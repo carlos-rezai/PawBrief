@@ -1,0 +1,126 @@
+# Ubiquitous Language
+
+## People
+
+| Term           | Definition                                         | Aliases to avoid             |
+| -------------- | -------------------------------------------------- | ---------------------------- |
+| **Owner**      | The person who creates and maintains a cat profile | User, parent, caretaker      |
+| **Pet-sitter** | The person who receives and reads the care guide   | Caretaker, sitter, recipient |
+
+## Profiles
+
+| Term                 | Definition                                                     | Aliases to avoid                |
+| -------------------- | -------------------------------------------------------------- | ------------------------------- |
+| **Profile**          | A single cat's complete care guide data stored in IndexedDB    | Cat profile, record, entry      |
+| **Draft**            | A profile where not all wizard steps have been completed       | Incomplete, partial, unfinished |
+| **Complete Profile** | A profile where all wizard steps have been saved at least once | Finished profile                |
+
+## Wizard
+
+| Term          | Definition                                                                                    | Aliases to avoid            |
+| ------------- | --------------------------------------------------------------------------------------------- | --------------------------- |
+| **Wizard**    | The linear step-by-step form used to create or edit a profile                                 | Form, survey, questionnaire |
+| **Step**      | A single named screen within the wizard (Basics, Feeding, Routine, Favorites, Medical, Notes) | Page, section, screen       |
+| **Stepper**   | The navigation component that shows wizard progress and the current step                      | Progress bar, tabs          |
+| **Edit Mode** | The wizard opened on an existing profile, jumping directly to a specific step                 | Update mode, edit flow      |
+
+## Feeding
+
+| Term                     | Definition                                                                              | Aliases to avoid                                           |
+| ------------------------ | --------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Food Entry**           | A single food item defined by Brand, Flavor, and Texture                                | Meal, food item, food record                               |
+| **Brand**                | The manufacturer name of a food or supplement (e.g. "Royal Canin")                      | Make, manufacturer, label                                  |
+| **Flavor**               | The protein or ingredient type of a food or supplement (e.g. "chicken", "duck", "beef") | Type, protein, ingredient                                  |
+| **Texture**              | The physical form of a food (e.g. "sauce", "meat patty", "dry", "soup")                 | Consistency, format, type                                  |
+| **Supplement Entry**     | A vitamin or supplement defined by Brand and Flavor                                     | Vitamin entry, medication (not a medication — see Medical) |
+| **Feeding Time**         | A specific clock time (HH:MM) at which the cat is fed                                   | Meal time, schedule entry                                  |
+| **Plating Instructions** | Text and optional photo explaining how to prepare or serve the cat's food               | Serving instructions, prep notes                           |
+
+## Routine
+
+| Term              | Definition                                                                    | Aliases to avoid                 |
+| ----------------- | ----------------------------------------------------------------------------- | -------------------------------- |
+| **Routine**       | The cat's 24-hour daily activity pattern, represented as a pie chart          | Schedule, timetable              |
+| **Activity Slot** | A named time block in the routine with a label and duration in hours          | Time block, routine entry, slice |
+| **Pie Chart**     | The visual representation of time allocation across activity slots in the PDF | Chart, donut chart, graph        |
+| **Color Palette** | The fixed set of design-token colors automatically assigned to activity slots | Color scheme, theme colors       |
+
+## Favorites
+
+| Term               | Definition                                                                | Aliases to avoid              |
+| ------------------ | ------------------------------------------------------------------------- | ----------------------------- |
+| **Toy Entry**      | A named toy with an optional description                                  | Toy item, play item           |
+| **Treat Entry**    | A treat defined by Brand and Flavor                                       | Snack entry, reward entry     |
+| **Comfort Item**   | A free-text object that provides comfort to the cat (e.g. "blue blanket") | Comfort object, security item |
+| **Favourite Spot** | A free-text location the cat regularly occupies (e.g. "sunny windowsill") | Hangout, spot, location       |
+
+## Medical
+
+| Term                  | Definition                                                                                                  | Aliases to avoid                                                                          |
+| --------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| **Vet**               | The veterinarian and clinic associated with a profile                                                       | Doctor, vet clinic                                                                        |
+| **Vet Address**       | The physical address of the vet clinic — used only to generate the Maps URL, never stored as routing origin | Home address (never use for origin)                                                       |
+| **Maps URL**          | A destination-only Google Maps URL constructed from the vet address                                         | Route, directions link, map link                                                          |
+| **Emergency Contact** | A person to contact in an emergency, defined by name, phone, and relationship                               | Contact, backup contact                                                                   |
+| **Medication**        | A medicine or treatment with name, dosage, frequency, and instructions                                      | Drug, supplement (distinct from Supplement Entry — medications are prescribed treatments) |
+
+## Special Notes
+
+| Term             | Definition                                                                              | Aliases to avoid              |
+| ---------------- | --------------------------------------------------------------------------------------- | ----------------------------- |
+| **Special Note** | A titled free-text note with an optional photo, for anything not covered by other steps | Note, remark, additional info |
+
+## Care Guide (PDF)
+
+| Term                  | Definition                                                                                               | Aliases to avoid             |
+| --------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| **Care Guide**        | The generated PDF document the owner shares with the pet-sitter                                          | PDF, document, report, guide |
+| **Single Care Guide** | A care guide generated from one profile                                                                  | Solo PDF, individual guide   |
+| **Merged Care Guide** | A side-by-side care guide generated from exactly two profiles                                            | Combined PDF, dual guide     |
+| **Preview**           | The in-browser rendering of the care guide before download, using PDFViewer                              | Draft view, PDF view         |
+| **PDF Header**        | The cover section on page 1 of the care guide, containing PawBrief branding, cat name, and profile photo | Cover, title page            |
+| **PDF Footer**        | The per-page footer on the care guide containing "Made with PawBrief" and page number                    | Page footer, branding footer |
+
+## Storage & Security
+
+| Term           | Definition                                                                                                          | Aliases to avoid             |
+| -------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| **Photo ID**   | A UUID string used as the IndexedDB key for a stored photo Blob                                                     | Image key, file ID           |
+| **EXIF Strip** | The process of removing all metadata from an uploaded photo by re-drawing it through an HTML5 Canvas before storage | Metadata removal, EXIF scrub |
+
+## Dashboard
+
+| Term             | Definition                                                                             | Aliases to avoid            |
+| ---------------- | -------------------------------------------------------------------------------------- | --------------------------- |
+| **Dashboard**    | The home screen displaying all profile cards                                           | Home, profile list, gallery |
+| **Profile Card** | A card on the dashboard representing a single profile with its key details and actions | Card, tile, profile tile    |
+| **Merge**        | The action of selecting exactly two profiles to generate a Merged Care Guide           | Combine, join, link         |
+
+## Relationships
+
+- A **Profile** belongs to exactly one cat and is managed by one **Owner**.
+- A **Profile** has a status of either **Draft** or **Complete**.
+- A **Profile** contains one or more **Food Entries**, zero or more **Supplement Entries**, one or more **Activity Slots**, and zero or more **Special Notes**.
+- A **Care Guide** is generated from one **Profile** (Single) or exactly two **Profiles** (Merged).
+- A **Pet-sitter** receives a **Care Guide** — they never interact with the app directly.
+- A **Vet Address** generates a **Maps URL** — the owner's home address is never stored.
+- A **Photo ID** references a Blob in IndexedDB — a **Profile** references photos by **Photo ID**, never inline.
+- **Flavor** and **Texture** are distinct: **Flavor** is what the food is made of; **Texture** is how it is prepared or served.
+- **Supplement Entry** and **Medication** are distinct: a **Supplement Entry** is a routine nutritional addition; a **Medication** is a prescribed treatment.
+
+## Example dialogue
+
+> **Dev:** "When the **Owner** finishes the last step, do we mark the **Profile** complete immediately?"
+> **Domain expert:** "Yes — once all six **Steps** in the **Wizard** have been saved, the **Profile** transitions from **Draft** to **Complete**. The **Dashboard** then shows the **Generate PDF** action on the **Profile Card**."
+> **Dev:** "And if they only finish four steps and close the tab?"
+> **Domain expert:** "The **Profile** stays a **Draft**. The **Profile Card** shows a 'Continue' button instead. All data is safe — the **Wizard** auto-saves to IndexedDB on every **Step** advance."
+> **Dev:** "When we generate the **Merged Care Guide**, are the two **Profiles** linked in any way?"
+> **Domain expert:** "No — the **Merge** is a one-time PDF generation action. The two **Profiles** remain independent. The **Merged Care Guide** is the only artifact that joins them."
+> **Dev:** "Should we call it 'consistency' or 'texture' in the UI for the food form field?"
+> **Domain expert:** "**Texture** — it matches what cat owners read on packaging. **Consistency** is an alias to avoid."
+
+## Flagged ambiguities
+
+- **"Type"** was used during the session to mean both **Flavor** (e.g. chicken, duck) and **Texture** (e.g. sauce, patty). These are distinct fields. Use **Flavor** for protein/ingredient type and **Texture** for physical form — never "type" alone.
+- **"Supplement"** could refer to either a **Supplement Entry** (routine nutritional addition in the Feeding step) or a **Medication** (prescribed treatment in the Medical step). These are distinct. Use the full term in all contexts.
+- **"Page"** risks conflation between a route-level page (a React component) and a **Step** (a screen within the Wizard). Use **Step** exclusively for wizard navigation; reserve **Page** for route-level components.
