@@ -140,8 +140,10 @@ Output: `dist/`
 ### Commit message convention
 
 ```
-<type>: [<feature-slug>] issue #<n> <description>
+<type>: [<initiative>] issue #<n> <description>
 ```
+
+`<initiative>` is the PRD/feature initiative name (e.g. `profile-wizard`, `pdf-generation`) — not the issue title.
 
 Examples:
 
