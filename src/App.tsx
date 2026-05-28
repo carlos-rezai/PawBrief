@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { AppLayout } from "./layouts/AppLayout/AppLayout";
-import DashboardPage from "./pages/DashboardPage";
-import PreviewPage from "./pages/PreviewPage";
-import WizardPage from "./pages/WizardPage";
+import { DashboardPage, PreviewPage, WizardPage } from "./pages";
 
 export default function App() {
   return (

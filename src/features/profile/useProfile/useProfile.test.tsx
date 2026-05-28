@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { IDBFactory } from "fake-indexeddb";
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { saveProfile } from "./profileStorage";
+import { saveProfile } from "../profileStorage/profileStorage";
 import { useProfile } from "./useProfile";
 
 beforeEach(() => {

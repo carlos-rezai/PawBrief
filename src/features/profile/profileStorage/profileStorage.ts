@@ -1,5 +1,5 @@
-import { getDB } from "./db";
-import type { CatProfile } from "../../types/profile";
+import { getDB } from "../db";
+import type { CatProfile } from "../../../types/profile";
 
 const STORE = "profiles";
 

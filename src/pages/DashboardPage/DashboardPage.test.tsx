@@ -4,7 +4,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { saveProfile } from "../features/profile/profileStorage";
+import { saveProfile } from "../../features/profile";
 import DashboardPage from "./DashboardPage";
 
 beforeEach(() => {

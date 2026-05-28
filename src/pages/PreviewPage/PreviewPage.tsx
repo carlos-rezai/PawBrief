@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useProfile } from "../features/profile/useProfile";
+import { useProfile } from "../../features/profile";
 
 export default function PreviewPage() {
   const { id } = useParams<{ id: string }>();

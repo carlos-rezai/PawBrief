@@ -1,5 +1,6 @@
-import { useProfiles } from "../features/profile/useProfiles";
-import type { WizardStep } from "../types/profile";
+import { useProfiles } from "../../features/profile";
+import { Button } from "../../primitives";
+import type { WizardStep } from "../../types/profile";
 
 const ALL_STEPS: WizardStep[] = [
   "basics",
@@ -15,7 +16,7 @@ export default function DashboardPage() {
 
   return (
     <main>
-      <button onClick={() => createProfile()}>+ New Profile</button>
+      <Button onClick={() => createProfile()}>+ New Profile</Button>
       {profiles.length === 0 ? (
         <p>Get started — create your first profile above.</p>
       ) : (
@@ -36,15 +37,15 @@ export default function DashboardPage() {
                     </p>
                   </>
                 )}
-                <button>Edit</button>
+                <Button>Edit</Button>
                 {isComplete ? (
-                  <button>Generate PDF</button>
+                  <Button>Generate PDF</Button>
                 ) : (
-                  <button>Continue</button>
+                  <Button>Continue</Button>
                 )}
-                <button onClick={() => deleteProfile(profile.id)}>
+                <Button onClick={() => deleteProfile(profile.id)}>
                   Delete
-                </button>
+                </Button>
               </li>
             );
           })}

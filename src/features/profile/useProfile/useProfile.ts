@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { getProfile, saveProfile } from "./profileStorage";
-import type { BasicsData, CatProfile, WizardStep } from "../../types/profile";
+import { getProfile, saveProfile } from "../profileStorage/profileStorage";
+import type {
+  BasicsData,
+  CatProfile,
+  WizardStep,
+} from "../../../types/profile";
 
 interface UseProfileReturn {
   profile: CatProfile | null;

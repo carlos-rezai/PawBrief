@@ -1,6 +1,7 @@
 import { useState } from "react";
-import type { BasicsData } from "../../types/profile";
-import { validatePhoto } from "../../utils/validatePhoto";
+import type { BasicsData } from "../../../types/profile";
+import { validatePhoto } from "../../../utils/validatePhoto";
+import { Button, Field, Input, Select } from "../../../primitives";
 
 interface BasicsStepProps {
   onSave?: (data: BasicsData) => void;
@@ -32,35 +33,31 @@ export default function BasicsStep({ onSave }: BasicsStepProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <label>
-        Name
-        <input value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
-      <label>
-        Breed
-        <input value={breed} onChange={(e) => setBreed(e.target.value)} />
-      </label>
-      <label>
-        Age
-        <input
+      <Field label="Name">
+        <Input value={name} onChange={(e) => setName(e.target.value)} />
+      </Field>
+      <Field label="Breed">
+        <Input value={breed} onChange={(e) => setBreed(e.target.value)} />
+      </Field>
+      <Field label="Age">
+        <Input
           type="number"
           value={ageValue}
           onChange={(e) => setAgeValue(Number(e.target.value))}
         />
-        <select
+        <Select
           value={ageUnit}
           onChange={(e) => setAgeUnit(e.target.value as "years" | "months")}
         >
           <option value="years">years</option>
           <option value="months">months</option>
-        </select>
-      </label>
-      <label>
-        Photo
-        <input type="file" onChange={handlePhotoChange} />
-      </label>
+        </Select>
+      </Field>
+      <Field label="Photo">
+        <Input type="file" onChange={handlePhotoChange} />
+      </Field>
       {photoError && <p role="alert">{photoError}</p>}
-      <button type="submit">Next</button>
+      <Button type="submit">Next</Button>
     </form>
   );
 }

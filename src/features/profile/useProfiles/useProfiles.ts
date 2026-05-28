@@ -3,8 +3,8 @@ import {
   deleteProfile as storageDelete,
   getAllProfiles,
   saveProfile,
-} from "./profileStorage";
-import type { CatProfile } from "../../types/profile";
+} from "../profileStorage/profileStorage";
+import type { CatProfile } from "../../../types/profile";
 
 interface UseProfilesReturn {
   profiles: CatProfile[];
