@@ -2,10 +2,15 @@ import "fake-indexeddb/auto";
 import { IDBFactory } from "fake-indexeddb";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { saveProfile } from "../../features/profile";
 import DashboardPage from "./DashboardPage";
+
+function LocationDisplay() {
+  const location = useLocation();
+  return <div data-testid="location">{location.pathname}</div>;
+}
 
 beforeEach(() => {
   globalThis.indexedDB = new IDBFactory();
@@ -16,6 +21,7 @@ function renderDashboard() {
     <MemoryRouter initialEntries={["/"]}>
       <Routes>
         <Route index element={<DashboardPage />} />
+        <Route path="preview/:id" element={<LocationDisplay />} />
       </Routes>
     </MemoryRouter>
   );
@@ -101,5 +107,30 @@ describe("DashboardPage", () => {
     await waitFor(() => {
       expect(screen.queryByText("Whiskers")).not.toBeInTheDocument();
     });
+  });
+
+  it("clicking Generate PDF navigates to /preview/:id", async () => {
+    const user = userEvent.setup();
+    await saveProfile({
+      id: "pdf-nav-test",
+      completedSteps: [
+        "basics",
+        "feeding",
+        "routine",
+        "favorites",
+        "medical",
+        "notes",
+      ],
+      basics: { name: "Luna", ageValue: 3, ageUnit: "years" },
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+    renderDashboard();
+    const generateBtn = await screen.findByRole("button", {
+      name: /generate pdf/i,
+    });
+    await user.click(generateBtn);
+    const location = await screen.findByTestId("location");
+    expect(location).toHaveTextContent("/preview/pdf-nav-test");
   });
 });
