@@ -5,10 +5,15 @@ import { Button, Field, Input, Textarea } from "../../../primitives";
 
 interface NotesStepProps {
   onSave?: (data: NotesData) => void;
+  onBack?: () => void;
   initialData?: NotesData;
 }
 
-export default function NotesStep({ onSave, initialData }: NotesStepProps) {
+export default function NotesStep({
+  onSave,
+  onBack,
+  initialData,
+}: NotesStepProps) {
   const [specialNotes, setSpecialNotes] = useState<SpecialNote[]>(
     initialData?.specialNotes ?? []
   );
@@ -87,6 +92,7 @@ export default function NotesStep({ onSave, initialData }: NotesStepProps) {
         Add note
       </Button>
 
+      {onBack && <Button onClick={onBack}>Back</Button>}
       <Button type="submit">Next</Button>
     </form>
   );

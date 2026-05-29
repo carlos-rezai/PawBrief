@@ -9,10 +9,15 @@ import { Button, Field, Input, Textarea } from "../../../primitives";
 
 interface FeedingStepProps {
   onSave?: (data: FeedingData) => void;
+  onBack?: () => void;
   initialData?: FeedingData;
 }
 
-export default function FeedingStep({ onSave, initialData }: FeedingStepProps) {
+export default function FeedingStep({
+  onSave,
+  onBack,
+  initialData,
+}: FeedingStepProps) {
   const [foodEntries, setFoodEntries] = useState<FoodEntry[]>(
     initialData?.foodEntries ?? []
   );
@@ -198,6 +203,7 @@ export default function FeedingStep({ onSave, initialData }: FeedingStepProps) {
         />
       </Field>
 
+      {onBack && <Button onClick={onBack}>Back</Button>}
       <Button type="submit">Next</Button>
     </form>
   );

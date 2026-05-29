@@ -8,11 +8,13 @@ import { Button, Field, Input } from "../../../primitives";
 
 interface FavoritesStepProps {
   onSave?: (data: FavoritesData) => void;
+  onBack?: () => void;
   initialData?: FavoritesData;
 }
 
 export default function FavoritesStep({
   onSave,
+  onBack,
   initialData,
 }: FavoritesStepProps) {
   const [toyEntries, setToyEntries] = useState<ToyEntry[]>(
@@ -167,6 +169,7 @@ export default function FavoritesStep({
         Add favourite spot
       </Button>
 
+      {onBack && <Button onClick={onBack}>Back</Button>}
       <Button type="submit">Next</Button>
     </form>
   );

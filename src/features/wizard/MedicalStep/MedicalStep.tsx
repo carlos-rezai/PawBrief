@@ -10,12 +10,17 @@ import { Button, Field, Input, Textarea } from "../../../primitives";
 
 interface MedicalStepProps {
   onSave?: (data: MedicalData) => void;
+  onBack?: () => void;
   initialData?: MedicalData;
 }
 
 const emptyVet: VetInfo = { name: "", clinicName: "", phone: "", address: "" };
 
-export default function MedicalStep({ onSave, initialData }: MedicalStepProps) {
+export default function MedicalStep({
+  onSave,
+  onBack,
+  initialData,
+}: MedicalStepProps) {
   const [vet, setVet] = useState<VetInfo>(initialData?.vet ?? emptyVet);
   const [emergencyContacts, setEmergencyContacts] = useState<
     EmergencyContact[]
@@ -217,6 +222,7 @@ export default function MedicalStep({ onSave, initialData }: MedicalStepProps) {
         />
       </Field>
 
+      {onBack && <Button onClick={onBack}>Back</Button>}
       <Button type="submit">Next</Button>
     </form>
   );

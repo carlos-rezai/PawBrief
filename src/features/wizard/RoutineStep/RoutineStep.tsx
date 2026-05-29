@@ -4,6 +4,7 @@ import { Button, Input } from "../../../primitives";
 
 interface RoutineStepProps {
   onSave?: (data: RoutineData) => void;
+  onBack?: () => void;
   initialData?: RoutineData;
 }
 
@@ -16,7 +17,11 @@ const DEFAULT_SLOTS: ActivitySlot[] = [
   { label: "Other", durationHours: 2 },
 ];
 
-export default function RoutineStep({ onSave, initialData }: RoutineStepProps) {
+export default function RoutineStep({
+  onSave,
+  onBack,
+  initialData,
+}: RoutineStepProps) {
   const [slots, setSlots] = useState<ActivitySlot[]>(
     initialData?.slots ?? DEFAULT_SLOTS
   );
@@ -92,6 +97,7 @@ export default function RoutineStep({ onSave, initialData }: RoutineStepProps) {
 
       <Button onClick={addSlot}>Add slot</Button>
 
+      {onBack && <Button onClick={onBack}>Back</Button>}
       <Button type="submit">Next</Button>
     </form>
   );
