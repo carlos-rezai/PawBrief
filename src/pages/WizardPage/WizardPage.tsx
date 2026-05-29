@@ -1,9 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useProfile } from "../../features/profile";
-import { FeedingStep, BasicsStep, RoutineStep } from "../../features/wizard";
-import FavoritesStep from "../../features/wizard/FavoritesStep/FavoritesStep";
-import MedicalStep from "../../features/wizard/MedicalStep/MedicalStep";
-import NotesStep from "../../features/wizard/NotesStep/NotesStep";
+import {
+  BasicsStep,
+  FeedingStep,
+  RoutineStep,
+  FavoritesStep,
+  MedicalStep,
+  NotesStep,
+} from "../../features/wizard";
 import type { WizardStep } from "../../types/profile";
 
 export default function WizardPage() {
