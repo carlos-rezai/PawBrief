@@ -99,6 +99,14 @@ export interface NotesData {
   specialNotes: SpecialNote[];
 }
 
+export type StepData =
+  | BasicsData
+  | FeedingData
+  | RoutineData
+  | FavoritesData
+  | MedicalData
+  | NotesData;
+
 export interface CatProfile {
   id: string;
   completedSteps: WizardStep[];

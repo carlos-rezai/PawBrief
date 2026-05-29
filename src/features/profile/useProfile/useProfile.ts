@@ -1,15 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { getProfile, saveProfile } from "../profileStorage/profileStorage";
-import type {
-  BasicsData,
-  CatProfile,
-  WizardStep,
-} from "../../../types/profile";
+import type { CatProfile, StepData, WizardStep } from "../../../types/profile";
 
 interface UseProfileReturn {
   profile: CatProfile | null;
   loading: boolean;
-  saveStep: (step: WizardStep, data: BasicsData) => Promise<void>;
+  saveStep: (step: WizardStep, data: StepData) => Promise<void>;
 }
 
 export function useProfile(id: string): UseProfileReturn {
@@ -26,7 +22,7 @@ export function useProfile(id: string): UseProfileReturn {
   }, [id]);
 
   const saveStep = useCallback(
-    async (step: WizardStep, data: BasicsData) => {
+    async (step: WizardStep, data: StepData) => {
       if (!profile) return;
       const updated: CatProfile = {
         ...profile,

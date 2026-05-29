@@ -59,4 +59,25 @@ describe("useProfile", () => {
     });
     expect(result.current.profile?.completedSteps).toContain("basics");
   });
+
+  it("saveStep persists a non-basics step and updates completedSteps", async () => {
+    await saveProfile(makeProfile("feeding-test"));
+    const { result } = renderHook(() => useProfile("feeding-test"));
+    await act(async () => {});
+    await act(async () => {
+      await result.current.saveStep("feeding", {
+        foodEntries: [
+          { brand: "Royal Canin", flavor: "chicken", texture: "dry" },
+        ],
+        servingGrams: 50,
+        feedingTimes: ["08:00", "18:00"],
+        supplementEntries: [],
+        platingInstructions: "Mix with water",
+      });
+    });
+    expect(result.current.profile?.completedSteps).toContain("feeding");
+    expect(result.current.profile?.feeding?.foodEntries[0].brand).toBe(
+      "Royal Canin"
+    );
+  });
 });
