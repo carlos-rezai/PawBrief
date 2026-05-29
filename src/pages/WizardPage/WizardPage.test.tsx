@@ -3,8 +3,8 @@ import { IDBFactory } from "fake-indexeddb";
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it } from "vitest";
-import { saveProfile } from "../features/profile";
-import type { WizardStep, FeedingData } from "../types/profile";
+import { saveProfile } from "../../features/profile";
+import type { WizardStep, FeedingData } from "../../types/profile";
 import WizardPage from "./WizardPage";
 
 beforeEach(() => {
