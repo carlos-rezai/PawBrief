@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { BasicsData } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
+import { savePhoto } from "../../profile";
 import { Button, Field, Input, Select } from "../../../primitives";
 
 interface BasicsStepProps {
@@ -20,6 +21,7 @@ export default function BasicsStep({
   const [ageUnit, setAgeUnit] = useState<"years" | "months">(
     initialData?.ageUnit ?? "years"
   );
+  const [pendingPhoto, setPendingPhoto] = useState<File | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -32,11 +34,16 @@ export default function BasicsStep({
       return;
     }
     setPhotoError(null);
+    setPendingPhoto(file);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    onSave?.({ name, breed, ageValue, ageUnit });
+    let photoId = initialData?.photoId;
+    if (pendingPhoto) {
+      photoId = await savePhoto(pendingPhoto);
+    }
+    onSave?.({ name, breed, ageValue, ageUnit, photoId });
   }
 
   return (

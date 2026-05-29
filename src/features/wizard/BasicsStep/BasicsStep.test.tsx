@@ -1,7 +1,21 @@
-import { render, screen } from "@testing-library/react";
+import "fake-indexeddb/auto";
+import { IDBFactory } from "fake-indexeddb";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import BasicsStep from "./BasicsStep";
+
+beforeEach(() => {
+  globalThis.indexedDB = new IDBFactory();
+  HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
+    drawImage: vi.fn(),
+  }) as unknown as typeof HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.toBlob = vi
+    .fn()
+    .mockImplementation((cb: BlobCallback) =>
+      cb(new Blob(["img"], { type: "image/jpeg" }))
+    ) as unknown as typeof HTMLCanvasElement.prototype.toBlob;
+});
 
 function renderBasicsStep() {
   render(<BasicsStep />);
@@ -47,5 +61,22 @@ describe("BasicsStep photo upload", () => {
       })
     );
     expect(await screen.findByRole("alert")).toBeInTheDocument();
+  });
+
+  it("submitting with a photo file calls onSave with a non-null photoId", async () => {
+    const user = userEvent.setup();
+    const onSave = vi.fn();
+    render(<BasicsStep onSave={onSave} />);
+    await user.type(screen.getByLabelText(/name/i), "Luna");
+    await user.upload(
+      screen.getByLabelText(/photo/i),
+      new File(["fake-image"], "cat.jpg", { type: "image/jpeg" })
+    );
+    await user.click(screen.getByRole("button", { name: /next/i }));
+    await waitFor(() => {
+      expect(onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ photoId: expect.any(String) })
+      );
+    });
   });
 });
