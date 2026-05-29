@@ -27,6 +27,42 @@ function renderDashboard() {
   );
 }
 
+function renderDashboardForMerge() {
+  render(
+    <MemoryRouter initialEntries={["/"]}>
+      <Routes>
+        <Route index element={<DashboardPage />} />
+        <Route path="preview/merge/:id1/:id2" element={<LocationDisplay />} />
+        <Route path="preview/:id" element={<LocationDisplay />} />
+      </Routes>
+    </MemoryRouter>
+  );
+}
+
+function makeCompleteProfile(id: string, name: string) {
+  return {
+    id,
+    completedSteps: [
+      "basics",
+      "feeding",
+      "routine",
+      "favorites",
+      "medical",
+      "notes",
+    ] as (
+      | "basics"
+      | "feeding"
+      | "routine"
+      | "favorites"
+      | "medical"
+      | "notes"
+    )[],
+    basics: { name, ageValue: 2, ageUnit: "years" as const },
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+}
+
 function makeBasicsProfile(id: string) {
   return {
     id,
@@ -132,5 +168,92 @@ describe("DashboardPage", () => {
     await user.click(generateBtn);
     const location = await screen.findByTestId("location");
     expect(location).toHaveTextContent("/preview/pdf-nav-test");
+  });
+});
+
+describe("DashboardPage merge mode", () => {
+  it("shows a 'Merge two profiles' button", async () => {
+    renderDashboardForMerge();
+    expect(
+      await screen.findByRole("button", { name: /merge two profiles/i })
+    ).toBeInTheDocument();
+  });
+
+  it("complete profiles become selectable after clicking 'Merge two profiles'", async () => {
+    const user = userEvent.setup();
+    await saveProfile(makeCompleteProfile("m1", "Luna"));
+    renderDashboardForMerge();
+    await user.click(
+      await screen.findByRole("button", { name: /merge two profiles/i })
+    );
+    expect(
+      await screen.findByRole("checkbox", { name: /luna/i })
+    ).toBeInTheDocument();
+  });
+
+  it("incomplete profiles have no checkbox in merge mode", async () => {
+    const user = userEvent.setup();
+    await saveProfile(makeCompleteProfile("complete-1", "Luna"));
+    await saveProfile(makeBasicsProfile("incomplete-1"));
+    renderDashboardForMerge();
+    await user.click(
+      await screen.findByRole("button", { name: /merge two profiles/i })
+    );
+    const checkboxes = await screen.findAllByRole("checkbox");
+    expect(checkboxes).toHaveLength(1);
+  });
+
+  it("selecting two complete profiles shows a 'Preview Merge' button", async () => {
+    const user = userEvent.setup();
+    await saveProfile(makeCompleteProfile("sel1", "Luna"));
+    await saveProfile(makeCompleteProfile("sel2", "Whiskers"));
+    renderDashboardForMerge();
+    await user.click(
+      await screen.findByRole("button", { name: /merge two profiles/i })
+    );
+    const checkboxes = await screen.findAllByRole("checkbox");
+    await user.click(checkboxes[0]);
+    await user.click(checkboxes[1]);
+    expect(
+      await screen.findByRole("button", { name: /preview merge/i })
+    ).toBeInTheDocument();
+  });
+
+  it("selecting a third complete profile deselects the first-selected", async () => {
+    const user = userEvent.setup();
+    await saveProfile(makeCompleteProfile("p1", "Cat One"));
+    await saveProfile(makeCompleteProfile("p2", "Cat Two"));
+    await saveProfile(makeCompleteProfile("p3", "Cat Three"));
+    renderDashboardForMerge();
+    await user.click(
+      await screen.findByRole("button", { name: /merge two profiles/i })
+    );
+    const checkboxes = await screen.findAllByRole("checkbox");
+    await user.click(checkboxes[0]);
+    await user.click(checkboxes[1]);
+    await user.click(checkboxes[2]);
+    expect(checkboxes[0]).not.toBeChecked();
+    expect(checkboxes[1]).toBeChecked();
+    expect(checkboxes[2]).toBeChecked();
+  });
+
+  it("clicking 'Preview Merge' navigates to /preview/merge/:id1/:id2", async () => {
+    const user = userEvent.setup();
+    await saveProfile(makeCompleteProfile("merge-a", "Luna"));
+    await saveProfile(makeCompleteProfile("merge-b", "Whiskers"));
+    renderDashboardForMerge();
+    await user.click(
+      await screen.findByRole("button", { name: /merge two profiles/i })
+    );
+    const checkboxes = await screen.findAllByRole("checkbox");
+    await user.click(checkboxes[0]);
+    await user.click(checkboxes[1]);
+    await user.click(
+      await screen.findByRole("button", { name: /preview merge/i })
+    );
+    const location = await screen.findByTestId("location");
+    expect(location.textContent).toMatch(/\/preview\/merge\//);
+    expect(location.textContent).toContain("merge-a");
+    expect(location.textContent).toContain("merge-b");
   });
 });
