@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../../features/profile";
 import { Button } from "../../primitives";
@@ -15,10 +16,41 @@ const ALL_STEPS: WizardStep[] = [
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { profiles, createProfile, deleteProfile } = useProfiles();
+  const [mergeMode, setMergeMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  function toggleMergeSelect(id: string) {
+    setSelectedIds((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((x) => x !== id);
+      }
+      if (prev.length < 2) {
+        return [...prev, id];
+      }
+      return [prev[1], id];
+    });
+  }
 
   return (
     <main>
       <Button onClick={() => createProfile()}>+ New Profile</Button>
+      <Button
+        onClick={() => {
+          setMergeMode(true);
+          setSelectedIds([]);
+        }}
+      >
+        Merge two profiles
+      </Button>
+      {mergeMode && selectedIds.length === 2 && (
+        <Button
+          onClick={() =>
+            navigate(`/preview/merge/${selectedIds[0]}/${selectedIds[1]}`)
+          }
+        >
+          Preview Merge
+        </Button>
+      )}
       {profiles.length === 0 ? (
         <p>Get started — create your first profile above.</p>
       ) : (
@@ -30,6 +62,14 @@ export default function DashboardPage() {
             const basics = profile.basics;
             return (
               <li key={profile.id}>
+                {mergeMode && isComplete && (
+                  <input
+                    type="checkbox"
+                    aria-label={basics?.name}
+                    checked={selectedIds.includes(profile.id)}
+                    onChange={() => toggleMergeSelect(profile.id)}
+                  />
+                )}
                 {basics && (
                   <>
                     <p>{basics.name}</p>
