@@ -1,8 +1,22 @@
-import { render, screen, within } from "@testing-library/react";
+import "fake-indexeddb/auto";
+import { IDBFactory } from "fake-indexeddb";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import NotesStep from "./NotesStep";
 import type { NotesData } from "../../../types/profile";
+
+beforeEach(() => {
+  globalThis.indexedDB = new IDBFactory();
+  HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
+    drawImage: vi.fn(),
+  }) as unknown as typeof HTMLCanvasElement.prototype.getContext;
+  HTMLCanvasElement.prototype.toBlob = vi
+    .fn()
+    .mockImplementation((cb: BlobCallback) =>
+      cb(new Blob(["img"], { type: "image/jpeg" }))
+    ) as unknown as typeof HTMLCanvasElement.prototype.toBlob;
+});
 
 function renderNotesStep(onSave = vi.fn()) {
   render(<NotesStep onSave={onSave} />);
@@ -63,6 +77,24 @@ describe("NotesStep photo upload", () => {
       })
     );
     expect(await screen.findByRole("alert")).toBeInTheDocument();
+  });
+
+  it("submitting a note with a photo calls onSave with a non-null photoId on that note", async () => {
+    const user = userEvent.setup();
+    const onSave = vi.fn();
+    render(<NotesStep onSave={onSave} />);
+    await user.click(screen.getByRole("button", { name: /add note/i }));
+    const entry = screen.getByTestId("special-note");
+    await user.upload(
+      within(entry).getByLabelText(/photo/i),
+      new File(["fake-image"], "note.jpg", { type: "image/jpeg" })
+    );
+    await user.click(screen.getByRole("button", { name: /next/i }));
+    await waitFor(() => {
+      expect(onSave).toHaveBeenCalledOnce();
+      const saved = onSave.mock.calls[0][0] as NotesData;
+      expect(saved.specialNotes[0].photoId).toEqual(expect.any(String));
+    });
   });
 });
 

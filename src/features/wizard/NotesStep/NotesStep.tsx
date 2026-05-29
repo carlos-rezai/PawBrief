@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { NotesData, SpecialNote } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
+import { savePhoto } from "../../profile";
 import { Button, Field, Input, Textarea } from "../../../primitives";
 
 interface NotesStepProps {
@@ -17,6 +18,7 @@ export default function NotesStep({
   const [specialNotes, setSpecialNotes] = useState<SpecialNote[]>(
     initialData?.specialNotes ?? []
   );
+  const [pendingPhotos, setPendingPhotos] = useState<Record<number, File>>({});
   const [photoErrors, setPhotoErrors] = useState<Record<number, string>>({});
 
   function handlePhotoChange(
@@ -35,12 +37,23 @@ export default function NotesStep({
         delete next[index];
         return next;
       });
+      setPendingPhotos((prev) => ({ ...prev, [index]: file }));
     }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    onSave?.({ specialNotes });
+    const resolvedNotes = await Promise.all(
+      specialNotes.map(async (note, i) => {
+        const pendingFile = pendingPhotos[i];
+        if (pendingFile) {
+          const photoId = await savePhoto(pendingFile);
+          return { ...note, photoId };
+        }
+        return note;
+      })
+    );
+    onSave?.({ specialNotes: resolvedNotes });
   }
 
   return (
