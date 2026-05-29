@@ -76,6 +76,21 @@ function makeCompleteProfile(id: string, name: string) {
       | "notes"
     )[],
     basics: { name, ageValue: 3, ageUnit: "years" as const },
+    routine: {
+      slots: [
+        { label: "Sleep", durationHours: 14 },
+        { label: "Playtime", durationHours: 3 },
+      ],
+    },
+    favorites: {
+      toyEntries: [{ name: "Feather wand" }],
+      treatEntries: [{ brand: "Temptations", flavor: "chicken" }],
+      comfortItems: ["blue blanket"],
+      favouriteSpots: ["sunny windowsill"],
+    },
+    notes: {
+      specialNotes: [{ title: "Feeding tip", body: "Always warm the food" }],
+    },
     createdAt: Date.now(),
     updatedAt: Date.now(),
   };
@@ -133,6 +148,33 @@ describe("MergedPreviewPage", () => {
     const location = await screen.findByTestId("location");
     expect(location.textContent).toContain("/wizard/nav-a/step/basics");
     expect(location.textContent).toContain("returnTo=merge/nav-a/nav-b");
+  });
+
+  it("shows Routine section for both profiles", async () => {
+    await saveProfile(makeCompleteProfile("routine-a", "Luna"));
+    await saveProfile(makeCompleteProfile("routine-b", "Whiskers"));
+    renderAtRoute("/preview/merge/routine-a/routine-b");
+    const viewer = await screen.findByTestId("pdf-viewer");
+    expect(viewer.textContent).toContain("Routine");
+    expect(viewer.textContent).toContain("Sleep");
+  });
+
+  it("shows Favorites section for both profiles", async () => {
+    await saveProfile(makeCompleteProfile("fav-a", "Luna"));
+    await saveProfile(makeCompleteProfile("fav-b", "Whiskers"));
+    renderAtRoute("/preview/merge/fav-a/fav-b");
+    const viewer = await screen.findByTestId("pdf-viewer");
+    expect(viewer.textContent).toContain("Favorites");
+    expect(viewer.textContent).toContain("Feather wand");
+  });
+
+  it("shows Notes section for both profiles", async () => {
+    await saveProfile(makeCompleteProfile("notes-a", "Luna"));
+    await saveProfile(makeCompleteProfile("notes-b", "Whiskers"));
+    renderAtRoute("/preview/merge/notes-a/notes-b");
+    const viewer = await screen.findByTestId("pdf-viewer");
+    expect(viewer.textContent).toContain("Notes");
+    expect(viewer.textContent).toContain("Feeding tip");
   });
 
   it("clicking Edit [Cat B] navigates to Cat B's wizard with returnTo=merge", async () => {

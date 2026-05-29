@@ -134,6 +134,110 @@ export default function MergedPDF({ profileA, profileB }: MergedPDFProps) {
             </View>
           </View>
         )}
+        {(profileA.routine || profileB.routine) && (
+          <View style={styles.row}>
+            <View style={styles.col}>
+              {profileA.routine && (
+                <>
+                  <Text style={styles.sectionTitle}>Routine</Text>
+                  {profileA.routine.slots.map((slot, i) => (
+                    <Text key={i}>
+                      {slot.label}: {slot.durationHours}h
+                    </Text>
+                  ))}
+                </>
+              )}
+            </View>
+            <View style={styles.col}>
+              {profileB.routine && (
+                <>
+                  <Text style={styles.sectionTitle}>Routine</Text>
+                  {profileB.routine.slots.map((slot, i) => (
+                    <Text key={i}>
+                      {slot.label}: {slot.durationHours}h
+                    </Text>
+                  ))}
+                </>
+              )}
+            </View>
+          </View>
+        )}
+        {(profileA.favorites || profileB.favorites) && (
+          <View style={styles.row}>
+            <View style={styles.col}>
+              {profileA.favorites && (
+                <>
+                  <Text style={styles.sectionTitle}>Favorites</Text>
+                  {profileA.favorites.toyEntries.map((t, i) => (
+                    <Text key={i}>Toy: {t.name}</Text>
+                  ))}
+                  {profileA.favorites.treatEntries.map((t, i) => (
+                    <Text key={i}>
+                      Treat: {t.brand} {t.flavor}
+                    </Text>
+                  ))}
+                  {profileA.favorites.comfortItems.map((c, i) => (
+                    <Text key={i}>Comfort: {c}</Text>
+                  ))}
+                  {profileA.favorites.favouriteSpots.map((s, i) => (
+                    <Text key={i}>Spot: {s}</Text>
+                  ))}
+                </>
+              )}
+            </View>
+            <View style={styles.col}>
+              {profileB.favorites && (
+                <>
+                  <Text style={styles.sectionTitle}>Favorites</Text>
+                  {profileB.favorites.toyEntries.map((t, i) => (
+                    <Text key={i}>Toy: {t.name}</Text>
+                  ))}
+                  {profileB.favorites.treatEntries.map((t, i) => (
+                    <Text key={i}>
+                      Treat: {t.brand} {t.flavor}
+                    </Text>
+                  ))}
+                  {profileB.favorites.comfortItems.map((c, i) => (
+                    <Text key={i}>Comfort: {c}</Text>
+                  ))}
+                  {profileB.favorites.favouriteSpots.map((s, i) => (
+                    <Text key={i}>Spot: {s}</Text>
+                  ))}
+                </>
+              )}
+            </View>
+          </View>
+        )}
+        {(profileA.notes || profileB.notes) && (
+          <View style={styles.row}>
+            <View style={styles.col}>
+              {profileA.notes && (
+                <>
+                  <Text style={styles.sectionTitle}>Notes</Text>
+                  {profileA.notes.specialNotes.map((note, i) => (
+                    <View key={i}>
+                      <Text>{note.title}</Text>
+                      <Text>{note.body}</Text>
+                    </View>
+                  ))}
+                </>
+              )}
+            </View>
+            <View style={styles.col}>
+              {profileB.notes && (
+                <>
+                  <Text style={styles.sectionTitle}>Notes</Text>
+                  {profileB.notes.specialNotes.map((note, i) => (
+                    <View key={i}>
+                      <Text>{note.title}</Text>
+                      <Text>{note.body}</Text>
+                    </View>
+                  ))}
+                </>
+              )}
+            </View>
+          </View>
+        )}
         {footer}
       </Page>
     </Document>
