@@ -5,13 +5,16 @@ import { Button, Field, Input, Select } from "../../../primitives";
 
 interface BasicsStepProps {
   onSave?: (data: BasicsData) => void;
+  initialData?: BasicsData;
 }
 
-export default function BasicsStep({ onSave }: BasicsStepProps) {
-  const [name, setName] = useState("");
-  const [breed, setBreed] = useState("");
-  const [ageValue, setAgeValue] = useState(1);
-  const [ageUnit, setAgeUnit] = useState<"years" | "months">("years");
+export default function BasicsStep({ onSave, initialData }: BasicsStepProps) {
+  const [name, setName] = useState(initialData?.name ?? "");
+  const [breed, setBreed] = useState(initialData?.breed ?? "");
+  const [ageValue, setAgeValue] = useState(initialData?.ageValue ?? 1);
+  const [ageUnit, setAgeUnit] = useState<"years" | "months">(
+    initialData?.ageUnit ?? "years"
+  );
   const [photoError, setPhotoError] = useState<string | null>(null);
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {

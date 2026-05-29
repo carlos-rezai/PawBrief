@@ -9,17 +9,28 @@ import { Button, Field, Input, Textarea } from "../../../primitives";
 
 interface FeedingStepProps {
   onSave?: (data: FeedingData) => void;
+  initialData?: FeedingData;
 }
 
-export default function FeedingStep({ onSave }: FeedingStepProps) {
-  const [foodEntries, setFoodEntries] = useState<FoodEntry[]>([]);
-  const [servingGrams, setServingGrams] = useState(0);
-  const [feedingTimes, setFeedingTimes] = useState<string[]>([]);
-  const [supplementEntries, setSupplementEntries] = useState<SupplementEntry[]>(
-    []
+export default function FeedingStep({ onSave, initialData }: FeedingStepProps) {
+  const [foodEntries, setFoodEntries] = useState<FoodEntry[]>(
+    initialData?.foodEntries ?? []
   );
-  const [platingInstructions, setPlatingInstructions] = useState("");
-  const [dietaryNotes, setDietaryNotes] = useState("");
+  const [servingGrams, setServingGrams] = useState(
+    initialData?.servingGrams ?? 0
+  );
+  const [feedingTimes, setFeedingTimes] = useState<string[]>(
+    initialData?.feedingTimes ?? []
+  );
+  const [supplementEntries, setSupplementEntries] = useState<SupplementEntry[]>(
+    initialData?.supplementEntries ?? []
+  );
+  const [platingInstructions, setPlatingInstructions] = useState(
+    initialData?.platingInstructions ?? ""
+  );
+  const [dietaryNotes, setDietaryNotes] = useState(
+    initialData?.dietaryNotes ?? ""
+  );
   const [photoError, setPhotoError] = useState<string | null>(null);
 
   function addFoodEntry() {

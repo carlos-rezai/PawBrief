@@ -4,6 +4,7 @@ import { Button, Input } from "../../../primitives";
 
 interface RoutineStepProps {
   onSave?: (data: RoutineData) => void;
+  initialData?: RoutineData;
 }
 
 const DEFAULT_SLOTS: ActivitySlot[] = [
@@ -15,8 +16,10 @@ const DEFAULT_SLOTS: ActivitySlot[] = [
   { label: "Other", durationHours: 2 },
 ];
 
-export default function RoutineStep({ onSave }: RoutineStepProps) {
-  const [slots, setSlots] = useState<ActivitySlot[]>(DEFAULT_SLOTS);
+export default function RoutineStep({ onSave, initialData }: RoutineStepProps) {
+  const [slots, setSlots] = useState<ActivitySlot[]>(
+    initialData?.slots ?? DEFAULT_SLOTS
+  );
 
   const total = slots.reduce((sum, slot) => sum + (slot.durationHours || 0), 0);
   const showWarning = total !== 24;
