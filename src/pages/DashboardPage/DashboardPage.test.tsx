@@ -68,6 +68,30 @@ describe("DashboardPage", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("shows Generate PDF (not Continue) when all 6 steps are completed", async () => {
+    await saveProfile({
+      id: "p-complete",
+      completedSteps: [
+        "basics",
+        "feeding",
+        "routine",
+        "favorites",
+        "medical",
+        "notes",
+      ],
+      basics: { name: "Max", ageValue: 2, ageUnit: "years" },
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+    renderDashboard();
+    expect(
+      await screen.findByRole("button", { name: /generate pdf/i })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /continue/i })
+    ).not.toBeInTheDocument();
+  });
+
   it("removes the profile card when Delete is clicked", async () => {
     const user = userEvent.setup();
     await saveProfile(makeBasicsProfile("p-3"));

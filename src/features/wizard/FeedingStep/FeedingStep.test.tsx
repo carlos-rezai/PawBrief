@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import FeedingStep from "./FeedingStep";
+import type { FeedingData } from "../../../types/profile";
 
 beforeEach(() => {
   HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
@@ -125,6 +126,22 @@ describe("FeedingStep plating photo upload", () => {
       })
     );
     expect(await screen.findByRole("alert")).toBeInTheDocument();
+  });
+});
+
+describe("FeedingStep initialData", () => {
+  it("pre-fills food entries from initialData", () => {
+    const initialData: FeedingData = {
+      foodEntries: [
+        { brand: "Royal Canin", flavor: "Chicken", texture: "dry" },
+      ],
+      servingGrams: 50,
+      feedingTimes: [],
+      supplementEntries: [],
+      platingInstructions: "",
+    };
+    render(<FeedingStep initialData={initialData} />);
+    expect(screen.getByDisplayValue("Royal Canin")).toBeInTheDocument();
   });
 });
 
