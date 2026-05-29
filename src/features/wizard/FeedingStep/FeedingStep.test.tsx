@@ -1,10 +1,13 @@
-import { render, screen, within } from "@testing-library/react";
+import "fake-indexeddb/auto";
+import { IDBFactory } from "fake-indexeddb";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import FeedingStep from "./FeedingStep";
 import type { FeedingData } from "../../../types/profile";
 
 beforeEach(() => {
+  globalThis.indexedDB = new IDBFactory();
   HTMLCanvasElement.prototype.getContext = vi.fn().mockReturnValue({
     drawImage: vi.fn(),
   }) as unknown as typeof HTMLCanvasElement.prototype.getContext;
@@ -102,6 +105,22 @@ describe("FeedingStep supplement entries", () => {
 });
 
 describe("FeedingStep plating photo upload", () => {
+  it("submitting with a plating photo calls onSave with a non-null platingPhotoId", async () => {
+    const user = userEvent.setup();
+    const onSave = vi.fn();
+    render(<FeedingStep onSave={onSave} />);
+    await user.upload(
+      screen.getByLabelText(/plating photo/i),
+      new File(["fake-image"], "plating.jpg", { type: "image/jpeg" })
+    );
+    await user.click(screen.getByRole("button", { name: /next/i }));
+    await waitFor(() => {
+      expect(onSave).toHaveBeenCalledWith(
+        expect.objectContaining({ platingPhotoId: expect.any(String) })
+      );
+    });
+  });
+
   it("shows an inline error when a non-image file is uploaded as plating photo", async () => {
     const user = userEvent.setup();
     renderFeedingStep();

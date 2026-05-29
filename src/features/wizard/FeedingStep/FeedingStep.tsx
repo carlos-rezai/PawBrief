@@ -5,6 +5,7 @@ import type {
   SupplementEntry,
 } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
+import { savePhoto } from "../../profile";
 import { Button, Field, Input, Textarea } from "../../../primitives";
 
 interface FeedingStepProps {
@@ -35,6 +36,9 @@ export default function FeedingStep({
   );
   const [dietaryNotes, setDietaryNotes] = useState(
     initialData?.dietaryNotes ?? ""
+  );
+  const [pendingPlatingPhoto, setPendingPlatingPhoto] = useState<File | null>(
+    null
   );
   const [photoError, setPhotoError] = useState<string | null>(null);
 
@@ -100,16 +104,22 @@ export default function FeedingStep({
       return;
     }
     setPhotoError(null);
+    setPendingPlatingPhoto(file);
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    let platingPhotoId = initialData?.platingPhotoId;
+    if (pendingPlatingPhoto) {
+      platingPhotoId = await savePhoto(pendingPlatingPhoto);
+    }
     onSave?.({
       foodEntries,
       servingGrams,
       feedingTimes,
       supplementEntries,
       platingInstructions,
+      platingPhotoId,
       dietaryNotes,
     });
   }
