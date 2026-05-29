@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../../features/profile";
 import { Button } from "../../primitives";
 import type { WizardStep } from "../../types/profile";
+import { getNextStep } from "../../utils/getNextStep";
 
 const ALL_STEPS: WizardStep[] = [
   "basics",
@@ -79,13 +80,29 @@ export default function DashboardPage() {
                     </p>
                   </>
                 )}
-                <Button>Edit</Button>
                 {isComplete ? (
-                  <Button onClick={() => navigate(`/preview/${profile.id}`)}>
-                    Generate PDF
-                  </Button>
+                  <>
+                    <Button
+                      onClick={() =>
+                        navigate(`/wizard/${profile.id}/step/basics`)
+                      }
+                    >
+                      Edit
+                    </Button>
+                    <Button onClick={() => navigate(`/preview/${profile.id}`)}>
+                      Generate PDF
+                    </Button>
+                  </>
                 ) : (
-                  <Button>Continue</Button>
+                  <Button
+                    onClick={() => {
+                      const nextStep = getNextStep(profile);
+                      if (nextStep)
+                        navigate(`/wizard/${profile.id}/step/${nextStep}`);
+                    }}
+                  >
+                    Continue
+                  </Button>
                 )}
                 <Button onClick={() => deleteProfile(profile.id)}>
                   Delete

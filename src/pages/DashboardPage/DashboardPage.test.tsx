@@ -22,6 +22,7 @@ function renderDashboard() {
       <Routes>
         <Route index element={<DashboardPage />} />
         <Route path="preview/:id" element={<LocationDisplay />} />
+        <Route path="wizard/:id/step/:step" element={<LocationDisplay />} />
       </Routes>
     </MemoryRouter>
   );
@@ -99,7 +100,7 @@ describe("DashboardPage", () => {
     expect(await screen.findByText(/3 year/i)).toBeInTheDocument();
   });
 
-  it("shows Continue (not Generate PDF) for a Basics-only profile", async () => {
+  it("shows Continue (not Generate PDF or Edit) for a Basics-only profile", async () => {
     await saveProfile(makeBasicsProfile("p-2"));
     renderDashboard();
     expect(
@@ -107,6 +108,9 @@ describe("DashboardPage", () => {
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: /generate pdf/i })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /^edit$/i })
     ).not.toBeInTheDocument();
   });
 
@@ -143,6 +147,39 @@ describe("DashboardPage", () => {
     await waitFor(() => {
       expect(screen.queryByText("Whiskers")).not.toBeInTheDocument();
     });
+  });
+
+  it("clicking Continue navigates to the next incomplete step", async () => {
+    const user = userEvent.setup();
+    await saveProfile(makeBasicsProfile("continue-nav-test"));
+    renderDashboard();
+    await user.click(await screen.findByRole("button", { name: /continue/i }));
+    const location = await screen.findByTestId("location");
+    expect(location).toHaveTextContent(
+      "/wizard/continue-nav-test/step/feeding"
+    );
+  });
+
+  it("clicking Edit navigates to the basics step", async () => {
+    const user = userEvent.setup();
+    await saveProfile({
+      id: "edit-nav-test",
+      completedSteps: [
+        "basics",
+        "feeding",
+        "routine",
+        "favorites",
+        "medical",
+        "notes",
+      ],
+      basics: { name: "Max", ageValue: 2, ageUnit: "years" },
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+    renderDashboard();
+    await user.click(await screen.findByRole("button", { name: /^edit$/i }));
+    const location = await screen.findByTestId("location");
+    expect(location).toHaveTextContent("/wizard/edit-nav-test/step/basics");
   });
 
   it("clicking Generate PDF navigates to /preview/:id", async () => {
