@@ -14,6 +14,7 @@ export default function App() {
         <Route element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
           <Route path="wizard/new" element={<WizardPage />} />
+          <Route path="wizard/:id/step/:step" element={<WizardPage />} />
           <Route
             path="preview/merge/:id1/:id2"
             element={<MergedPreviewPage />}
