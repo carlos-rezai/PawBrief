@@ -17,12 +17,13 @@
 
 ## Wizard
 
-| Term          | Definition                                                                                    | Aliases to avoid            |
-| ------------- | --------------------------------------------------------------------------------------------- | --------------------------- |
-| **Wizard**    | The linear step-by-step form used to create or edit a profile                                 | Form, survey, questionnaire |
-| **Step**      | A single named screen within the wizard (Basics, Feeding, Routine, Favorites, Medical, Notes) | Page, section, screen       |
-| **Stepper**   | The navigation component that shows wizard progress and the current step                      | Progress bar, tabs          |
-| **Edit Mode** | The wizard opened on an existing profile, jumping directly to a specific step                 | Update mode, edit flow      |
+| Term          | Definition                                                                                       | Aliases to avoid            |
+| ------------- | ------------------------------------------------------------------------------------------------ | --------------------------- |
+| **Wizard**    | The linear step-by-step form used to create or edit a profile                                    | Form, survey, questionnaire |
+| **Step**      | A single named screen within the wizard (Basics, Feeding, Routine, Favorites, Medical, Notes)    | Page, section, screen       |
+| **Stepper**   | The navigation component that shows wizard progress and the current step; supports click-to-jump | Progress bar, tabs          |
+| **Step Card** | The surface card (`surface` bg, radius 12) that wraps each wizard step body (new)                | Step container, step panel  |
+| **Edit Mode** | The wizard opened on an existing profile, jumping directly to a specific step                    | Update mode, edit flow      |
 
 ## Feeding
 
@@ -38,12 +39,13 @@
 
 ## Routine
 
-| Term              | Definition                                                                    | Aliases to avoid                 |
-| ----------------- | ----------------------------------------------------------------------------- | -------------------------------- |
-| **Routine**       | The cat's 24-hour daily activity pattern, represented as a pie chart          | Schedule, timetable              |
-| **Activity Slot** | A named time block in the routine with a label and duration in hours          | Time block, routine entry, slice |
-| **Pie Chart**     | The visual representation of time allocation across activity slots in the PDF | Chart, donut chart, graph        |
-| **Color Palette** | The fixed set of design-token colors automatically assigned to activity slots | Color scheme, theme colors       |
+| Term              | Definition                                                                                                              | Aliases to avoid                 |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| **Routine**       | The cat's 24-hour daily activity pattern, represented as a radial clock                                                 | Schedule, timetable              |
+| **Activity Slot** | A named time block in the routine with a label, start time, and duration in hours                                       | Time block, routine entry, slice |
+| **Routine Chart** | The 24-hour radial SVG clock that renders activity slots as arcs from their start time (updated)                        | Pie chart, donut chart, graph    |
+| **Arc**           | The visual segment on the Routine Chart representing one Activity Slot, drawn from start time across its duration (new) | Slice, wedge, segment            |
+| **Color Palette** | The fixed set of six design-token colors automatically assigned to activity slots by index                              | Color scheme, theme colors       |
 
 ## Favorites
 
@@ -90,11 +92,32 @@
 
 ## Dashboard
 
-| Term             | Definition                                                                             | Aliases to avoid            |
-| ---------------- | -------------------------------------------------------------------------------------- | --------------------------- |
-| **Dashboard**    | The home screen displaying all profile cards                                           | Home, profile list, gallery |
-| **Profile Card** | A card on the dashboard representing a single profile with its key details and actions | Card, tile, profile tile    |
-| **Merge**        | The action of selecting exactly two profiles to generate a Merged Care Guide           | Combine, join, link         |
+| Term                  | Definition                                                                                            | Aliases to avoid                  |
+| --------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------- |
+| **Dashboard**         | The home screen displaying all profile cards                                                          | Home, profile list, gallery       |
+| **Profile Card**      | A card on the dashboard representing a single profile with its key details and actions                | Card, tile, profile tile          |
+| **Photo Zone**        | The 128px-tall image area at the top of a Profile Card, rendered with `object-fit: cover` (new)       | Photo area, image slot            |
+| **Scrim**             | The gradient overlay on the Photo Zone that keeps the Status Badge legible against any photo (new)    | Overlay, tint, vignette           |
+| **Status Badge**      | The opaque chip on a Profile Card showing Draft or Complete status (new)                              | Status pill, state label          |
+| **Plus Card**         | The dashed-border card on the Dashboard that is the sole entry point for creating a new profile (new) | Add card, create card, new button |
+| **Merge**             | The action of selecting exactly two profiles to generate a Merged Care Guide                          | Combine, join, link               |
+| **Merge-select Mode** | The Dashboard state where the Owner selects exactly two Complete Profiles to merge (new)              | Merge mode, selection mode        |
+| **Toast**             | A transient bottom-right snackbar notification (e.g. "Draft saved") that auto-dismisses (new)         | Snackbar, alert, notification     |
+
+## Design System
+
+| Term             | Definition                                                                                                   | Aliases to avoid                   |
+| ---------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------- |
+| **Sienna**       | The chosen visual design direction — warm, earthy, friendly-geometric, light-mode (new)                      | Theme, style, direction            |
+| **Design Token** | A named constant in `src/tokens/` that encodes a single design decision (color, spacing, radius, etc.) (new) | CSS variable, design value         |
+| **Theme**        | The namespaced collection of all design tokens passed through `ThemeProvider` (new)                          | Config, styles object              |
+| **Mark**         | The "Brief" document-with-folded-corner-and-paw SVG symbol, used as the app logo (new)                       | Logo, icon, paw mark               |
+| **Wordmark**     | The "PawBrief" logotype combining the Mark and the styled text ("Paw" + "Brief") (new)                       | Logo text, brand name, title       |
+| **Primitive**    | A dumb, reusable UI atom with no business logic (Button, Input, Field, Modal, Mark) (new)                    | Base component, atom               |
+| **Component**    | A composed UI block built from primitives, with no business logic (Stepper, Chips, Repeatable, etc.) (new)   | Composed component, widget         |
+| **Chips**        | A composed input component for adding and removing short tag-like values below a text input (new)            | Tags, pills input, chip input      |
+| **Repeatable**   | A composed component that manages an ordered list of entry cards with Add and Remove actions (new)           | Repeater, entry list, list builder |
+| **ConfirmModal** | A composed modal used exclusively for destructive actions, requiring explicit confirmation (new)             | Delete dialog, confirm dialog      |
 
 ## Relationships
 
@@ -107,6 +130,10 @@
 - A **Photo ID** references a Blob in IndexedDB — a **Profile** references photos by **Photo ID**, never inline.
 - **Flavor** and **Texture** are distinct: **Flavor** is what the food is made of; **Texture** is how it is prepared or served.
 - **Supplement Entry** and **Medication** are distinct: a **Supplement Entry** is a routine nutritional addition; a **Medication** is a prescribed treatment.
+- A **Routine Chart** renders one **Arc** per **Activity Slot**, drawn from the slot's start time across its duration.
+- The **Mark** and **Wordmark** are built in SVG code — no raster asset; the **Mark** is the symbol alone, the **Wordmark** combines Mark + text.
+- A **Profile Card** has exactly one **Photo Zone**, one **Status Badge**, and one **Scrim** (when a photo is present).
+- **Merge-select Mode** is only available when two or more **Complete Profiles** exist; **Draft** profiles are visible but unselectable.
 
 ## Example dialogue
 
@@ -116,6 +143,8 @@
 > **Domain expert:** "The **Profile** stays a **Draft**. The **Profile Card** shows a 'Continue' button instead. All data is safe — the **Wizard** auto-saves to IndexedDB on every **Step** advance."
 > **Dev:** "When we generate the **Merged Care Guide**, are the two **Profiles** linked in any way?"
 > **Domain expert:** "No — the **Merge** is a one-time PDF generation action. The two **Profiles** remain independent. The **Merged Care Guide** is the only artifact that joins them."
+> **Dev:** "Should we call the routine visualization a pie chart or something else?"
+> **Domain expert:** "**Routine Chart** — it's a 24-hour radial clock, not a pie chart. Each **Arc** starts at the **Activity Slot**'s clock time and spans its duration. Calling it a pie chart implies proportional slices; **Arc** on a **Routine Chart** is the correct mental model."
 > **Dev:** "Should we call it 'consistency' or 'texture' in the UI for the food form field?"
 > **Domain expert:** "**Texture** — it matches what cat owners read on packaging. **Consistency** is an alias to avoid."
 
@@ -124,3 +153,6 @@
 - **"Type"** was used during the session to mean both **Flavor** (e.g. chicken, duck) and **Texture** (e.g. sauce, patty). These are distinct fields. Use **Flavor** for protein/ingredient type and **Texture** for physical form — never "type" alone.
 - **"Supplement"** could refer to either a **Supplement Entry** (routine nutritional addition in the Feeding step) or a **Medication** (prescribed treatment in the Medical step). These are distinct. Use the full term in all contexts.
 - **"Page"** risks conflation between a route-level page (a React component) and a **Step** (a screen within the Wizard). Use **Step** exclusively for wizard navigation; reserve **Page** for route-level components.
+- **"Pie Chart"** was the prior term for the routine visualization. The correct term is **Routine Chart** — it is a radial clock where each **Activity Slot** is represented as an **Arc**, not a proportional wedge. "Pie chart" is an alias to avoid.
+- **"Logo"** is ambiguous: the **Mark** is the symbol alone (document + paw SVG); the **Wordmark** is the logotype that combines the Mark with the "PawBrief" text. Use the specific term, not "logo."
+- **"Component"** in general programming means any React component. In this codebase it has a specific layer meaning: a composed UI block in `src/components/`. Use **Primitive** for atoms in `src/primitives/` and **Component** only for composed blocks.
