@@ -23,6 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-Claude Code
+# Claude Code
 .claude/
 CLAUDE.md
+
+# Assets
+design_handoff_pawbrief
