@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../../features/profile";
 import { Button, Checkbox } from "../../primitives";
-import type { WizardStep } from "../../types/profile";
+import Wordmark from "../../primitives/Wordmark/Wordmark";
+import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import { useToast } from "../../components/Toast/Toast";
+import type { CatProfile, WizardStep } from "../../types/profile";
 import { getNextStep } from "../../utils/getNextStep";
 
 const ALL_STEPS: WizardStep[] = [
@@ -17,8 +20,15 @@ const ALL_STEPS: WizardStep[] = [
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { profiles, createProfile, deleteProfile } = useProfiles();
+  const { enqueue } = useToast();
   const [mergeMode, setMergeMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [pendingDelete, setPendingDelete] = useState<CatProfile | null>(null);
+
+  const completeProfiles = profiles.filter((p) =>
+    ALL_STEPS.every((s) => p.completedSteps.includes(s))
+  );
+  const canMerge = completeProfiles.length >= 2;
 
   function toggleMergeSelect(id: string) {
     setSelectedIds((prev) => {
@@ -32,85 +42,127 @@ export default function DashboardPage() {
     });
   }
 
+  async function handleCreateProfile() {
+    const id = await createProfile();
+    navigate(`/wizard/${id}/step/basics`);
+  }
+
+  async function handleConfirmDelete() {
+    if (!pendingDelete) return;
+    const name = pendingDelete.basics?.name ?? "Profile";
+    await deleteProfile(pendingDelete.id);
+    setPendingDelete(null);
+    enqueue(`${name} deleted`);
+  }
+
   return (
-    <main>
-      <Button onClick={() => createProfile()}>+ New Profile</Button>
-      <Button
-        onClick={() => {
-          setMergeMode(true);
-          setSelectedIds([]);
-        }}
-      >
-        Merge two profiles
-      </Button>
-      {mergeMode && selectedIds.length === 2 && (
+    <>
+      <nav>
+        <Wordmark />
+      </nav>
+      <main>
         <Button
-          onClick={() =>
-            navigate(`/preview/merge/${selectedIds[0]}/${selectedIds[1]}`)
-          }
+          disabled={!canMerge}
+          onClick={() => {
+            setMergeMode(true);
+            setSelectedIds([]);
+          }}
         >
-          Preview Merge
+          Merge guides
         </Button>
-      )}
-      {profiles.length === 0 ? (
-        <p>Get started — create your first profile above.</p>
-      ) : (
-        <ul>
-          {profiles.map((profile) => {
-            const isComplete = ALL_STEPS.every((s) =>
-              profile.completedSteps.includes(s)
-            );
-            const basics = profile.basics;
-            return (
-              <li key={profile.id}>
-                {mergeMode && isComplete && (
-                  <Checkbox
-                    aria-label={basics?.name}
-                    checked={selectedIds.includes(profile.id)}
-                    onChange={() => toggleMergeSelect(profile.id)}
-                  />
-                )}
-                {basics && (
-                  <>
-                    <p>{basics.name}</p>
-                    {basics.breed && <p>{basics.breed}</p>}
-                    <p>
-                      {basics.ageValue} {basics.ageUnit}
-                    </p>
-                  </>
-                )}
-                {isComplete ? (
-                  <>
+        {profiles.length === 0 ? (
+          <p>Get started — create your first profile above.</p>
+        ) : (
+          <ul>
+            {profiles.map((profile) => {
+              const isComplete = ALL_STEPS.every((s) =>
+                profile.completedSteps.includes(s)
+              );
+              const basics = profile.basics;
+              return (
+                <li key={profile.id}>
+                  {mergeMode && isComplete && (
+                    <Checkbox
+                      aria-label={basics?.name}
+                      checked={selectedIds.includes(profile.id)}
+                      onChange={() => toggleMergeSelect(profile.id)}
+                    />
+                  )}
+                  {basics && (
+                    <>
+                      <p>{basics.name}</p>
+                      {basics.breed && <p>{basics.breed}</p>}
+                      <p>
+                        {basics.ageValue} {basics.ageUnit}
+                      </p>
+                    </>
+                  )}
+                  {isComplete ? (
+                    <>
+                      <Button
+                        onClick={() =>
+                          navigate(`/wizard/${profile.id}/step/basics`)
+                        }
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        onClick={() => navigate(`/preview/${profile.id}`)}
+                      >
+                        Generate PDF
+                      </Button>
+                    </>
+                  ) : (
                     <Button
-                      onClick={() =>
-                        navigate(`/wizard/${profile.id}/step/basics`)
-                      }
+                      onClick={() => {
+                        const nextStep = getNextStep(profile);
+                        if (nextStep)
+                          navigate(`/wizard/${profile.id}/step/${nextStep}`);
+                      }}
                     >
-                      Edit
+                      Continue
                     </Button>
-                    <Button onClick={() => navigate(`/preview/${profile.id}`)}>
-                      Generate PDF
-                    </Button>
-                  </>
-                ) : (
-                  <Button
-                    onClick={() => {
-                      const nextStep = getNextStep(profile);
-                      if (nextStep)
-                        navigate(`/wizard/${profile.id}/step/${nextStep}`);
-                    }}
-                  >
-                    Continue
+                  )}
+                  <Button onClick={() => setPendingDelete(profile)}>
+                    Delete
                   </Button>
-                )}
-                <Button onClick={() => deleteProfile(profile.id)}>
-                  Delete
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+        <button onClick={handleCreateProfile}>New cat profile</button>
+      </main>
+
+      {mergeMode && (
+        <div>
+          <span>{selectedIds.length} selected</span>
+          <Button
+            disabled={selectedIds.length !== 2}
+            onClick={() => {
+              if (selectedIds.length === 2) {
+                navigate(`/preview/merge/${selectedIds[0]}/${selectedIds[1]}`);
+              }
+            }}
+          >
+            Create merged guide
+          </Button>
+        </div>
       )}
-    </main>
+
+      {pendingDelete && (
+        <ConfirmModal
+          confirmLabel="Delete profile"
+          cancelLabel="Cancel"
+          onConfirm={handleConfirmDelete}
+          onCancel={() => setPendingDelete(null)}
+        >
+          <p>
+            Delete{" "}
+            <strong>{pendingDelete.basics?.name ?? "this profile"}</strong>?
+          </p>
+        </ConfirmModal>
+      )}
+    </>
   );
 }
