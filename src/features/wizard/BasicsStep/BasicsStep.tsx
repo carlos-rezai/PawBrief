@@ -2,8 +2,35 @@ import { useState } from "react";
 import type { BasicsData } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
-import { Button, Field, Input, Select } from "../../../primitives";
+import { Button, Field, Select } from "../../../primitives";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
+import {
+  AgeGrid,
+  BasicsBody,
+  FieldsCol,
+  PhotoCircle,
+  PhotoCircleText,
+  PhotoCol,
+} from "./BasicsStep.styles";
+
+const cameraIcon = (
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    className="photo-circle-icon"
+    style={{ color: "var(--pb-muted, #948675)", pointerEvents: "none" }}
+  >
+    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+    <circle cx="12" cy="13" r="4" />
+  </svg>
+);
 
 interface BasicsStepProps {
   onSave?: (data: BasicsData) => void;
@@ -53,30 +80,70 @@ export default function BasicsStep({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Field label="Name">
-        <Input value={name} onChange={(e) => setName(e.target.value)} />
-      </Field>
-      <Field label="Breed">
-        <Input value={breed} onChange={(e) => setBreed(e.target.value)} />
-      </Field>
-      <Field label="Age">
-        <Input
-          type="number"
-          value={ageValue}
-          onChange={(e) => setAgeValue(Number(e.target.value))}
-        />
-        <Select
-          value={ageUnit}
-          onChange={(e) => setAgeUnit(e.target.value as "years" | "months")}
-        >
-          <option value="years">years</option>
-          <option value="months">months</option>
-        </Select>
-      </Field>
-      <Field label="Photo">
-        <Input type="file" onChange={handlePhotoChange} />
-      </Field>
-      {photoError && <p role="alert">{photoError}</p>}
+      <BasicsBody>
+        <PhotoCol>
+          <PhotoCircle>
+            {cameraIcon}
+            <PhotoCircleText className="photo-circle-text">
+              Add photo
+            </PhotoCircleText>
+            <input
+              type="file"
+              aria-label="Photo"
+              onChange={handlePhotoChange}
+              style={{
+                position: "absolute",
+                inset: 0,
+                opacity: 0,
+                cursor: "pointer",
+                width: "100%",
+                height: "100%",
+              }}
+            />
+          </PhotoCircle>
+          {photoError && <p role="alert">{photoError}</p>}
+        </PhotoCol>
+
+        <FieldsCol>
+          <Field label="Name">
+            <input
+              aria-label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{ width: "100%" }}
+            />
+          </Field>
+          <Field label="Breed" optional>
+            <input
+              aria-label="Breed"
+              value={breed}
+              onChange={(e) => setBreed(e.target.value)}
+              style={{ width: "100%" }}
+            />
+          </Field>
+          <Field label="Age">
+            <AgeGrid>
+              <input
+                type="number"
+                aria-label="Age"
+                value={ageValue}
+                onChange={(e) => setAgeValue(Number(e.target.value))}
+                style={{ width: "100%" }}
+              />
+              <Select
+                value={ageUnit}
+                onChange={(e) =>
+                  setAgeUnit(e.target.value as "years" | "months")
+                }
+              >
+                <option value="years">years</option>
+                <option value="months">months</option>
+              </Select>
+            </AgeGrid>
+          </Field>
+        </FieldsCol>
+      </BasicsBody>
+
       <StepFooter>
         <Button onClick={onBack}>{backLabel}</Button>
         <StepFooterSpacer />
