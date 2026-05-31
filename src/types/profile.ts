@@ -37,7 +37,9 @@ export interface FeedingData {
 
 export interface ActivitySlot {
   label: string;
-  durationHours: number;
+  start: string;
+  hours: number;
+  colorIndex: number;
 }
 
 export interface RoutineData {

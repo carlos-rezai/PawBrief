@@ -142,7 +142,7 @@ export default function MergedPDF({ profileA, profileB }: MergedPDFProps) {
                   <Text style={styles.sectionTitle}>Routine</Text>
                   {profileA.routine.slots.map((slot, i) => (
                     <Text key={i}>
-                      {slot.label}: {slot.durationHours}h
+                      {slot.label}: {slot.hours}h
                     </Text>
                   ))}
                 </>
@@ -154,7 +154,7 @@ export default function MergedPDF({ profileA, profileB }: MergedPDFProps) {
                   <Text style={styles.sectionTitle}>Routine</Text>
                   {profileB.routine.slots.map((slot, i) => (
                     <Text key={i}>
-                      {slot.label}: {slot.durationHours}h
+                      {slot.label}: {slot.hours}h
                     </Text>
                   ))}
                 </>

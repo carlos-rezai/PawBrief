@@ -78,8 +78,8 @@ function makeCompleteProfile(id: string, name: string) {
     basics: { name, ageValue: 3, ageUnit: "years" as const },
     routine: {
       slots: [
-        { label: "Sleep", durationHours: 14 },
-        { label: "Playtime", durationHours: 3 },
+        { label: "Sleep", start: "22:30", hours: 14, colorIndex: 0 },
+        { label: "Playtime", start: "09:00", hours: 3, colorIndex: 1 },
       ],
     },
     favorites: {

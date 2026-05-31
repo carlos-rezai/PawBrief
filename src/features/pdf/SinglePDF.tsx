@@ -50,11 +50,11 @@ const pdfColors = [
 ];
 
 interface PieChartProps {
-  slots: { label: string; durationHours: number }[];
+  slots: { label: string; hours: number }[];
 }
 
 function PieChart({ slots }: PieChartProps) {
-  const total = slots.reduce((s, sl) => s + sl.durationHours, 0);
+  const total = slots.reduce((s, sl) => s + sl.hours, 0);
   if (total === 0) return null;
 
   const size = 100;
@@ -64,7 +64,7 @@ function PieChart({ slots }: PieChartProps) {
 
   let cumulative = 0;
   const slices = slots.map((slot, i) => {
-    const fraction = slot.durationHours / total;
+    const fraction = slot.hours / total;
     const startAngle = cumulative * 2 * Math.PI - Math.PI / 2;
     cumulative += fraction;
     const endAngle = cumulative * 2 * Math.PI - Math.PI / 2;
@@ -172,7 +172,7 @@ export default function SinglePDF({
             <PieChart slots={routine.slots} />
             {routine.slots.map((slot, i) => (
               <Text key={i}>
-                {slot.label}: {slot.durationHours}h
+                {slot.label}: {slot.hours}h
               </Text>
             ))}
           </View>
