@@ -8,6 +8,15 @@ import type {
 import { buildMapsUrl } from "../../../utils/buildMapsUrl";
 import { Button, Field, Input, Textarea } from "../../../primitives";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
+import StepSection from "../StepSection";
+import {
+  ContactGrid,
+  EntryCard,
+  HealthGrid,
+  MedTopGrid,
+  PrivacyNote,
+  VetGrid,
+} from "./MedicalStep.styles";
 
 interface MedicalStepProps {
   onSave?: (data: MedicalData) => void;
@@ -53,179 +62,207 @@ export default function MedicalStep({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Field label="Vet name">
-        <Input
-          value={vet.name}
-          onChange={(e) => setVet((v) => ({ ...v, name: e.target.value }))}
-        />
-      </Field>
-      <Field label="Clinic name">
-        <Input
-          value={vet.clinicName}
-          onChange={(e) =>
-            setVet((v) => ({ ...v, clinicName: e.target.value }))
-          }
-        />
-      </Field>
-      <Field label="Phone">
-        <Input
-          value={vet.phone}
-          onChange={(e) => setVet((v) => ({ ...v, phone: e.target.value }))}
-        />
-      </Field>
-      <Field label="Vet address">
-        <Input
-          value={vet.address}
-          onChange={(e) => setVet((v) => ({ ...v, address: e.target.value }))}
-        />
-      </Field>
-      {mapsUrl && (
-        <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
-          Get directions
-        </a>
-      )}
-
-      {emergencyContacts.map((contact, i) => (
-        <div key={i} data-testid="emergency-contact">
-          <Field label="Name">
+      <StepSection first title="Vet">
+        <VetGrid>
+          <Field label="Vet name">
             <Input
-              value={contact.name}
+              value={vet.name}
+              onChange={(e) => setVet((v) => ({ ...v, name: e.target.value }))}
+            />
+          </Field>
+          <Field label="Clinic name">
+            <Input
+              value={vet.clinicName}
               onChange={(e) =>
-                setEmergencyContacts((prev) =>
-                  prev.map((c, idx) =>
-                    idx === i ? { ...c, name: e.target.value } : c
-                  )
-                )
+                setVet((v) => ({ ...v, clinicName: e.target.value }))
               }
             />
           </Field>
+        </VetGrid>
+        <VetGrid>
           <Field label="Phone">
             <Input
-              value={contact.phone}
-              onChange={(e) =>
-                setEmergencyContacts((prev) =>
-                  prev.map((c, idx) =>
-                    idx === i ? { ...c, phone: e.target.value } : c
-                  )
-                )
-              }
+              value={vet.phone}
+              onChange={(e) => setVet((v) => ({ ...v, phone: e.target.value }))}
             />
           </Field>
-          <Field label="Relationship">
+          <Field label="Vet address">
             <Input
-              value={contact.relationship}
+              value={vet.address}
               onChange={(e) =>
-                setEmergencyContacts((prev) =>
-                  prev.map((c, idx) =>
-                    idx === i ? { ...c, relationship: e.target.value } : c
-                  )
-                )
+                setVet((v) => ({ ...v, address: e.target.value }))
               }
             />
           </Field>
-          <Button
-            onClick={() =>
-              setEmergencyContacts((prev) => prev.filter((_, idx) => idx !== i))
-            }
-          >
-            Remove emergency contact
-          </Button>
-        </div>
-      ))}
-      <Button
-        onClick={() =>
-          setEmergencyContacts((prev) => [
-            ...prev,
-            { name: "", phone: "", relationship: "" },
-          ])
-        }
-      >
-        Add emergency contact
-      </Button>
+        </VetGrid>
+        {mapsUrl && (
+          <a href={mapsUrl} target="_blank" rel="noopener noreferrer">
+            Get directions
+          </a>
+        )}
+        <PrivacyNote>
+          The address is only used to generate a 'Get directions' link in the
+          guide. Your home address is never stored.
+        </PrivacyNote>
+      </StepSection>
 
-      {medications.map((med, i) => (
-        <div key={i} data-testid="medication">
-          <Field label="Name">
-            <Input
-              value={med.name}
-              onChange={(e) =>
-                setMedications((prev) =>
-                  prev.map((m, idx) =>
-                    idx === i ? { ...m, name: e.target.value } : m
-                  )
+      <StepSection title="Emergency contacts">
+        {emergencyContacts.map((contact, i) => (
+          <EntryCard key={i} data-testid="emergency-contact">
+            <ContactGrid>
+              <Field label="Name">
+                <Input
+                  value={contact.name}
+                  onChange={(e) =>
+                    setEmergencyContacts((prev) =>
+                      prev.map((c, idx) =>
+                        idx === i ? { ...c, name: e.target.value } : c
+                      )
+                    )
+                  }
+                />
+              </Field>
+              <Field label="Phone">
+                <Input
+                  value={contact.phone}
+                  onChange={(e) =>
+                    setEmergencyContacts((prev) =>
+                      prev.map((c, idx) =>
+                        idx === i ? { ...c, phone: e.target.value } : c
+                      )
+                    )
+                  }
+                />
+              </Field>
+              <Field label="Relationship">
+                <Input
+                  value={contact.relationship}
+                  onChange={(e) =>
+                    setEmergencyContacts((prev) =>
+                      prev.map((c, idx) =>
+                        idx === i ? { ...c, relationship: e.target.value } : c
+                      )
+                    )
+                  }
+                />
+              </Field>
+            </ContactGrid>
+            <Button
+              onClick={() =>
+                setEmergencyContacts((prev) =>
+                  prev.filter((_, idx) => idx !== i)
                 )
               }
-            />
-          </Field>
-          <Field label="Dosage">
-            <Input
-              value={med.dosage}
-              onChange={(e) =>
-                setMedications((prev) =>
-                  prev.map((m, idx) =>
-                    idx === i ? { ...m, dosage: e.target.value } : m
+            >
+              Remove emergency contact
+            </Button>
+          </EntryCard>
+        ))}
+        <Button
+          onClick={() =>
+            setEmergencyContacts((prev) => [
+              ...prev,
+              { name: "", phone: "", relationship: "" },
+            ])
+          }
+        >
+          Add emergency contact
+        </Button>
+      </StepSection>
+
+      <StepSection
+        title="Medications"
+        hint="Prescribed treatments — name, dosage, frequency, how to give it."
+      >
+        {medications.map((med, i) => (
+          <EntryCard key={i} data-testid="medication">
+            <MedTopGrid>
+              <Field label="Name">
+                <Input
+                  value={med.name}
+                  onChange={(e) =>
+                    setMedications((prev) =>
+                      prev.map((m, idx) =>
+                        idx === i ? { ...m, name: e.target.value } : m
+                      )
+                    )
+                  }
+                />
+              </Field>
+              <Field label="Dosage">
+                <Input
+                  value={med.dosage}
+                  onChange={(e) =>
+                    setMedications((prev) =>
+                      prev.map((m, idx) =>
+                        idx === i ? { ...m, dosage: e.target.value } : m
+                      )
+                    )
+                  }
+                />
+              </Field>
+              <Field label="Frequency">
+                <Input
+                  value={med.frequency}
+                  onChange={(e) =>
+                    setMedications((prev) =>
+                      prev.map((m, idx) =>
+                        idx === i ? { ...m, frequency: e.target.value } : m
+                      )
+                    )
+                  }
+                />
+              </Field>
+            </MedTopGrid>
+            <Field label="Instructions">
+              <Textarea
+                value={med.instructions}
+                onChange={(e) =>
+                  setMedications((prev) =>
+                    prev.map((m, idx) =>
+                      idx === i ? { ...m, instructions: e.target.value } : m
+                    )
                   )
-                )
+                }
+              />
+            </Field>
+            <Button
+              onClick={() =>
+                setMedications((prev) => prev.filter((_, idx) => idx !== i))
               }
-            />
-          </Field>
-          <Field label="Frequency">
-            <Input
-              value={med.frequency}
-              onChange={(e) =>
-                setMedications((prev) =>
-                  prev.map((m, idx) =>
-                    idx === i ? { ...m, frequency: e.target.value } : m
-                  )
-                )
-              }
-            />
-          </Field>
-          <Field label="Instructions">
+            >
+              Remove medication
+            </Button>
+          </EntryCard>
+        ))}
+        <Button
+          onClick={() =>
+            setMedications((prev) => [
+              ...prev,
+              { name: "", dosage: "", frequency: "", instructions: "" },
+            ])
+          }
+        >
+          Add medication
+        </Button>
+      </StepSection>
+
+      <StepSection title="Health notes">
+        <HealthGrid>
+          <Field label="Allergies" optional>
             <Textarea
-              value={med.instructions}
-              onChange={(e) =>
-                setMedications((prev) =>
-                  prev.map((m, idx) =>
-                    idx === i ? { ...m, instructions: e.target.value } : m
-                  )
-                )
-              }
+              value={allergies}
+              onChange={(e) => setAllergies(e.target.value)}
             />
           </Field>
-          <Button
-            onClick={() =>
-              setMedications((prev) => prev.filter((_, idx) => idx !== i))
-            }
-          >
-            Remove medication
-          </Button>
-        </div>
-      ))}
-      <Button
-        onClick={() =>
-          setMedications((prev) => [
-            ...prev,
-            { name: "", dosage: "", frequency: "", instructions: "" },
-          ])
-        }
-      >
-        Add medication
-      </Button>
-
-      <Field label="Allergies">
-        <Textarea
-          value={allergies}
-          onChange={(e) => setAllergies(e.target.value)}
-        />
-      </Field>
-
-      <Field label="Medical conditions">
-        <Textarea
-          value={medicalConditions}
-          onChange={(e) => setMedicalConditions(e.target.value)}
-        />
-      </Field>
+          <Field label="Medical conditions" optional>
+            <Textarea
+              value={medicalConditions}
+              onChange={(e) => setMedicalConditions(e.target.value)}
+            />
+          </Field>
+        </HealthGrid>
+      </StepSection>
 
       <StepFooter>
         <Button onClick={onBack}>{backLabel}</Button>
