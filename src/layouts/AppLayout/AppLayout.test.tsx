@@ -18,24 +18,18 @@ function renderAtRoute(path: string) {
 }
 
 describe("AppLayout", () => {
-  it("renders a navbar on the dashboard route", () => {
+  it("renders the dashboard child on the index route", () => {
     renderAtRoute("/");
-    expect(screen.getByRole("navigation")).toBeInTheDocument();
+    expect(screen.getByText("Dashboard")).toBeInTheDocument();
   });
 
-  it("renders a navbar on the wizard route", () => {
+  it("renders the wizard child on the wizard route", () => {
     renderAtRoute("/wizard/new");
-    expect(screen.getByRole("navigation")).toBeInTheDocument();
+    expect(screen.getByText("Wizard")).toBeInTheDocument();
   });
 
-  it("renders a navbar on the preview route", () => {
+  it("renders the preview child on the preview route", () => {
     renderAtRoute("/preview/test");
-    expect(screen.getByRole("navigation")).toBeInTheDocument();
-  });
-
-  it("logo link points to /", () => {
-    renderAtRoute("/wizard/new");
-    const logo = screen.getByRole("link", { name: /pawbrief/i });
-    expect(logo).toHaveAttribute("href", "/");
+    expect(screen.getByText("Preview")).toBeInTheDocument();
   });
 });

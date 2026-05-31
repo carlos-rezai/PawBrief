@@ -2,15 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../../features/profile";
 import { Button } from "../../primitives";
-import Wordmark from "../../primitives/Wordmark/Wordmark";
+import Mark from "../../primitives/Mark/Mark";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
+import Header from "../../components/Header/Header";
 import { useToast } from "../../components/Toast/Toast";
 import type { CatProfile } from "../../types/profile";
 import { getNextStep } from "../../utils/getNextStep";
 import { STEP_ORDER } from "../../utils/wizardSteps";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
 import PlusCard from "../../components/PlusCard/PlusCard";
-import Mark from "../../primitives/Mark/Mark";
 import {
   CardGrid,
   DashContent,
@@ -18,8 +18,6 @@ import {
   DashHeaderLeft,
   DashHeaderSubtitle,
   DashHeaderTitle,
-  DashNavbar,
-  DashNavbarInner,
   EmptyStateDesc,
   EmptyStateTitle,
   EmptyStateWrapper,
@@ -86,11 +84,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <DashNavbar>
-        <DashNavbarInner>
-          <Wordmark />
-        </DashNavbarInner>
-      </DashNavbar>
+      <Header />
       <DashContent>
         <DashHeader>
           <DashHeaderLeft>

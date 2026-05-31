@@ -12,7 +12,7 @@ import {
 import Stepper from "../../components/Stepper/Stepper";
 import Modal from "../../primitives/Modal/Modal";
 import Button from "../../primitives/Button/Button";
-import Wordmark from "../../primitives/Wordmark/Wordmark";
+import Header from "../../components/Header/Header";
 import { useToast } from "../../components/Toast/Toast";
 import type { StepData, WizardStep } from "../../types/profile";
 import {
@@ -21,8 +21,6 @@ import {
   STEP_SUBTITLES,
 } from "../../utils/wizardSteps";
 import {
-  WizNavbar,
-  WizNavbarInner,
   WizMain,
   WizStepEyebrow,
   WizStepCard,
@@ -126,11 +124,7 @@ export default function WizardPage() {
 
   return (
     <>
-      <WizNavbar>
-        <WizNavbarInner>
-          <Wordmark />
-        </WizNavbarInner>
-      </WizNavbar>
+      <Header />
       <WizMain>
         <Stepper currentStep={stepIndex} onStepClick={handleStepClick} />
         <WizStepEyebrow>STEP {stepIndex + 1} OF 6</WizStepEyebrow>

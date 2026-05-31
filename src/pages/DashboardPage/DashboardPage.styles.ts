@@ -1,28 +1,6 @@
 import styled from "styled-components";
 import { theme as defaultTheme } from "../../tokens";
 
-export const DashNavbar = styled.nav`
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: ${({ theme }) => theme.colors.surface};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  height: 64px;
-`;
-
-export const DashNavbarInner = styled.div`
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 0 28px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-
-  @media (max-width: 640px) {
-    padding: 0 16px;
-  }
-`;
-
 export const DashContent = styled.main`
   max-width: 1080px;
   margin: 0 auto;
@@ -131,8 +109,6 @@ export const MergeHint = styled.span`
   color: ${({ theme }) => theme.colors.muted};
 `;
 
-DashNavbar.defaultProps = { theme: defaultTheme };
-DashNavbarInner.defaultProps = { theme: defaultTheme };
 DashContent.defaultProps = { theme: defaultTheme };
 DashHeader.defaultProps = { theme: defaultTheme };
 DashHeaderTitle.defaultProps = { theme: defaultTheme };
