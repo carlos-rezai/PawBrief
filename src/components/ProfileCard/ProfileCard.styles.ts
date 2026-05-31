@@ -57,6 +57,7 @@ export const PhotoImg = styled.img`
 export const PhotoScrim = styled.div`
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.34) 0%,
@@ -66,10 +67,14 @@ export const PhotoScrim = styled.div`
   pointer-events: none;
 `;
 
-export const StatusBadge = styled.span<{ $complete: boolean }>`
+export const StatusBadge = styled.span<{
+  $complete: boolean;
+  $onPhoto: boolean;
+}>`
   position: absolute;
   top: 12px;
   left: 12px;
+  z-index: 2;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.4px;
@@ -84,13 +89,15 @@ export const StatusBadge = styled.span<{ $complete: boolean }>`
   border: 1px solid
     ${({ $complete, theme }) =>
       $complete ? "transparent" : theme.colors.border};
-  box-shadow: ${({ theme }) => theme.shadows.soft};
+  box-shadow: ${({ $onPhoto }) =>
+    $onPhoto ? "0 1px 4px rgba(0,0,0,0.32)" : "none"};
 `;
 
 export const MergeCheck = styled.div<{ $selected: boolean }>`
   position: absolute;
   top: 12px;
   right: 12px;
+  z-index: 2;
   width: 24px;
   height: 24px;
   border-radius: 50%;

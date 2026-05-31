@@ -61,7 +61,7 @@ export default function ProfileCard({
           <Mark size={50} />
         )}
         {photoUrl && <PhotoScrim />}
-        <StatusBadge $complete={isComplete}>
+        <StatusBadge $complete={isComplete} $onPhoto={!!photoUrl}>
           {isComplete ? "Complete" : "Draft"}
         </StatusBadge>
         {mergeMode && selectable && (
