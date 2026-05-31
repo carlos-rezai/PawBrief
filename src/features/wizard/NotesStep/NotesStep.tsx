@@ -4,6 +4,8 @@ import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import { Button, Field, Input, Textarea } from "../../../primitives";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
+import StepSection from "../StepSection";
+import { NoteCard } from "./NotesStep.styles";
 
 interface NotesStepProps {
   onSave?: (data: NotesData) => void;
@@ -63,52 +65,59 @@ export default function NotesStep({
 
   return (
     <form onSubmit={handleSubmit}>
-      {specialNotes.map((note, i) => (
-        <div key={i} data-testid="special-note">
-          <Field label="Title">
-            <Input
-              value={note.title}
-              onChange={(e) =>
-                setSpecialNotes((prev) =>
-                  prev.map((n, idx) =>
-                    idx === i ? { ...n, title: e.target.value } : n
-                  )
-                )
-              }
-            />
-          </Field>
-          <Field label="Body">
-            <Textarea
-              value={note.body}
-              onChange={(e) =>
-                setSpecialNotes((prev) =>
-                  prev.map((n, idx) =>
-                    idx === i ? { ...n, body: e.target.value } : n
-                  )
-                )
-              }
-            />
-          </Field>
-          <Field label="Photo">
-            <Input type="file" onChange={(e) => handlePhotoChange(i, e)} />
-          </Field>
-          {photoErrors[i] && <p role="alert">{photoErrors[i]}</p>}
-          <Button
-            onClick={() =>
-              setSpecialNotes((prev) => prev.filter((_, idx) => idx !== i))
-            }
-          >
-            Remove note
-          </Button>
-        </div>
-      ))}
-      <Button
-        onClick={() =>
-          setSpecialNotes((prev) => [...prev, { title: "", body: "" }])
-        }
+      <StepSection
+        first
+        title="Special notes"
+        hint="Anything the other steps didn't cover — quirks, house rules, do's and don'ts."
       >
-        Add note
-      </Button>
+        {specialNotes.map((note, i) => (
+          <NoteCard key={i} data-testid="special-note">
+            <Field label="Title">
+              <Input
+                value={note.title}
+                onChange={(e) =>
+                  setSpecialNotes((prev) =>
+                    prev.map((n, idx) =>
+                      idx === i ? { ...n, title: e.target.value } : n
+                    )
+                  )
+                }
+              />
+            </Field>
+            <Field label="Body">
+              <Textarea
+                value={note.body}
+                placeholder="What should the sitter know?"
+                onChange={(e) =>
+                  setSpecialNotes((prev) =>
+                    prev.map((n, idx) =>
+                      idx === i ? { ...n, body: e.target.value } : n
+                    )
+                  )
+                }
+              />
+            </Field>
+            <Field label="Photo">
+              <Input type="file" onChange={(e) => handlePhotoChange(i, e)} />
+            </Field>
+            {photoErrors[i] && <p role="alert">{photoErrors[i]}</p>}
+            <Button
+              onClick={() =>
+                setSpecialNotes((prev) => prev.filter((_, idx) => idx !== i))
+              }
+            >
+              Remove note
+            </Button>
+          </NoteCard>
+        ))}
+        <Button
+          onClick={() =>
+            setSpecialNotes((prev) => [...prev, { title: "", body: "" }])
+          }
+        >
+          Add note
+        </Button>
+      </StepSection>
 
       <StepFooter>
         <Button onClick={onBack}>{backLabel}</Button>
