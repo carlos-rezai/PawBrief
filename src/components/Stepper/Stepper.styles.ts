@@ -59,6 +59,10 @@ export const StepLabel = styled.span<{ $active: boolean }>`
   font-weight: ${({ $active }) => ($active ? 700 : 600)};
   color: ${({ $active, theme }) =>
     $active ? theme.colors.ink : theme.colors.muted};
+
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
 
 export const StepConnector = styled.div<{ $done: boolean }>`

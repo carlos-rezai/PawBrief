@@ -27,3 +27,13 @@ export const WizMain = styled.main`
     padding: 20px 16px 48px;
   }
 `;
+
+export const WizStepEyebrow = styled.p`
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.7px;
+  text-transform: uppercase;
+  color: ${({ theme }) => theme.colors.muted};
+  text-align: center;
+  margin: 26px 0 16px;
+`;

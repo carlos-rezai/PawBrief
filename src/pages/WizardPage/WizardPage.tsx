@@ -16,7 +16,12 @@ import Wordmark from "../../primitives/Wordmark/Wordmark";
 import { useToast } from "../../components/Toast/Toast";
 import type { StepData, WizardStep } from "../../types/profile";
 import { STEP_ORDER, STEP_LABELS } from "../../utils/wizardSteps";
-import { WizNavbar, WizNavbarInner, WizMain } from "./WizardPage.styles";
+import {
+  WizNavbar,
+  WizNavbarInner,
+  WizMain,
+  WizStepEyebrow,
+} from "./WizardPage.styles";
 
 const backIcon = (
   <svg
@@ -120,6 +125,7 @@ export default function WizardPage() {
       </WizNavbar>
       <WizMain>
         <Stepper currentStep={stepIndex} onStepClick={handleStepClick} />
+        <WizStepEyebrow>STEP {stepIndex + 1} OF 6</WizStepEyebrow>
         <h2>{STEP_LABELS[currentStep]}</h2>
         {currentStep === "basics" && (
           <BasicsStep
