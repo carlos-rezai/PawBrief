@@ -2,14 +2,13 @@ import { useEffect, useState } from "react";
 import type { BasicsData } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { getPhoto, savePhoto } from "../../profile";
-import { Button, Field, Select } from "../../../primitives";
+import { Button, Field, Input, Select } from "../../../primitives";
 import { IconCamera } from "../../../primitives/icons";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import {
   AgeGrid,
   BasicsBody,
   FieldsCol,
-  FullInput,
   PhotoChangeOverlay,
   PhotoCircle,
   PhotoCircleText,
@@ -132,14 +131,14 @@ export default function BasicsStep({
 
         <FieldsCol>
           <Field label="Name">
-            <FullInput
+            <Input
               aria-label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </Field>
           <Field label="Breed" optional>
-            <FullInput
+            <Input
               aria-label="Breed"
               value={breed}
               onChange={(e) => setBreed(e.target.value)}
@@ -147,7 +146,7 @@ export default function BasicsStep({
           </Field>
           <Field label="Age">
             <AgeGrid>
-              <FullInput
+              <Input
                 type="number"
                 aria-label="Age"
                 value={ageValue}

@@ -110,9 +110,5 @@ export const PhotoFileInput = styled.input`
   z-index: 2;
 `;
 
-export const FullInput = styled.input`
-  width: 100%;
-`;
-
 PhotoCircle.defaultProps = { theme: defaultTheme };
 PhotoCircleText.defaultProps = { theme: defaultTheme };
