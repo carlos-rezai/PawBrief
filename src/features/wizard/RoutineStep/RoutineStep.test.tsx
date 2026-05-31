@@ -8,7 +8,11 @@ import RoutineStep from "./RoutineStep";
 const DEFAULT_SLOT_COUNT = 6;
 
 function renderRoutineStep(onSave = vi.fn()) {
-  render(<RoutineStep onSave={onSave} />);
+  render(
+    <ThemeProvider theme={theme}>
+      <RoutineStep onSave={onSave} />
+    </ThemeProvider>
+  );
 }
 
 describe("RoutineStep default slots", () => {
@@ -53,7 +57,11 @@ describe("RoutineStep onSave", () => {
   it("calls onSave with the current slots when Next is clicked", async () => {
     const user = userEvent.setup();
     const onSave = vi.fn();
-    render(<RoutineStep onSave={onSave} />);
+    render(
+      <ThemeProvider theme={theme}>
+        <RoutineStep onSave={onSave} />
+      </ThemeProvider>
+    );
     await user.click(screen.getByRole("button", { name: /next/i }));
     expect(onSave).toHaveBeenCalledOnce();
     const saved = onSave.mock.calls[0][0];
