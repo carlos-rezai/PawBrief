@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../../features/profile";
-import { Button, Checkbox } from "../../primitives";
+import { Button } from "../../primitives";
 import Wordmark from "../../primitives/Wordmark/Wordmark";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import { useToast } from "../../components/Toast/Toast";
 import type { CatProfile } from "../../types/profile";
 import { getNextStep } from "../../utils/getNextStep";
 import { STEP_ORDER } from "../../utils/wizardSteps";
+import ProfileCard from "../../components/ProfileCard/ProfileCard";
+import PlusCard from "../../components/PlusCard/PlusCard";
+import Mark from "../../primitives/Mark/Mark";
 import {
+  CardGrid,
   DashContent,
   DashHeader,
   DashHeaderLeft,
@@ -16,6 +20,9 @@ import {
   DashHeaderTitle,
   DashNavbar,
   DashNavbarInner,
+  EmptyStateDesc,
+  EmptyStateTitle,
+  EmptyStateWrapper,
 } from "./DashboardPage.styles";
 
 const mergeIcon = (
@@ -118,67 +125,48 @@ export default function DashboardPage() {
           </div>
         </DashHeader>
         {profiles.length === 0 ? (
-          <p>Get started — create your first profile above.</p>
+          <EmptyStateWrapper>
+            <Mark size={84} />
+            <EmptyStateTitle>No care guides yet</EmptyStateTitle>
+            <EmptyStateDesc>
+              Create a profile for each cat, fill in the wizard, and generate a
+              printable care guide to share with your sitter.
+            </EmptyStateDesc>
+            <Button kind="primary" size="lg" onClick={handleCreateProfile}>
+              New cat profile
+            </Button>
+          </EmptyStateWrapper>
         ) : (
-          <ul>
+          <CardGrid>
             {profiles.map((profile) => {
               const isComplete = STEP_ORDER.every((s) =>
                 profile.completedSteps.includes(s)
               );
-              const basics = profile.basics;
               return (
-                <li key={profile.id}>
-                  {mergeMode && isComplete && (
-                    <Checkbox
-                      aria-label={basics?.name}
-                      checked={selectedIds.includes(profile.id)}
-                      onChange={() => toggleMergeSelect(profile.id)}
-                    />
-                  )}
-                  {basics && (
-                    <>
-                      <p>{basics.name}</p>
-                      {basics.breed && <p>{basics.breed}</p>}
-                      <p>
-                        {basics.ageValue} {basics.ageUnit}
-                      </p>
-                    </>
-                  )}
-                  {isComplete ? (
-                    <>
-                      <Button
-                        onClick={() =>
-                          navigate(`/wizard/${profile.id}/step/basics`)
-                        }
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        onClick={() => navigate(`/preview/${profile.id}`)}
-                      >
-                        Generate PDF
-                      </Button>
-                    </>
-                  ) : (
-                    <Button
-                      onClick={() => {
-                        const nextStep = getNextStep(profile);
-                        if (nextStep)
-                          navigate(`/wizard/${profile.id}/step/${nextStep}`);
-                      }}
-                    >
-                      Continue
-                    </Button>
-                  )}
-                  <Button onClick={() => setPendingDelete(profile)}>
-                    Delete
-                  </Button>
-                </li>
+                <ProfileCard
+                  key={profile.id}
+                  profile={profile}
+                  mergeMode={mergeMode}
+                  selected={selectedIds.includes(profile.id)}
+                  selectable={isComplete}
+                  onEdit={() => navigate(`/wizard/${profile.id}/step/basics`)}
+                  onAction={() => {
+                    if (isComplete) {
+                      navigate(`/preview/${profile.id}`);
+                    } else {
+                      const nextStep = getNextStep(profile);
+                      if (nextStep)
+                        navigate(`/wizard/${profile.id}/step/${nextStep}`);
+                    }
+                  }}
+                  onDelete={() => setPendingDelete(profile)}
+                  onSelect={() => toggleMergeSelect(profile.id)}
+                />
               );
             })}
-          </ul>
+            {!mergeMode && <PlusCard onClick={handleCreateProfile} />}
+          </CardGrid>
         )}
-        <button onClick={handleCreateProfile}>New cat profile</button>
       </DashContent>
 
       {mergeMode && (

@@ -110,7 +110,7 @@ describe("DashboardPage", () => {
     expect(await screen.findByText(/3 year/i)).toBeInTheDocument();
   });
 
-  it("shows Continue (not Generate PDF or Edit) for a Basics-only profile", async () => {
+  it("shows Continue (not Generate PDF) for a Basics-only profile", async () => {
     await saveProfile(makeBasicsProfile("p-2"));
     renderDashboard();
     expect(
@@ -118,9 +118,6 @@ describe("DashboardPage", () => {
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: /generate pdf/i })
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /^edit$/i })
     ).not.toBeInTheDocument();
   });
 
@@ -343,9 +340,9 @@ describe("DashboardPage visual shell", () => {
     const user = userEvent.setup();
     await saveProfile(makeBasicsProfile("plus-card-test"));
     renderDashboardWithProviders();
-    await user.click(
-      await screen.findByRole("button", { name: /new cat profile/i })
-    );
+    // Wait for the profile to load so PlusCard is visible (avoids EmptyState timing race)
+    await screen.findByText(/start the care-guide wizard/i);
+    await user.click(screen.getByRole("button", { name: /new cat profile/i }));
     const location = await screen.findByTestId("location");
     expect(location.textContent).toMatch(/\/wizard\/.+\/step\/basics/);
   });

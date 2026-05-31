@@ -58,9 +58,46 @@ export const DashHeaderSubtitle = styled.p`
   margin: 5px 0 0;
 `;
 
+export const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const EmptyStateWrapper = styled.div`
+  text-align: center;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+`;
+
+export const EmptyStateTitle = styled.h2`
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: ${({ theme }) => theme.colors.ink};
+  margin: 0;
+`;
+
+export const EmptyStateDesc = styled.p`
+  font-size: 15px;
+  color: ${({ theme }) => theme.colors.inkSoft};
+  max-width: 380px;
+  line-height: 1.5;
+  margin: 0;
+`;
+
 DashNavbar.defaultProps = { theme: defaultTheme };
 DashNavbarInner.defaultProps = { theme: defaultTheme };
 DashContent.defaultProps = { theme: defaultTheme };
 DashHeader.defaultProps = { theme: defaultTheme };
 DashHeaderTitle.defaultProps = { theme: defaultTheme };
 DashHeaderSubtitle.defaultProps = { theme: defaultTheme };
+EmptyStateTitle.defaultProps = { theme: defaultTheme };
+EmptyStateDesc.defaultProps = { theme: defaultTheme };

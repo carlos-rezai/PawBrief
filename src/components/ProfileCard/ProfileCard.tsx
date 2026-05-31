@@ -110,8 +110,15 @@ export default function ProfileCard({
         <StatusBadge $complete={isComplete}>
           {isComplete ? "Complete" : "Draft"}
         </StatusBadge>
-        {mergeMode && (
-          <MergeCheck $selected={selected}>{selected && checkIcon}</MergeCheck>
+        {mergeMode && selectable && (
+          <MergeCheck
+            $selected={selected}
+            role="checkbox"
+            aria-checked={selected}
+            aria-label={basics?.name}
+          >
+            {selected && checkIcon}
+          </MergeCheck>
         )}
       </PhotoZone>
 
