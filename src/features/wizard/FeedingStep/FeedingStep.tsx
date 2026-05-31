@@ -8,6 +8,8 @@ import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import { Button, Field, Input, Textarea } from "../../../primitives";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
+import StepSection from "../StepSection";
+import { EntryCard, ThreeColGrid, TwoColGrid } from "./FeedingStep.styles";
 
 interface FeedingStepProps {
   onSave?: (data: FeedingData) => void;
@@ -131,92 +133,127 @@ export default function FeedingStep({
 
   return (
     <form onSubmit={handleSubmit}>
-      {foodEntries.map((entry, i) => (
-        <div key={i}>
-          <Field label="Brand">
+      <StepSection
+        first
+        title="Food"
+        hint="What you serve, and how it's prepared."
+      >
+        {foodEntries.map((entry, i) => (
+          <EntryCard key={i}>
+            <ThreeColGrid>
+              <Field label="Brand">
+                <Input
+                  value={entry.brand}
+                  onChange={(e) => updateFoodEntry(i, "brand", e.target.value)}
+                />
+              </Field>
+              <Field label="Flavor">
+                <Input
+                  value={entry.flavor}
+                  onChange={(e) => updateFoodEntry(i, "flavor", e.target.value)}
+                />
+              </Field>
+              <Field label="Texture">
+                <Input
+                  value={entry.texture}
+                  onChange={(e) =>
+                    updateFoodEntry(i, "texture", e.target.value)
+                  }
+                />
+              </Field>
+            </ThreeColGrid>
+            <Button onClick={() => removeFoodEntry(i)}>
+              Remove food entry
+            </Button>
+          </EntryCard>
+        ))}
+        <Button onClick={addFoodEntry}>Add food entry</Button>
+      </StepSection>
+
+      <StepSection title="Serving">
+        <TwoColGrid>
+          <Field label="Serving amount (g)">
             <Input
-              value={entry.brand}
-              onChange={(e) => updateFoodEntry(i, "brand", e.target.value)}
+              type="number"
+              value={servingGrams}
+              onChange={(e) => setServingGrams(Number(e.target.value))}
             />
           </Field>
-          <Field label="Flavor">
-            <Input
-              value={entry.flavor}
-              onChange={(e) => updateFoodEntry(i, "flavor", e.target.value)}
-            />
-          </Field>
-          <Field label="Texture">
-            <Input
-              value={entry.texture}
-              onChange={(e) => updateFoodEntry(i, "texture", e.target.value)}
-            />
-          </Field>
-          <Button onClick={() => removeFoodEntry(i)}>Remove food entry</Button>
-        </div>
-      ))}
-      <Button onClick={addFoodEntry}>Add food entry</Button>
+          <div>
+            {feedingTimes.map((time, i) => (
+              <div key={i}>
+                <Field label="Feeding time">
+                  <Input
+                    type="time"
+                    value={time}
+                    onChange={(e) => updateFeedingTime(i, e.target.value)}
+                  />
+                </Field>
+                <Button onClick={() => removeFeedingTime(i)}>
+                  Remove feeding time
+                </Button>
+              </div>
+            ))}
+            <Button onClick={addFeedingTime}>Add feeding time</Button>
+          </div>
+        </TwoColGrid>
+      </StepSection>
 
-      <Field label="Serving amount (g)">
-        <Input
-          type="number"
-          value={servingGrams}
-          onChange={(e) => setServingGrams(Number(e.target.value))}
-        />
-      </Field>
+      <StepSection
+        title="Supplements"
+        hint="Vitamins or routine additions — not prescribed medications."
+      >
+        {supplementEntries.map((entry, i) => (
+          <EntryCard key={i} data-testid="supplement-entry">
+            <TwoColGrid>
+              <Field label="Brand">
+                <Input
+                  value={entry.brand}
+                  onChange={(e) => updateSupplement(i, "brand", e.target.value)}
+                />
+              </Field>
+              <Field label="Flavor">
+                <Input
+                  value={entry.flavor}
+                  onChange={(e) =>
+                    updateSupplement(i, "flavor", e.target.value)
+                  }
+                />
+              </Field>
+            </TwoColGrid>
+            <Button onClick={() => removeSupplement(i)}>
+              Remove supplement
+            </Button>
+          </EntryCard>
+        ))}
+        <Button onClick={addSupplement}>Add supplement</Button>
+      </StepSection>
 
-      {feedingTimes.map((time, i) => (
-        <div key={i}>
-          <Field label="Feeding time">
-            <Input
-              type="time"
-              value={time}
-              onChange={(e) => updateFeedingTime(i, e.target.value)}
-            />
-          </Field>
-          <Button onClick={() => removeFeedingTime(i)}>
-            Remove feeding time
-          </Button>
-        </div>
-      ))}
-      <Button onClick={addFeedingTime}>Add feeding time</Button>
+      <StepSection
+        title="Plating instructions"
+        hint="How to prepare or serve — add a photo if it helps."
+      >
+        <Field label="Plating instructions">
+          <Textarea
+            value={platingInstructions}
+            onChange={(e) => setPlatingInstructions(e.target.value)}
+          />
+        </Field>
+        <Field label="Plating photo">
+          <Input type="file" onChange={handlePhotoChange} />
+        </Field>
+        {photoError && <p role="alert">{photoError}</p>}
+      </StepSection>
 
-      {supplementEntries.map((entry, i) => (
-        <div key={i} data-testid="supplement-entry">
-          <Field label="Brand">
-            <Input
-              value={entry.brand}
-              onChange={(e) => updateSupplement(i, "brand", e.target.value)}
-            />
-          </Field>
-          <Field label="Flavor">
-            <Input
-              value={entry.flavor}
-              onChange={(e) => updateSupplement(i, "flavor", e.target.value)}
-            />
-          </Field>
-          <Button onClick={() => removeSupplement(i)}>Remove supplement</Button>
-        </div>
-      ))}
-      <Button onClick={addSupplement}>Add supplement</Button>
-
-      <Field label="Plating instructions">
-        <Textarea
-          value={platingInstructions}
-          onChange={(e) => setPlatingInstructions(e.target.value)}
-        />
-      </Field>
-
-      <Field label="Plating photo">
-        <Input type="file" onChange={handlePhotoChange} />
-      </Field>
-      {photoError && <p role="alert">{photoError}</p>}
-
-      <Field label="Dietary notes">
-        <Textarea
-          value={dietaryNotes}
-          onChange={(e) => setDietaryNotes(e.target.value)}
-        />
-      </Field>
+      <StepSection title="Dietary notes">
+        <Field label="Dietary notes">
+          <Textarea
+            value={dietaryNotes}
+            placeholder="Allergies, sensitivities, anything to avoid…"
+            onChange={(e) => setDietaryNotes(e.target.value)}
+          />
+        </Field>
+      </StepSection>
 
       <StepFooter>
         <Button onClick={onBack}>{backLabel}</Button>
