@@ -61,6 +61,11 @@ describe("Button kind prop", () => {
     renderWithTheme(<Button kind="disabled">Confirm</Button>);
     expect(screen.getByRole("button")).toBeDisabled();
   });
+
+  it("kind=dashed renders an enabled button", () => {
+    renderWithTheme(<Button kind="dashed">Add item</Button>);
+    expect(screen.getByRole("button")).not.toBeDisabled();
+  });
 });
 
 describe("Button size prop", () => {

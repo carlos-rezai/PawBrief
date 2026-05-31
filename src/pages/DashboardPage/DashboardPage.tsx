@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useProfiles } from "../../features/profile";
-import { Button } from "../../primitives";
+import { Button, Checkbox } from "../../primitives";
 import type { WizardStep } from "../../types/profile";
 import { getNextStep } from "../../utils/getNextStep";
 
@@ -64,8 +64,7 @@ export default function DashboardPage() {
             return (
               <li key={profile.id}>
                 {mergeMode && isComplete && (
-                  <input
-                    type="checkbox"
+                  <Checkbox
                     aria-label={basics?.name}
                     checked={selectedIds.includes(profile.id)}
                     onChange={() => toggleMergeSelect(profile.id)}

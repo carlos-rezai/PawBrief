@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes } from "react";
 
-type ButtonKind = "primary" | "secondary" | "ghost" | "disabled";
+type ButtonKind = "primary" | "secondary" | "ghost" | "disabled" | "dashed";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
