@@ -1,4 +1,11 @@
 import type { ReactNode } from "react";
+import {
+  FieldRoot,
+  HelperText,
+  LabelRow,
+  LabelText,
+  OptionalBadge,
+} from "./Field.styles";
 
 interface FieldProps {
   label: string;
@@ -16,12 +23,18 @@ export default function Field({
   error,
 }: FieldProps) {
   return (
-    <label>
-      {label}
-      {optional && <span>(optional)</span>}
+    <FieldRoot>
+      <LabelRow>
+        <LabelText>{label}</LabelText>
+        {optional && <OptionalBadge>Optional</OptionalBadge>}
+      </LabelRow>
       {children}
-      {hint && <span>{hint}</span>}
-      {error && <span role="alert">{error}</span>}
-    </label>
+      {error && (
+        <HelperText $error role="alert">
+          {error}
+        </HelperText>
+      )}
+      {!error && hint && <HelperText>{hint}</HelperText>}
+    </FieldRoot>
   );
 }

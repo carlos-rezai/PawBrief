@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
+import { ToastContainer, ToastItem } from "./Toast.styles";
 
-interface ToastItem {
+interface ToastEntry {
   id: number;
   message: string;
 }
@@ -11,11 +12,13 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
+let _nextId = 0;
+
 export function ToastProvider({ children }: { children: ReactNode }) {
-  const [toasts, setToasts] = useState<ToastItem[]>([]);
+  const [toasts, setToasts] = useState<ToastEntry[]>([]);
 
   const enqueue = (message: string) => {
-    const id = Date.now();
+    const id = ++_nextId;
     setToasts((prev) => [...prev, { id, message }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -25,11 +28,11 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ enqueue }}>
       {children}
-      <div aria-live="polite">
+      <ToastContainer aria-live="polite">
         {toasts.map((t) => (
-          <div key={t.id}>{t.message}</div>
+          <ToastItem key={t.id}>{t.message}</ToastItem>
         ))}
-      </div>
+      </ToastContainer>
     </ToastContext.Provider>
   );
 }

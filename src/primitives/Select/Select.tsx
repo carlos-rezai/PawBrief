@@ -1,4 +1,5 @@
 import type { SelectHTMLAttributes } from "react";
+import { ChevronIcon, SelectWrapper, StyledSelect } from "./Select.styles";
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   hasError?: boolean;
@@ -6,13 +7,29 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 
 export default function Select({ children, hasError, ...props }: SelectProps) {
   return (
-    <div>
-      <select {...props} aria-invalid={hasError ? true : undefined}>
+    <SelectWrapper>
+      <StyledSelect
+        $hasError={hasError}
+        aria-invalid={hasError ? true : undefined}
+        {...props}
+      >
         {children}
-      </select>
-      <svg viewBox="0 0 16 16" aria-hidden="true">
-        <path d="M4 6l4 4 4-4" stroke="currentColor" fill="none" />
-      </svg>
-    </div>
+      </StyledSelect>
+      <ChevronIcon
+        width="12"
+        height="12"
+        viewBox="0 0 12 12"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M2 4l4 4 4-4"
+          stroke="#6F6155"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </ChevronIcon>
+    </SelectWrapper>
   );
 }

@@ -14,10 +14,27 @@ interface RoutineChartProps {
 }
 
 export default function RoutineChart({ slots, size }: RoutineChartProps) {
-  const strokeWidth = size * 0.08;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = size * 0.38;
+  const strokeWidth = size * 0.13;
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      aria-hidden="true"
+    >
+      {/* background track */}
+      <circle
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill="none"
+        stroke="#E0D2BC"
+        strokeWidth={strokeWidth}
+      />
       {slots
         .filter((slot) => slot.hours > 0)
         .map((slot, i) => (
@@ -26,6 +43,7 @@ export default function RoutineChart({ slots, size }: RoutineChartProps) {
             d={arcPath(slot.start, slot.hours, size)}
             stroke={routinePalette[slot.colorIndex % routinePalette.length]}
             strokeWidth={strokeWidth}
+            strokeLinecap="round"
             fill="none"
           />
         ))}

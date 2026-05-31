@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
 import Button from "../../primitives/Button/Button";
+import {
+  EntryCard,
+  EntryHeader,
+  EntryLabel,
+  RemoveButton,
+  RepeatableRoot,
+} from "./Repeatable.styles";
 
 interface RepeatableProps<T> {
   entries: T[];
@@ -15,23 +22,24 @@ export default function Repeatable<T>({
   renderEntry,
 }: RepeatableProps<T>) {
   return (
-    <div>
+    <RepeatableRoot>
       {entries.map((entry, i) => (
-        <div key={i}>
+        <EntryCard key={i}>
+          <EntryHeader>
+            <EntryLabel>Item {i + 1}</EntryLabel>
+            <RemoveButton
+              aria-label={`Remove entry ${i + 1}`}
+              onClick={() => onRemove(i)}
+            >
+              ×
+            </RemoveButton>
+          </EntryHeader>
           {renderEntry(entry, i)}
-          <Button
-            kind="ghost"
-            iconOnly
-            aria-label={`Remove entry ${i + 1}`}
-            onClick={() => onRemove(i)}
-          >
-            ×
-          </Button>
-        </div>
+        </EntryCard>
       ))}
       <Button kind="dashed" onClick={onAdd}>
-        Add
+        + Add
       </Button>
-    </div>
+    </RepeatableRoot>
   );
 }

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Button from "../../primitives/Button/Button";
 import Modal from "../../primitives/Modal/Modal";
+import { ModalActions, ModalBody } from "./ConfirmModal.styles";
 
 interface ConfirmModalProps {
   confirmLabel: string;
@@ -19,11 +20,17 @@ export default function ConfirmModal({
 }: ConfirmModalProps) {
   return (
     <Modal onClose={onCancel}>
-      {children}
-      <div>
-        <Button onClick={onCancel}>{cancelLabel}</Button>
-        <Button onClick={onConfirm}>{confirmLabel}</Button>
-      </div>
+      <ModalBody>
+        {children}
+        <ModalActions>
+          <Button kind="secondary" onClick={onCancel}>
+            {cancelLabel}
+          </Button>
+          <Button kind="primary" onClick={onConfirm}>
+            {confirmLabel}
+          </Button>
+        </ModalActions>
+      </ModalBody>
     </Modal>
   );
 }

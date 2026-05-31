@@ -1,5 +1,11 @@
 import { Fragment } from "react";
-import Button from "../../primitives/Button/Button";
+import {
+  StepButton,
+  StepCircle,
+  StepConnector,
+  StepLabel,
+  StepperNav,
+} from "./Stepper.styles";
 
 const STEPS = ["Basics", "Feeding", "Routine", "Favorites", "Medical", "Notes"];
 
@@ -10,42 +16,29 @@ interface StepperProps {
 
 export default function Stepper({ currentStep, onStepClick }: StepperProps) {
   return (
-    <nav style={{ display: "flex", alignItems: "flex-start", width: "100%" }}>
+    <StepperNav>
       {STEPS.map((label, index) => {
         const done = index < currentStep;
         const active = index === currentStep;
         return (
           <Fragment key={label}>
-            <Button
-              kind="ghost"
+            <StepButton
+              $done={done}
+              $active={active}
               aria-current={active ? "step" : undefined}
               onClick={() => onStepClick(index)}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 6,
-                padding: 0,
-                flex: "0 0 auto",
-              }}
             >
-              <span aria-hidden="true">{done ? "✓" : index + 1}</span>
-              <span>{label}</span>
-            </Button>
+              <StepCircle $done={done} $active={active} aria-hidden="true">
+                {done ? "✓" : index + 1}
+              </StepCircle>
+              <StepLabel $active={active}>{label}</StepLabel>
+            </StepButton>
             {index < STEPS.length - 1 && (
-              <div
-                aria-hidden="true"
-                style={{
-                  flex: 1,
-                  height: 2,
-                  alignSelf: "flex-start",
-                  marginTop: 14,
-                }}
-              />
+              <StepConnector $done={done} aria-hidden="true" />
             )}
           </Fragment>
         );
       })}
-    </nav>
+    </StepperNav>
   );
 }

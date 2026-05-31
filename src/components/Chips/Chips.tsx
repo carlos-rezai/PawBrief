@@ -1,6 +1,13 @@
 import { useState } from "react";
 import Button from "../../primitives/Button/Button";
 import Input from "../../primitives/Input/Input";
+import {
+  Chip,
+  ChipRemove,
+  ChipsList,
+  ChipsRoot,
+  InputRow,
+} from "./Chips.styles";
 
 interface ChipsProps {
   values: string[];
@@ -18,8 +25,8 @@ export default function Chips({ values, onChange }: ChipsProps) {
   };
 
   return (
-    <div>
-      <div style={{ display: "flex", gap: 8 }}>
+    <ChipsRoot>
+      <InputRow>
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -33,20 +40,22 @@ export default function Chips({ values, onChange }: ChipsProps) {
         <Button kind="secondary" onClick={add}>
           Add
         </Button>
-      </div>
-      {values.map((v, i) => (
-        <span key={i}>
-          {v}
-          <Button
-            kind="ghost"
-            iconOnly
-            aria-label={`Remove ${v}`}
-            onClick={() => onChange(values.filter((_, j) => j !== i))}
-          >
-            ×
-          </Button>
-        </span>
-      ))}
-    </div>
+      </InputRow>
+      {values.length > 0 && (
+        <ChipsList>
+          {values.map((v, i) => (
+            <Chip key={i}>
+              {v}
+              <ChipRemove
+                aria-label={`Remove ${v}`}
+                onClick={() => onChange(values.filter((_, j) => j !== i))}
+              >
+                ×
+              </ChipRemove>
+            </Chip>
+          ))}
+        </ChipsList>
+      )}
+    </ChipsRoot>
   );
 }

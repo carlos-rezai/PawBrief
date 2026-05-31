@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes } from "react";
+import { StyledButton } from "./Button.styles";
 
 type ButtonKind = "primary" | "secondary" | "ghost" | "disabled" | "dashed";
 type ButtonSize = "sm" | "md" | "lg";
@@ -12,15 +13,22 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export default function Button({
   children,
   type = "button",
-  kind,
-  size: _size,
-  iconOnly: _iconOnly,
+  kind = "secondary",
+  size = "md",
+  iconOnly = false,
   disabled,
   ...props
 }: ButtonProps) {
   return (
-    <button type={type} disabled={disabled || kind === "disabled"} {...props}>
+    <StyledButton
+      type={type}
+      $kind={kind}
+      $size={size}
+      $iconOnly={iconOnly}
+      disabled={disabled || kind === "disabled"}
+      {...props}
+    >
       {children}
-    </button>
+    </StyledButton>
   );
 }
