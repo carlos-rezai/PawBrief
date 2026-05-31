@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useProfiles } from "../../features/profile";
+import { useProfiles, useProfileAvatarUrls } from "../../features/profile";
 import { Button } from "../../primitives";
 import Mark from "../../primitives/Mark/Mark";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
@@ -32,6 +32,7 @@ import {
 export default function DashboardPage() {
   const navigate = useNavigate();
   const { profiles, loaded, createProfile, deleteProfile } = useProfiles();
+  const avatarUrls = useProfileAvatarUrls(profiles);
   const { enqueue } = useToast();
   const [mergeMode, setMergeMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -129,6 +130,7 @@ export default function DashboardPage() {
                 <ProfileCard
                   key={profile.id}
                   profile={profile}
+                  photoUrl={avatarUrls[profile.id]}
                   mergeMode={mergeMode}
                   selected={selectedIds.includes(profile.id)}
                   selectable={isComplete}
