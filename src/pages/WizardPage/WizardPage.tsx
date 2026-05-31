@@ -12,9 +12,11 @@ import {
 import Stepper from "../../components/Stepper/Stepper";
 import Modal from "../../primitives/Modal/Modal";
 import Button from "../../primitives/Button/Button";
+import Wordmark from "../../primitives/Wordmark/Wordmark";
 import { useToast } from "../../components/Toast/Toast";
 import type { StepData, WizardStep } from "../../types/profile";
 import { STEP_ORDER, STEP_LABELS } from "../../utils/wizardSteps";
+import { WizNavbar, WizNavbarInner, WizMain } from "./WizardPage.styles";
 
 const backIcon = (
   <svg
@@ -111,8 +113,13 @@ export default function WizardPage() {
 
   return (
     <>
-      <Stepper currentStep={stepIndex} onStepClick={handleStepClick} />
-      <main>
+      <WizNavbar>
+        <WizNavbarInner>
+          <Wordmark />
+        </WizNavbarInner>
+      </WizNavbar>
+      <WizMain>
+        <Stepper currentStep={stepIndex} onStepClick={handleStepClick} />
         <h2>{STEP_LABELS[currentStep]}</h2>
         {currentStep === "basics" && (
           <BasicsStep
@@ -168,7 +175,7 @@ export default function WizardPage() {
             submitLabel={submitLabel}
           />
         )}
-      </main>
+      </WizMain>
       {showSuccess && (
         <Modal
           onClose={() => {
