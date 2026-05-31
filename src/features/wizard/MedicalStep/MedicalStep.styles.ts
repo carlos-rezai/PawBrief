@@ -42,10 +42,6 @@ export const HealthGrid = styled.div`
   }
 `;
 
-export const EntryCard = styled.div`
-  margin-bottom: 10px;
-`;
-
 export const PrivacyNote = styled.p`
   font-size: 11.5px;
   color: #948675;

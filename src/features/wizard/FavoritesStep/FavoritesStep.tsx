@@ -4,10 +4,19 @@ import type {
   ToyEntry,
   TreatEntry,
 } from "../../../types/profile";
-import { Button, Field, Input } from "../../../primitives";
+import { Field, Input } from "../../../primitives";
+import { IconPlus, IconX } from "../../../primitives/icons";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import StepSection from "../StepSection";
-import { EntryCard, ToyGrid, TreatGrid } from "./FavoritesStep.styles";
+import {
+  AddEntryButton,
+  EntryCard,
+  EntryHeader,
+  EntryLabel,
+  RemoveButton,
+} from "../StepEntry.styles";
+import { ToyGrid, TreatGrid } from "./FavoritesStep.styles";
+import { Button } from "../../../primitives";
 
 interface FavoritesStepProps {
   onSave?: (data: FavoritesData) => void;
@@ -47,6 +56,18 @@ export default function FavoritesStep({
       <StepSection first title="Toys">
         {toyEntries.map((entry, i) => (
           <EntryCard key={i} data-testid="toy-entry">
+            <EntryHeader>
+              <EntryLabel>Toy {i + 1}</EntryLabel>
+              <RemoveButton
+                type="button"
+                title="Remove toy"
+                onClick={() =>
+                  setToyEntries((prev) => prev.filter((_, idx) => idx !== i))
+                }
+              >
+                <IconX />
+              </RemoveButton>
+            </EntryHeader>
             <ToyGrid>
               <Field label="Name">
                 <Input
@@ -73,25 +94,31 @@ export default function FavoritesStep({
                 />
               </Field>
             </ToyGrid>
-            <Button
-              onClick={() =>
-                setToyEntries((prev) => prev.filter((_, idx) => idx !== i))
-              }
-            >
-              Remove toy
-            </Button>
           </EntryCard>
         ))}
-        <Button
+        <AddEntryButton
+          type="button"
           onClick={() => setToyEntries((prev) => [...prev, { name: "" }])}
         >
-          Add toy
-        </Button>
+          <IconPlus size={14} /> Add toy
+        </AddEntryButton>
       </StepSection>
 
       <StepSection title="Treats">
         {treatEntries.map((entry, i) => (
           <EntryCard key={i} data-testid="treat-entry">
+            <EntryHeader>
+              <EntryLabel>Treat {i + 1}</EntryLabel>
+              <RemoveButton
+                type="button"
+                title="Remove treat"
+                onClick={() =>
+                  setTreatEntries((prev) => prev.filter((_, idx) => idx !== i))
+                }
+              >
+                <IconX />
+              </RemoveButton>
+            </EntryHeader>
             <TreatGrid>
               <Field label="Brand">
                 <Input
@@ -118,22 +145,16 @@ export default function FavoritesStep({
                 />
               </Field>
             </TreatGrid>
-            <Button
-              onClick={() =>
-                setTreatEntries((prev) => prev.filter((_, idx) => idx !== i))
-              }
-            >
-              Remove treat
-            </Button>
           </EntryCard>
         ))}
-        <Button
+        <AddEntryButton
+          type="button"
           onClick={() =>
             setTreatEntries((prev) => [...prev, { brand: "", flavor: "" }])
           }
         >
-          Add treat
-        </Button>
+          <IconPlus size={14} /> Add treat
+        </AddEntryButton>
       </StepSection>
 
       <StepSection

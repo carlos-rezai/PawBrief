@@ -109,6 +109,20 @@ export function IconPlus({ size = 16 }: IconProps) {
   );
 }
 
+export function IconX({ size = 12 }: IconProps) {
+  return (
+    <svg
+      {...base}
+      width={size}
+      height={size}
+      viewBox="0 0 12 12"
+      strokeWidth="2"
+    >
+      <path d="M2 2l8 8M10 2L2 10" />
+    </svg>
+  );
+}
+
 export function IconCamera({ size = 22 }: IconProps) {
   return (
     <svg

@@ -19,7 +19,3 @@ export const TreatGrid = styled.div`
     grid-template-columns: 1fr;
   }
 `;
-
-export const EntryCard = styled.div`
-  margin-bottom: 10px;
-`;

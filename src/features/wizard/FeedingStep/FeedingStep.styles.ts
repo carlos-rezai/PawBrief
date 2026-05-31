@@ -20,6 +20,8 @@ export const TwoColGrid = styled.div`
   }
 `;
 
-export const EntryCard = styled.div`
-  margin-bottom: 10px;
+export const TimeRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;

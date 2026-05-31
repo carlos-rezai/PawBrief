@@ -7,9 +7,17 @@ import type {
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import { Button, Field, Input, Textarea } from "../../../primitives";
+import { IconPlus, IconX } from "../../../primitives/icons";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import StepSection from "../StepSection";
-import { EntryCard, ThreeColGrid, TwoColGrid } from "./FeedingStep.styles";
+import {
+  AddEntryButton,
+  EntryCard,
+  EntryHeader,
+  EntryLabel,
+  RemoveButton,
+} from "../StepEntry.styles";
+import { ThreeColGrid, TimeRow, TwoColGrid } from "./FeedingStep.styles";
 
 interface FeedingStepProps {
   onSave?: (data: FeedingData) => void;
@@ -140,6 +148,16 @@ export default function FeedingStep({
       >
         {foodEntries.map((entry, i) => (
           <EntryCard key={i}>
+            <EntryHeader>
+              <EntryLabel>Food {i + 1}</EntryLabel>
+              <RemoveButton
+                type="button"
+                title="Remove food entry"
+                onClick={() => removeFoodEntry(i)}
+              >
+                <IconX />
+              </RemoveButton>
+            </EntryHeader>
             <ThreeColGrid>
               <Field label="Brand">
                 <Input
@@ -162,12 +180,11 @@ export default function FeedingStep({
                 />
               </Field>
             </ThreeColGrid>
-            <Button onClick={() => removeFoodEntry(i)}>
-              Remove food entry
-            </Button>
           </EntryCard>
         ))}
-        <Button onClick={addFoodEntry}>Add food entry</Button>
+        <AddEntryButton type="button" onClick={addFoodEntry}>
+          <IconPlus size={14} /> Add food entry
+        </AddEntryButton>
       </StepSection>
 
       <StepSection title="Serving">
@@ -181,20 +198,25 @@ export default function FeedingStep({
           </Field>
           <div>
             {feedingTimes.map((time, i) => (
-              <div key={i}>
-                <Field label="Feeding time">
-                  <Input
-                    type="time"
-                    value={time}
-                    onChange={(e) => updateFeedingTime(i, e.target.value)}
-                  />
-                </Field>
-                <Button onClick={() => removeFeedingTime(i)}>
-                  Remove feeding time
-                </Button>
-              </div>
+              <TimeRow key={i}>
+                <Input
+                  type="time"
+                  aria-label="Feeding time"
+                  value={time}
+                  onChange={(e) => updateFeedingTime(i, e.target.value)}
+                />
+                <RemoveButton
+                  type="button"
+                  title="Remove feeding time"
+                  onClick={() => removeFeedingTime(i)}
+                >
+                  <IconX />
+                </RemoveButton>
+              </TimeRow>
             ))}
-            <Button onClick={addFeedingTime}>Add feeding time</Button>
+            <AddEntryButton type="button" onClick={addFeedingTime}>
+              <IconPlus size={14} /> Add feeding time
+            </AddEntryButton>
           </div>
         </TwoColGrid>
       </StepSection>
@@ -205,6 +227,16 @@ export default function FeedingStep({
       >
         {supplementEntries.map((entry, i) => (
           <EntryCard key={i} data-testid="supplement-entry">
+            <EntryHeader>
+              <EntryLabel>Supplement {i + 1}</EntryLabel>
+              <RemoveButton
+                type="button"
+                title="Remove supplement"
+                onClick={() => removeSupplement(i)}
+              >
+                <IconX />
+              </RemoveButton>
+            </EntryHeader>
             <TwoColGrid>
               <Field label="Brand">
                 <Input
@@ -221,12 +253,11 @@ export default function FeedingStep({
                 />
               </Field>
             </TwoColGrid>
-            <Button onClick={() => removeSupplement(i)}>
-              Remove supplement
-            </Button>
           </EntryCard>
         ))}
-        <Button onClick={addSupplement}>Add supplement</Button>
+        <AddEntryButton type="button" onClick={addSupplement}>
+          <IconPlus size={14} /> Add supplement
+        </AddEntryButton>
       </StepSection>
 
       <StepSection

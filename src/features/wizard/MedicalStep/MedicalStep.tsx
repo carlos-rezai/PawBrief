@@ -7,11 +7,18 @@ import type {
 } from "../../../types/profile";
 import { buildMapsUrl } from "../../../utils/buildMapsUrl";
 import { Button, Field, Input, Textarea } from "../../../primitives";
+import { IconPlus, IconX } from "../../../primitives/icons";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import StepSection from "../StepSection";
 import {
-  ContactGrid,
+  AddEntryButton,
   EntryCard,
+  EntryHeader,
+  EntryLabel,
+  RemoveButton,
+} from "../StepEntry.styles";
+import {
+  ContactGrid,
   HealthGrid,
   MedTopGrid,
   PrivacyNote,
@@ -109,6 +116,20 @@ export default function MedicalStep({
       <StepSection title="Emergency contacts">
         {emergencyContacts.map((contact, i) => (
           <EntryCard key={i} data-testid="emergency-contact">
+            <EntryHeader>
+              <EntryLabel>Contact {i + 1}</EntryLabel>
+              <RemoveButton
+                type="button"
+                title="Remove emergency contact"
+                onClick={() =>
+                  setEmergencyContacts((prev) =>
+                    prev.filter((_, idx) => idx !== i)
+                  )
+                }
+              >
+                <IconX />
+              </RemoveButton>
+            </EntryHeader>
             <ContactGrid>
               <Field label="Name">
                 <Input
@@ -147,18 +168,10 @@ export default function MedicalStep({
                 />
               </Field>
             </ContactGrid>
-            <Button
-              onClick={() =>
-                setEmergencyContacts((prev) =>
-                  prev.filter((_, idx) => idx !== i)
-                )
-              }
-            >
-              Remove emergency contact
-            </Button>
           </EntryCard>
         ))}
-        <Button
+        <AddEntryButton
+          type="button"
           onClick={() =>
             setEmergencyContacts((prev) => [
               ...prev,
@@ -166,8 +179,8 @@ export default function MedicalStep({
             ])
           }
         >
-          Add emergency contact
-        </Button>
+          <IconPlus size={14} /> Add emergency contact
+        </AddEntryButton>
       </StepSection>
 
       <StepSection
@@ -176,6 +189,18 @@ export default function MedicalStep({
       >
         {medications.map((med, i) => (
           <EntryCard key={i} data-testid="medication">
+            <EntryHeader>
+              <EntryLabel>Medication {i + 1}</EntryLabel>
+              <RemoveButton
+                type="button"
+                title="Remove medication"
+                onClick={() =>
+                  setMedications((prev) => prev.filter((_, idx) => idx !== i))
+                }
+              >
+                <IconX />
+              </RemoveButton>
+            </EntryHeader>
             <MedTopGrid>
               <Field label="Name">
                 <Input
@@ -226,16 +251,10 @@ export default function MedicalStep({
                 }
               />
             </Field>
-            <Button
-              onClick={() =>
-                setMedications((prev) => prev.filter((_, idx) => idx !== i))
-              }
-            >
-              Remove medication
-            </Button>
           </EntryCard>
         ))}
-        <Button
+        <AddEntryButton
+          type="button"
           onClick={() =>
             setMedications((prev) => [
               ...prev,
@@ -243,8 +262,8 @@ export default function MedicalStep({
             ])
           }
         >
-          Add medication
-        </Button>
+          <IconPlus size={14} /> Add medication
+        </AddEntryButton>
       </StepSection>
 
       <StepSection title="Health notes">
