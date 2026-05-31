@@ -103,6 +103,7 @@ export const MergeCheck = styled.div<{ $selected: boolean }>`
   align-items: center;
   justify-content: center;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  color: white;
 `;
 
 export const CardBody = styled.div`
@@ -134,6 +135,15 @@ export const CardActions = styled.div`
   display: flex;
   gap: 8px;
   margin-top: 16px;
+`;
+
+export const ActionFlexItem = styled.div`
+  flex: 1;
+  display: flex;
+
+  > button {
+    width: 100%;
+  }
 `;
 
 CardOuter.defaultProps = { theme: defaultTheme };

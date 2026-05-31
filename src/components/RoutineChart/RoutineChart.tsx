@@ -4,7 +4,10 @@ import { arcPath } from "../../utils/routineChartArcs";
 import {
   ChartInner,
   ChartOuter,
-  ClockLabel,
+  ClockLabelBottom,
+  ClockLabelLeft,
+  ClockLabelRight,
+  ClockLabelTop,
   DayCentreContainer,
   DayLabel,
 } from "./RoutineChart.styles";
@@ -31,8 +34,8 @@ export default function RoutineChart({ slots, size }: RoutineChartProps) {
   const strokeWidth = size * 0.13;
 
   return (
-    <ChartOuter style={{ width: size + PAD * 2, height: size }}>
-      <ChartInner style={{ left: PAD, width: size, height: size }}>
+    <ChartOuter $width={size + PAD * 2} $height={size}>
+      <ChartInner $left={PAD} $size={size}>
         <svg
           width={size}
           height={size}
@@ -60,28 +63,14 @@ export default function RoutineChart({ slots, size }: RoutineChartProps) {
               />
             ))}
         </svg>
-        <ClockLabel style={{ top: 0, left: 0, right: 0, textAlign: "center" }}>
-          00:00
-        </ClockLabel>
-        <ClockLabel
-          style={{ bottom: 0, left: 0, right: 0, textAlign: "center" }}
-        >
-          12:00
-        </ClockLabel>
+        <ClockLabelTop>00:00</ClockLabelTop>
+        <ClockLabelBottom>12:00</ClockLabelBottom>
         <DayCentreContainer>
           <DayLabel>A Day</DayLabel>
         </DayCentreContainer>
       </ChartInner>
-      <ClockLabel
-        style={{ right: 0, top: "50%", transform: "translateY(-50%)" }}
-      >
-        06:00
-      </ClockLabel>
-      <ClockLabel
-        style={{ left: 0, top: "50%", transform: "translateY(-50%)" }}
-      >
-        18:00
-      </ClockLabel>
+      <ClockLabelRight>06:00</ClockLabelRight>
+      <ClockLabelLeft>18:00</ClockLabelLeft>
     </ChartOuter>
   );
 }

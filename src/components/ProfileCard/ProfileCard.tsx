@@ -1,9 +1,11 @@
 import Button from "../../primitives/Button/Button";
 import Mark from "../../primitives/Mark/Mark";
+import { IconCheck, IconEdit, IconTrash } from "../../primitives/icons";
 import type { CatProfile } from "../../types/profile";
 import { formatAge } from "../../utils/formatAge";
 import { STEP_ORDER } from "../../utils/wizardSteps";
 import {
+  ActionFlexItem,
   CardActions,
   CardBody,
   CardBreedAge,
@@ -16,54 +18,6 @@ import {
   PhotoZone,
   StatusBadge,
 } from "./ProfileCard.styles";
-
-const editIcon = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 16 16"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.7"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M11 2.5l2.5 2.5M9 4.5L3 10.5V13h2.5l6-6" />
-  </svg>
-);
-
-const trashIcon = (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 16 16"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.6"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M3 4h10M6.5 4V2.5h3V4M4.5 4l.5 9a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1l.5-9" />
-  </svg>
-);
-
-const checkIcon = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 14 14"
-    fill="none"
-    stroke="#fff"
-    strokeWidth="2.2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M2.5 7.5l3 3 6-7" />
-  </svg>
-);
 
 interface ProfileCardProps {
   profile: CatProfile;
@@ -117,7 +71,7 @@ export default function ProfileCard({
             aria-checked={selected}
             aria-label={basics?.name}
           >
-            {selected && checkIcon}
+            {selected && <IconCheck />}
           </MergeCheck>
         )}
       </PhotoZone>
@@ -138,24 +92,18 @@ export default function ProfileCard({
         </CardMeta>
         {!mergeMode && (
           <CardActions>
-            <Button
-              kind="secondary"
-              size="sm"
-              onClick={onEdit}
-              style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
-            >
-              {editIcon} Edit
+            <Button kind="secondary" size="sm" onClick={onEdit}>
+              <IconEdit size={14} /> Edit
             </Button>
-            <div style={{ flex: 1 }}>
+            <ActionFlexItem>
               <Button
                 kind={isComplete ? "primary" : "secondary"}
                 size="sm"
-                style={{ width: "100%" }}
                 onClick={onAction}
               >
                 {isComplete ? "Generate PDF" : "Continue"}
               </Button>
-            </div>
+            </ActionFlexItem>
             <Button
               kind="secondary"
               size="sm"
@@ -163,7 +111,7 @@ export default function ProfileCard({
               title={`Delete ${basics?.name ?? "profile"}`}
               onClick={onDelete}
             >
-              {trashIcon}
+              <IconTrash size={15} />
             </Button>
           </CardActions>
         )}

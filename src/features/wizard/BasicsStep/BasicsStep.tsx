@@ -3,34 +3,18 @@ import type { BasicsData } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import { Button, Field, Select } from "../../../primitives";
+import { IconCamera } from "../../../primitives/icons";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import {
   AgeGrid,
   BasicsBody,
   FieldsCol,
+  FullInput,
   PhotoCircle,
   PhotoCircleText,
   PhotoCol,
+  PhotoFileInput,
 } from "./BasicsStep.styles";
-
-const cameraIcon = (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-    className="photo-circle-icon"
-    style={{ color: "var(--pb-muted, #948675)", pointerEvents: "none" }}
-  >
-    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-    <circle cx="12" cy="13" r="4" />
-  </svg>
-);
 
 interface BasicsStepProps {
   onSave?: (data: BasicsData) => void;
@@ -83,22 +67,14 @@ export default function BasicsStep({
       <BasicsBody>
         <PhotoCol>
           <PhotoCircle>
-            {cameraIcon}
+            <IconCamera />
             <PhotoCircleText className="photo-circle-text">
               Add photo
             </PhotoCircleText>
-            <input
+            <PhotoFileInput
               type="file"
               aria-label="Photo"
               onChange={handlePhotoChange}
-              style={{
-                position: "absolute",
-                inset: 0,
-                opacity: 0,
-                cursor: "pointer",
-                width: "100%",
-                height: "100%",
-              }}
             />
           </PhotoCircle>
           {photoError && <p role="alert">{photoError}</p>}
@@ -106,29 +82,26 @@ export default function BasicsStep({
 
         <FieldsCol>
           <Field label="Name">
-            <input
+            <FullInput
               aria-label="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              style={{ width: "100%" }}
             />
           </Field>
           <Field label="Breed" optional>
-            <input
+            <FullInput
               aria-label="Breed"
               value={breed}
               onChange={(e) => setBreed(e.target.value)}
-              style={{ width: "100%" }}
             />
           </Field>
           <Field label="Age">
             <AgeGrid>
-              <input
+              <FullInput
                 type="number"
                 aria-label="Age"
                 value={ageValue}
                 onChange={(e) => setAgeValue(Number(e.target.value))}
-                style={{ width: "100%" }}
               />
               <Select
                 value={ageUnit}

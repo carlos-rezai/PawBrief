@@ -30,6 +30,7 @@ export const PhotoCircle = styled.label`
   border-radius: 50%;
   border: 1.5px dashed ${({ theme }) => theme.colors.border};
   background: ${({ theme }) => theme.colors.surfaceAlt};
+  color: ${({ theme }) => theme.colors.muted};
   cursor: pointer;
   transition: all 0.15s;
   overflow: hidden;
@@ -37,10 +38,7 @@ export const PhotoCircle = styled.label`
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
     background: ${({ theme }) => theme.colors.surface};
-  }
-
-  &:hover .photo-circle-icon {
-    stroke: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.primary};
   }
 
   &:hover .photo-circle-text {
@@ -67,6 +65,19 @@ export const AgeGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+`;
+
+export const PhotoFileInput = styled.input`
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+`;
+
+export const FullInput = styled.input`
+  width: 100%;
 `;
 
 PhotoCircle.defaultProps = { theme: defaultTheme };

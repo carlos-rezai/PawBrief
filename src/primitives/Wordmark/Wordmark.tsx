@@ -1,4 +1,9 @@
+import styled from "styled-components";
 import { colors } from "../../tokens/colors";
+
+const WordmarkSvg = styled.svg`
+  display: block;
+`;
 
 type WordmarkProps = {
   size?: number;
@@ -10,13 +15,12 @@ const VIEW_H = 40;
 export default function Wordmark({ size = VIEW_H }: WordmarkProps) {
   const width = (size / VIEW_H) * VIEW_W;
   return (
-    <svg
+    <WordmarkSvg
       width={width}
       height={size}
       viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
       role="img"
       aria-label="PawBrief wordmark"
-      style={{ display: "block" }}
     >
       <path
         d="M7 4.5 H26 L33 11.5 V35.5 a1.5 1.5 0 0 1 -1.5 1.5 H8.5 a1.5 1.5 0 0 1 -1.5 -1.5 V6 a1.5 1.5 0 0 1 1.5 -1.5 Z"
@@ -44,6 +48,6 @@ export default function Wordmark({ size = VIEW_H }: WordmarkProps) {
         </tspan>
         <tspan fill={colors.primary}>Brief</tspan>
       </text>
-    </svg>
+    </WordmarkSvg>
   );
 }

@@ -20,6 +20,7 @@ import {
   STEP_LABELS,
   STEP_SUBTITLES,
 } from "../../utils/wizardSteps";
+import { IconArrowLeft, IconArrowRight } from "../../primitives/icons";
 import {
   WizMain,
   WizStepEyebrow,
@@ -28,38 +29,6 @@ import {
   WizStepCardTitle,
   WizStepCardSubtitle,
 } from "./WizardPage.styles";
-
-const backIcon = (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 16 16"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M10 3L5 8l5 5" />
-  </svg>
-);
-
-const nextIcon = (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 16 16"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M6 3l5 5-5 5" />
-  </svg>
-);
 
 export default function WizardPage() {
   const { id, step } = useParams<{ id: string; step: string }>();
@@ -106,11 +75,18 @@ export default function WizardPage() {
     }
   };
 
-  const backLabel = stepIndex === 0 ? "Cancel" : <>{backIcon} Back</>;
+  const backLabel =
+    stepIndex === 0 ? (
+      "Cancel"
+    ) : (
+      <>
+        <IconArrowLeft size={15} /> Back
+      </>
+    );
 
   const submitLabel = nextStep ? (
     <>
-      Next: {STEP_LABELS[nextStep]} {nextIcon}
+      Next: {STEP_LABELS[nextStep]} <IconArrowRight size={15} />
     </>
   ) : (
     "Finish & save"

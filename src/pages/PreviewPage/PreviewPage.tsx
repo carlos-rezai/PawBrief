@@ -5,6 +5,7 @@ import { useProfile } from "../../features/profile";
 import { usePhotoBlobUrls } from "../../features/preview/usePhotoBlobUrls";
 import SinglePDF from "../../features/pdf/SinglePDF";
 import { Button } from "../../primitives";
+import { PdfViewerContainer } from "./PreviewPage.styles";
 
 export default function PreviewPage() {
   const { id } = useParams<{ id: string }>();
@@ -38,9 +39,11 @@ export default function PreviewPage() {
       >
         Edit Profile
       </Button>
-      <PDFViewer style={{ width: "100%", height: "80vh" }}>
-        <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
-      </PDFViewer>
+      <PdfViewerContainer>
+        <PDFViewer width="100%" height="100%">
+          <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
+        </PDFViewer>
+      </PdfViewerContainer>
     </main>
   );
 }

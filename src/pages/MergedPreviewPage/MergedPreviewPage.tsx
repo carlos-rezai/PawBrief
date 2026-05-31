@@ -4,6 +4,7 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { useProfile } from "../../features/profile";
 import MergedPDF from "../../features/pdf/MergedPDF";
 import { Button } from "../../primitives";
+import { PdfViewerContainer } from "./MergedPreviewPage.styles";
 
 export default function MergedPreviewPage() {
   const { id1, id2 } = useParams<{ id1: string; id2: string }>();
@@ -47,9 +48,11 @@ export default function MergedPreviewPage() {
       >
         Edit {profileB.basics?.name ?? "Cat B"}
       </Button>
-      <PDFViewer style={{ width: "100%", height: "80vh" }}>
-        <MergedPDF profileA={profileA} profileB={profileB} />
-      </PDFViewer>
+      <PdfViewerContainer>
+        <PDFViewer width="100%" height="100%">
+          <MergedPDF profileA={profileA} profileB={profileB} />
+        </PDFViewer>
+      </PdfViewerContainer>
     </main>
   );
 }
