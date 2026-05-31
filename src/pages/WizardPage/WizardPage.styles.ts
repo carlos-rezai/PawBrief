@@ -37,3 +37,34 @@ export const WizStepEyebrow = styled.p`
   text-align: center;
   margin: 26px 0 16px;
 `;
+
+export const WizStepCard = styled.div`
+  background: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.radii.card}px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  box-shadow: ${({ theme }) => theme.shadows.base};
+  padding: 30px;
+
+  @media (max-width: 640px) {
+    padding: 18px;
+  }
+`;
+
+export const WizStepCardHeader = styled.div`
+  margin-bottom: 22px;
+`;
+
+export const WizStepCardTitle = styled.h2`
+  font-family: ${({ theme }) => theme.typography.family};
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: ${({ theme }) => theme.colors.ink};
+  margin: 0;
+`;
+
+export const WizStepCardSubtitle = styled.p`
+  font-size: 14.5px;
+  color: ${({ theme }) => theme.colors.inkSoft};
+  margin: 4px 0 0;
+`;

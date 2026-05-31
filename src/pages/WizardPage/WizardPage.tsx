@@ -15,12 +15,20 @@ import Button from "../../primitives/Button/Button";
 import Wordmark from "../../primitives/Wordmark/Wordmark";
 import { useToast } from "../../components/Toast/Toast";
 import type { StepData, WizardStep } from "../../types/profile";
-import { STEP_ORDER, STEP_LABELS } from "../../utils/wizardSteps";
+import {
+  STEP_ORDER,
+  STEP_LABELS,
+  STEP_SUBTITLES,
+} from "../../utils/wizardSteps";
 import {
   WizNavbar,
   WizNavbarInner,
   WizMain,
   WizStepEyebrow,
+  WizStepCard,
+  WizStepCardHeader,
+  WizStepCardTitle,
+  WizStepCardSubtitle,
 } from "./WizardPage.styles";
 
 const backIcon = (
@@ -126,61 +134,68 @@ export default function WizardPage() {
       <WizMain>
         <Stepper currentStep={stepIndex} onStepClick={handleStepClick} />
         <WizStepEyebrow>STEP {stepIndex + 1} OF 6</WizStepEyebrow>
-        <h2>{STEP_LABELS[currentStep]}</h2>
-        {currentStep === "basics" && (
-          <BasicsStep
-            initialData={profile?.basics}
-            onSave={onSave}
-            onBack={handleBack}
-            backLabel={backLabel}
-            submitLabel={submitLabel}
-          />
-        )}
-        {currentStep === "feeding" && (
-          <FeedingStep
-            initialData={profile?.feeding}
-            onSave={onSave}
-            onBack={handleBack}
-            backLabel={backLabel}
-            submitLabel={submitLabel}
-          />
-        )}
-        {currentStep === "routine" && (
-          <RoutineStep
-            initialData={profile?.routine}
-            onSave={onSave}
-            onBack={handleBack}
-            backLabel={backLabel}
-            submitLabel={submitLabel}
-          />
-        )}
-        {currentStep === "favorites" && (
-          <FavoritesStep
-            initialData={profile?.favorites}
-            onSave={onSave}
-            onBack={handleBack}
-            backLabel={backLabel}
-            submitLabel={submitLabel}
-          />
-        )}
-        {currentStep === "medical" && (
-          <MedicalStep
-            initialData={profile?.medical}
-            onSave={onSave}
-            onBack={handleBack}
-            backLabel={backLabel}
-            submitLabel={submitLabel}
-          />
-        )}
-        {currentStep === "notes" && (
-          <NotesStep
-            initialData={profile?.notes}
-            onSave={onSave}
-            onBack={handleBack}
-            backLabel={backLabel}
-            submitLabel={submitLabel}
-          />
-        )}
+        <WizStepCard>
+          <WizStepCardHeader>
+            <WizStepCardTitle>{STEP_LABELS[currentStep]}</WizStepCardTitle>
+            <WizStepCardSubtitle>
+              {STEP_SUBTITLES[currentStep]}
+            </WizStepCardSubtitle>
+          </WizStepCardHeader>
+          {currentStep === "basics" && (
+            <BasicsStep
+              initialData={profile?.basics}
+              onSave={onSave}
+              onBack={handleBack}
+              backLabel={backLabel}
+              submitLabel={submitLabel}
+            />
+          )}
+          {currentStep === "feeding" && (
+            <FeedingStep
+              initialData={profile?.feeding}
+              onSave={onSave}
+              onBack={handleBack}
+              backLabel={backLabel}
+              submitLabel={submitLabel}
+            />
+          )}
+          {currentStep === "routine" && (
+            <RoutineStep
+              initialData={profile?.routine}
+              onSave={onSave}
+              onBack={handleBack}
+              backLabel={backLabel}
+              submitLabel={submitLabel}
+            />
+          )}
+          {currentStep === "favorites" && (
+            <FavoritesStep
+              initialData={profile?.favorites}
+              onSave={onSave}
+              onBack={handleBack}
+              backLabel={backLabel}
+              submitLabel={submitLabel}
+            />
+          )}
+          {currentStep === "medical" && (
+            <MedicalStep
+              initialData={profile?.medical}
+              onSave={onSave}
+              onBack={handleBack}
+              backLabel={backLabel}
+              submitLabel={submitLabel}
+            />
+          )}
+          {currentStep === "notes" && (
+            <NotesStep
+              initialData={profile?.notes}
+              onSave={onSave}
+              onBack={handleBack}
+              backLabel={backLabel}
+              submitLabel={submitLabel}
+            />
+          )}
+        </WizStepCard>
       </WizMain>
       {showSuccess && (
         <Modal
