@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { ThemeProvider } from "styled-components";
 import { describe, expect, it, vi } from "vitest";
+import { theme } from "../../../tokens";
 import RoutineStep from "./RoutineStep";
 
 const DEFAULT_SLOT_COUNT = 6;
@@ -81,5 +83,18 @@ describe("RoutineStep onSave", () => {
     const saved = onSave.mock.calls[0][0];
     expect(saved).toHaveProperty("slots");
     expect(saved.slots).toHaveLength(DEFAULT_SLOT_COUNT);
+  });
+});
+
+// ── RoutineChart integration ───────────────────────────────────────────────
+
+describe("RoutineStep RoutineChart", () => {
+  it("renders a RoutineChart when the step has activity slots", () => {
+    const { container } = render(
+      <ThemeProvider theme={theme}>
+        <RoutineStep />
+      </ThemeProvider>
+    );
+    expect(container.querySelector("svg")).toBeInTheDocument();
   });
 });
