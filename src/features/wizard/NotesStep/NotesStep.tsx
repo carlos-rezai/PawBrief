@@ -3,6 +3,7 @@ import type { NotesData, SpecialNote } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import { Button, Field, Input, Textarea } from "../../../primitives";
+import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 
 interface NotesStepProps {
   onSave?: (data: NotesData) => void;
@@ -109,8 +110,13 @@ export default function NotesStep({
         Add note
       </Button>
 
-      <Button onClick={onBack}>{backLabel}</Button>
-      <Button type="submit">{submitLabel}</Button>
+      <StepFooter>
+        <Button onClick={onBack}>{backLabel}</Button>
+        <StepFooterSpacer />
+        <Button type="submit" kind="primary">
+          {submitLabel}
+        </Button>
+      </StepFooter>
     </form>
   );
 }

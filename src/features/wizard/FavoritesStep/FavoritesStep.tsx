@@ -5,6 +5,7 @@ import type {
   TreatEntry,
 } from "../../../types/profile";
 import { Button, Field, Input } from "../../../primitives";
+import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 
 interface FavoritesStepProps {
   onSave?: (data: FavoritesData) => void;
@@ -173,8 +174,13 @@ export default function FavoritesStep({
         Add favourite spot
       </Button>
 
-      <Button onClick={onBack}>{backLabel}</Button>
-      <Button type="submit">{submitLabel}</Button>
+      <StepFooter>
+        <Button onClick={onBack}>{backLabel}</Button>
+        <StepFooterSpacer />
+        <Button type="submit" kind="primary">
+          {submitLabel}
+        </Button>
+      </StepFooter>
     </form>
   );
 }

@@ -7,6 +7,7 @@ import type {
 } from "../../../types/profile";
 import { buildMapsUrl } from "../../../utils/buildMapsUrl";
 import { Button, Field, Input, Textarea } from "../../../primitives";
+import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 
 interface MedicalStepProps {
   onSave?: (data: MedicalData) => void;
@@ -226,8 +227,13 @@ export default function MedicalStep({
         />
       </Field>
 
-      <Button onClick={onBack}>{backLabel}</Button>
-      <Button type="submit">{submitLabel}</Button>
+      <StepFooter>
+        <Button onClick={onBack}>{backLabel}</Button>
+        <StepFooterSpacer />
+        <Button type="submit" kind="primary">
+          {submitLabel}
+        </Button>
+      </StepFooter>
     </form>
   );
 }

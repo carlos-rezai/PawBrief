@@ -3,6 +3,7 @@ import type { BasicsData } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import { Button, Field, Input, Select } from "../../../primitives";
+import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 
 interface BasicsStepProps {
   onSave?: (data: BasicsData) => void;
@@ -76,8 +77,13 @@ export default function BasicsStep({
         <Input type="file" onChange={handlePhotoChange} />
       </Field>
       {photoError && <p role="alert">{photoError}</p>}
-      <Button onClick={onBack}>{backLabel}</Button>
-      <Button type="submit">{submitLabel}</Button>
+      <StepFooter>
+        <Button onClick={onBack}>{backLabel}</Button>
+        <StepFooterSpacer />
+        <Button type="submit" kind="primary">
+          {submitLabel}
+        </Button>
+      </StepFooter>
     </form>
   );
 }

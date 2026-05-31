@@ -3,6 +3,7 @@ import type { ActivitySlot, RoutineData } from "../../../types/profile";
 import { Button, Input } from "../../../primitives";
 import RoutineChart from "../../../components/RoutineChart/RoutineChart";
 import { routinePalette } from "../../../tokens";
+import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 
 interface RoutineStepProps {
   onSave?: (data: RoutineData) => void;
@@ -117,8 +118,13 @@ export default function RoutineStep({
 
       <Button onClick={addSlot}>Add slot</Button>
 
-      <Button onClick={onBack}>{backLabel}</Button>
-      <Button type="submit">{submitLabel}</Button>
+      <StepFooter>
+        <Button onClick={onBack}>{backLabel}</Button>
+        <StepFooterSpacer />
+        <Button type="submit" kind="primary">
+          {submitLabel}
+        </Button>
+      </StepFooter>
     </form>
   );
 }

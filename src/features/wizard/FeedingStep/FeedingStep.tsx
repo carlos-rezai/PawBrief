@@ -7,6 +7,7 @@ import type {
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import { Button, Field, Input, Textarea } from "../../../primitives";
+import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 
 interface FeedingStepProps {
   onSave?: (data: FeedingData) => void;
@@ -217,8 +218,13 @@ export default function FeedingStep({
         />
       </Field>
 
-      <Button onClick={onBack}>{backLabel}</Button>
-      <Button type="submit">{submitLabel}</Button>
+      <StepFooter>
+        <Button onClick={onBack}>{backLabel}</Button>
+        <StepFooterSpacer />
+        <Button type="submit" kind="primary">
+          {submitLabel}
+        </Button>
+      </StepFooter>
     </form>
   );
 }
