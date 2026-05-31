@@ -6,10 +6,12 @@ import {
   PreviewPage,
   WizardPage,
 } from "./pages";
+import { GlobalStyles } from "./styles/GlobalStyles";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <GlobalStyles />
       <Routes>
         <Route element={<AppLayout />}>
           <Route index element={<DashboardPage />} />
