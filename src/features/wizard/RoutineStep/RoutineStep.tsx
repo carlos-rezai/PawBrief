@@ -4,6 +4,19 @@ import { Button, Input } from "../../../primitives";
 import RoutineChart from "../../../components/RoutineChart/RoutineChart";
 import { routinePalette } from "../../../tokens";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
+import {
+  AddSlotButton,
+  ChartBlock,
+  ChartCaption,
+  ColorDot,
+  SlotHoursInput,
+  SlotHoursSuffix,
+  SlotHoursWrapper,
+  SlotLabelInput,
+  SlotRow,
+  SlotTimeInput,
+  TotalLine,
+} from "./RoutineStep.styles";
 
 interface RoutineStepProps {
   onSave?: (data: RoutineData) => void;
@@ -68,55 +81,53 @@ export default function RoutineStep({
 
   return (
     <form onSubmit={handleSubmit}>
-      <RoutineChart slots={slots} size={200} />
-      <table>
-        <thead>
-          <tr>
-            <th>Activity</th>
-            <th>Starts at</th>
-            <th>Duration</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {slots.map((slot, i) => (
-            <tr key={i}>
-              <td>
-                <Input
-                  aria-label="Activity label"
-                  value={slot.label}
-                  onChange={(e) => updateSlot(i, "label", e.target.value)}
-                />
-              </td>
-              <td>
-                <input
-                  type="time"
-                  aria-label="Start time"
-                  value={slot.start}
-                  onChange={(e) => updateSlot(i, "start", e.target.value)}
-                />
-              </td>
-              <td>
-                <Input
-                  aria-label="Duration"
-                  type="number"
-                  value={slot.hours}
-                  onChange={(e) =>
-                    updateSlot(i, "hours", Number(e.target.value) || 0)
-                  }
-                />
-              </td>
-              <td>
-                <Button onClick={() => removeSlot(i)}>Remove slot</Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <ChartBlock>
+        <RoutineChart slots={slots} size={200} />
+        <ChartCaption>
+          Midnight sits at the top. Each block shows <strong>when</strong> it
+          happens — overlaps and gaps are fine. Colours are assigned
+          automatically.
+        </ChartCaption>
+      </ChartBlock>
 
-      <p data-testid="routine-total">{total}h scheduled across the day</p>
+      {slots.map((slot, i) => (
+        <SlotRow key={i}>
+          <ColorDot
+            $color={routinePalette[slot.colorIndex % routinePalette.length]}
+          />
+          <SlotLabelInput
+            aria-label="Activity label"
+            value={slot.label}
+            onChange={(e) => updateSlot(i, "label", e.target.value)}
+          />
+          <SlotTimeInput
+            type="time"
+            aria-label="Start time"
+            value={slot.start}
+            onChange={(e) => updateSlot(i, "start", e.target.value)}
+          />
+          <SlotHoursWrapper>
+            <SlotHoursInput
+              type="number"
+              aria-label="Duration"
+              value={slot.hours}
+              onChange={(e) =>
+                updateSlot(i, "hours", Number(e.target.value) || 0)
+              }
+            />
+            <SlotHoursSuffix>h</SlotHoursSuffix>
+          </SlotHoursWrapper>
+          <Button onClick={() => removeSlot(i)}>Remove slot</Button>
+        </SlotRow>
+      ))}
 
-      <Button onClick={addSlot}>Add slot</Button>
+      <AddSlotButton type="button" onClick={addSlot}>
+        + Add slot
+      </AddSlotButton>
+
+      <TotalLine data-testid="routine-total">
+        {total}h scheduled across the day
+      </TotalLine>
 
       <StepFooter>
         <Button onClick={onBack}>{backLabel}</Button>

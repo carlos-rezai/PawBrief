@@ -18,7 +18,9 @@ function renderRoutineStep(onSave = vi.fn()) {
 describe("RoutineStep default slots", () => {
   it("opens with exactly six pre-populated activity slots", () => {
     renderRoutineStep();
-    expect(screen.getAllByRole("row").length - 1).toBe(DEFAULT_SLOT_COUNT);
+    expect(
+      screen.getAllByRole("button", { name: /remove slot/i })
+    ).toHaveLength(DEFAULT_SLOT_COUNT);
   });
 });
 
@@ -39,7 +41,9 @@ describe("RoutineStep add and remove slots", () => {
     const user = userEvent.setup();
     renderRoutineStep();
     await user.click(screen.getByRole("button", { name: /add slot/i }));
-    expect(screen.getAllByRole("row").length - 1).toBe(DEFAULT_SLOT_COUNT + 1);
+    expect(
+      screen.getAllByRole("button", { name: /remove slot/i })
+    ).toHaveLength(DEFAULT_SLOT_COUNT + 1);
   });
 
   it("clicking remove on a slot removes it and updates the total", async () => {
@@ -49,7 +53,9 @@ describe("RoutineStep add and remove slots", () => {
       name: /remove slot/i,
     });
     await user.click(removeButtons[0]);
-    expect(screen.getAllByRole("row").length - 1).toBe(DEFAULT_SLOT_COUNT - 1);
+    expect(
+      screen.getAllByRole("button", { name: /remove slot/i })
+    ).toHaveLength(DEFAULT_SLOT_COUNT - 1);
   });
 });
 
