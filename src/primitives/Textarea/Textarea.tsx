@@ -1,7 +1,9 @@
 import type { TextareaHTMLAttributes } from "react";
 
-type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  hasError?: boolean;
+}
 
-export default function Textarea(props: TextareaProps) {
-  return <textarea {...props} />;
+export default function Textarea({ hasError, ...props }: TextareaProps) {
+  return <textarea {...props} aria-invalid={hasError ? true : undefined} />;
 }

@@ -1,7 +1,9 @@
 import type { InputHTMLAttributes } from "react";
 
-type InputProps = InputHTMLAttributes<HTMLInputElement>;
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  hasError?: boolean;
+}
 
-export default function Input(props: InputProps) {
-  return <input {...props} />;
+export default function Input({ hasError, ...props }: InputProps) {
+  return <input {...props} aria-invalid={hasError ? true : undefined} />;
 }
