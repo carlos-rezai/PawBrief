@@ -14,24 +14,7 @@ import Modal from "../../primitives/Modal/Modal";
 import Button from "../../primitives/Button/Button";
 import { useToast } from "../../components/Toast/Toast";
 import type { StepData, WizardStep } from "../../types/profile";
-
-const STEP_ORDER: WizardStep[] = [
-  "basics",
-  "feeding",
-  "routine",
-  "favorites",
-  "medical",
-  "notes",
-];
-
-const STEP_LABELS: Record<WizardStep, string> = {
-  basics: "Basics",
-  feeding: "Feeding",
-  routine: "Routine",
-  favorites: "Favorites",
-  medical: "Medical",
-  notes: "Notes",
-};
+import { STEP_ORDER, STEP_LABELS } from "../../utils/wizardSteps";
 
 export default function WizardPage() {
   const { id, step } = useParams<{ id: string; step: string }>();

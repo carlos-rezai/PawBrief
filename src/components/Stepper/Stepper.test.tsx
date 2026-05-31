@@ -15,7 +15,7 @@ describe("Stepper", () => {
     expect(screen.getByText("Basics")).toBeInTheDocument();
     expect(screen.getByText("Feeding")).toBeInTheDocument();
     expect(screen.getByText("Routine")).toBeInTheDocument();
-    expect(screen.getByText("Favorites")).toBeInTheDocument();
+    expect(screen.getByText("Favourites")).toBeInTheDocument();
     expect(screen.getByText("Medical")).toBeInTheDocument();
     expect(screen.getByText("Notes")).toBeInTheDocument();
   });

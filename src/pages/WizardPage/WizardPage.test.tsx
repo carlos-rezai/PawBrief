@@ -135,7 +135,7 @@ describe("WizardPage Stepper", () => {
       screen.getByRole("button", { name: /^routine$/i })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /^favorites$/i })
+      screen.getByRole("button", { name: /^favourites$/i })
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /^medical$/i })

@@ -6,8 +6,7 @@ import {
   StepLabel,
   StepperNav,
 } from "./Stepper.styles";
-
-const STEPS = ["Basics", "Feeding", "Routine", "Favorites", "Medical", "Notes"];
+import { STEP_ORDER, STEP_LABELS } from "../../utils/wizardSteps";
 
 interface StepperProps {
   currentStep: number;
@@ -17,11 +16,12 @@ interface StepperProps {
 export default function Stepper({ currentStep, onStepClick }: StepperProps) {
   return (
     <StepperNav>
-      {STEPS.map((label, index) => {
+      {STEP_ORDER.map((step, index) => {
+        const label = STEP_LABELS[step];
         const done = index < currentStep;
         const active = index === currentStep;
         return (
-          <Fragment key={label}>
+          <Fragment key={step}>
             <StepButton
               $done={done}
               $active={active}
@@ -33,7 +33,7 @@ export default function Stepper({ currentStep, onStepClick }: StepperProps) {
               </StepCircle>
               <StepLabel $active={active}>{label}</StepLabel>
             </StepButton>
-            {index < STEPS.length - 1 && (
+            {index < STEP_ORDER.length - 1 && (
               <StepConnector $done={done} aria-hidden="true" />
             )}
           </Fragment>

@@ -5,17 +5,9 @@ import { Button, Checkbox } from "../../primitives";
 import Wordmark from "../../primitives/Wordmark/Wordmark";
 import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
 import { useToast } from "../../components/Toast/Toast";
-import type { CatProfile, WizardStep } from "../../types/profile";
+import type { CatProfile } from "../../types/profile";
 import { getNextStep } from "../../utils/getNextStep";
-
-const ALL_STEPS: WizardStep[] = [
-  "basics",
-  "feeding",
-  "routine",
-  "favorites",
-  "medical",
-  "notes",
-];
+import { STEP_ORDER } from "../../utils/wizardSteps";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -26,7 +18,7 @@ export default function DashboardPage() {
   const [pendingDelete, setPendingDelete] = useState<CatProfile | null>(null);
 
   const completeProfiles = profiles.filter((p) =>
-    ALL_STEPS.every((s) => p.completedSteps.includes(s))
+    STEP_ORDER.every((s) => p.completedSteps.includes(s))
   );
   const canMerge = completeProfiles.length >= 2;
 
@@ -77,7 +69,7 @@ export default function DashboardPage() {
         ) : (
           <ul>
             {profiles.map((profile) => {
-              const isComplete = ALL_STEPS.every((s) =>
+              const isComplete = STEP_ORDER.every((s) =>
                 profile.completedSteps.includes(s)
               );
               const basics = profile.basics;

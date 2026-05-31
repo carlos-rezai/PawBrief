@@ -1,13 +1,5 @@
 import type { CatProfile, WizardStep } from "../types/profile";
-
-const STEP_ORDER: WizardStep[] = [
-  "basics",
-  "feeding",
-  "routine",
-  "favorites",
-  "medical",
-  "notes",
-];
+import { STEP_ORDER } from "./wizardSteps";
 
 export function getNextStep(profile: CatProfile): WizardStep | null {
   for (const step of STEP_ORDER) {
