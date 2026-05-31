@@ -368,8 +368,9 @@ describe("DashboardPage 'Merge guides' button state", () => {
     await saveProfile(makeCompleteProfile("mg-1", "Luna"));
     await saveProfile(makeCompleteProfile("mg-2", "Biscuit"));
     renderDashboardWithProviders();
+    await screen.findByText("Luna"); // wait for profiles to load
     expect(
-      await screen.findByRole("button", { name: /merge guides/i })
+      screen.getByRole("button", { name: /merge guides/i })
     ).not.toBeDisabled();
   });
 });
@@ -385,7 +386,7 @@ describe("DashboardPage merge-select action bar", () => {
     );
     const checkboxes = await screen.findAllByRole("checkbox");
     await user.click(checkboxes[0]);
-    expect(await screen.findByText(/1 selected/i)).toBeInTheDocument();
+    expect(await screen.findByText(/1 of 2 selected/i)).toBeInTheDocument();
   });
 
   it("'Create merged guide' CTA is enabled when exactly two profiles are selected", async () => {
@@ -399,7 +400,7 @@ describe("DashboardPage merge-select action bar", () => {
     const checkboxes = await screen.findAllByRole("checkbox");
     await user.click(checkboxes[0]);
     await user.click(checkboxes[1]);
-    expect(await screen.findByText(/2 selected/i)).toBeInTheDocument();
+    expect(await screen.findByText(/2 of 2 selected/i)).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /create merged guide/i })
     ).not.toBeDisabled();

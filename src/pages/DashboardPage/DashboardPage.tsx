@@ -23,6 +23,11 @@ import {
   EmptyStateDesc,
   EmptyStateTitle,
   EmptyStateWrapper,
+  MergeBar,
+  MergeBarInner,
+  MergeBarLeft,
+  MergeCount,
+  MergeHint,
 } from "./DashboardPage.styles";
 
 const mergeIcon = (
@@ -170,19 +175,28 @@ export default function DashboardPage() {
       </DashContent>
 
       {mergeMode && (
-        <div>
-          <span>{selectedIds.length} selected</span>
-          <Button
-            disabled={selectedIds.length !== 2}
-            onClick={() => {
-              if (selectedIds.length === 2) {
-                navigate(`/preview/merge/${selectedIds[0]}/${selectedIds[1]}`);
-              }
-            }}
-          >
-            Create merged guide
-          </Button>
-        </div>
+        <MergeBar>
+          <MergeBarInner>
+            <MergeBarLeft>
+              <MergeCount>{selectedIds.length} of 2 selected</MergeCount>
+              <MergeHint>
+                {selectedIds.length === 2 ? "Ready" : "Pick one more"}
+              </MergeHint>
+            </MergeBarLeft>
+            <Button
+              kind={selectedIds.length === 2 ? "primary" : "disabled"}
+              onClick={() => {
+                if (selectedIds.length === 2) {
+                  navigate(
+                    `/preview/merge/${selectedIds[0]}/${selectedIds[1]}`
+                  );
+                }
+              }}
+            >
+              Create merged guide
+            </Button>
+          </MergeBarInner>
+        </MergeBar>
       )}
 
       {pendingDelete && (
