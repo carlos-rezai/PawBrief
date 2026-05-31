@@ -10,12 +10,16 @@ interface FavoritesStepProps {
   onSave?: (data: FavoritesData) => void;
   onBack?: () => void;
   initialData?: FavoritesData;
+  backLabel?: React.ReactNode;
+  submitLabel?: React.ReactNode;
 }
 
 export default function FavoritesStep({
   onSave,
   onBack,
   initialData,
+  backLabel = "Back",
+  submitLabel = "Next",
 }: FavoritesStepProps) {
   const [toyEntries, setToyEntries] = useState<ToyEntry[]>(
     initialData?.toyEntries ?? []
@@ -169,8 +173,8 @@ export default function FavoritesStep({
         Add favourite spot
       </Button>
 
-      {onBack && <Button onClick={onBack}>Back</Button>}
-      <Button type="submit">Next</Button>
+      <Button onClick={onBack}>{backLabel}</Button>
+      <Button type="submit">{submitLabel}</Button>
     </form>
   );
 }

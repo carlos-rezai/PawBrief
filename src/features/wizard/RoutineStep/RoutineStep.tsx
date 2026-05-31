@@ -117,9 +117,7 @@ export default function RoutineStep({
 
       <Button onClick={addSlot}>Add slot</Button>
 
-      <Button onClick={onBack} disabled={!onBack}>
-        {backLabel}
-      </Button>
+      <Button onClick={onBack}>{backLabel}</Button>
       <Button type="submit">{submitLabel}</Button>
     </form>
   );

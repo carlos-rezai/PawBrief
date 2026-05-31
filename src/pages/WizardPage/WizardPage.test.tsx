@@ -178,11 +178,13 @@ describe("WizardPage Stepper", () => {
 // ── Footer navigation ──────────────────────────────────────────────────────
 
 describe("WizardPage footer navigation", () => {
-  it("the Back button is disabled on the Basics step", async () => {
+  it("clicking Cancel on the Basics step navigates to the Dashboard", async () => {
+    const user = userEvent.setup();
     await saveProfile(makeProfile("footer-basics-test"));
     renderWizardAt("/wizard/footer-basics-test/step/basics");
     await screen.findByLabelText(/name/i);
-    expect(screen.getByRole("button", { name: /back/i })).toBeDisabled();
+    await user.click(screen.getByRole("button", { name: /cancel/i }));
+    expect(await screen.findByText("Dashboard")).toBeInTheDocument();
   });
 
   it("the Back button is enabled on the Feeding step", async () => {

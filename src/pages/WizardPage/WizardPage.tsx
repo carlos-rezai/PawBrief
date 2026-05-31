@@ -16,6 +16,38 @@ import { useToast } from "../../components/Toast/Toast";
 import type { StepData, WizardStep } from "../../types/profile";
 import { STEP_ORDER, STEP_LABELS } from "../../utils/wizardSteps";
 
+const backIcon = (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M10 3L5 8l5 5" />
+  </svg>
+);
+
+const nextIcon = (
+  <svg
+    width="15"
+    height="15"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M6 3l5 5-5 5" />
+  </svg>
+);
+
 export default function WizardPage() {
   const { id, step } = useParams<{ id: string; step: string }>();
   const navigate = useNavigate();
@@ -53,9 +85,23 @@ export default function WizardPage() {
     }
   };
 
-  const onBack = prevStep
-    ? () => navigate(`/wizard/${id}/step/${prevStep}`)
-    : undefined;
+  const handleBack = () => {
+    if (stepIndex === 0) {
+      navigate("/");
+    } else if (prevStep) {
+      navigate(`/wizard/${id}/step/${prevStep}`);
+    }
+  };
+
+  const backLabel = stepIndex === 0 ? "Cancel" : <>{backIcon} Back</>;
+
+  const submitLabel = nextStep ? (
+    <>
+      Next: {STEP_LABELS[nextStep]} {nextIcon}
+    </>
+  ) : (
+    "Finish & save"
+  );
 
   function handleStepClick(index: number) {
     if (isEditMode) {
@@ -72,43 +118,54 @@ export default function WizardPage() {
           <BasicsStep
             initialData={profile?.basics}
             onSave={onSave}
-            onBack={onBack}
+            onBack={handleBack}
+            backLabel={backLabel}
+            submitLabel={submitLabel}
           />
         )}
         {currentStep === "feeding" && (
           <FeedingStep
             initialData={profile?.feeding}
             onSave={onSave}
-            onBack={onBack}
+            onBack={handleBack}
+            backLabel={backLabel}
+            submitLabel={submitLabel}
           />
         )}
         {currentStep === "routine" && (
           <RoutineStep
             initialData={profile?.routine}
             onSave={onSave}
-            onBack={onBack}
+            onBack={handleBack}
+            backLabel={backLabel}
+            submitLabel={submitLabel}
           />
         )}
         {currentStep === "favorites" && (
           <FavoritesStep
             initialData={profile?.favorites}
             onSave={onSave}
-            onBack={onBack}
+            onBack={handleBack}
+            backLabel={backLabel}
+            submitLabel={submitLabel}
           />
         )}
         {currentStep === "medical" && (
           <MedicalStep
             initialData={profile?.medical}
             onSave={onSave}
-            onBack={onBack}
+            onBack={handleBack}
+            backLabel={backLabel}
+            submitLabel={submitLabel}
           />
         )}
         {currentStep === "notes" && (
           <NotesStep
             initialData={profile?.notes}
             onSave={onSave}
-            onBack={onBack}
-            submitLabel="Finish"
+            onBack={handleBack}
+            backLabel={backLabel}
+            submitLabel={submitLabel}
           />
         )}
       </main>

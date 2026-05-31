@@ -12,12 +12,16 @@ interface FeedingStepProps {
   onSave?: (data: FeedingData) => void;
   onBack?: () => void;
   initialData?: FeedingData;
+  backLabel?: React.ReactNode;
+  submitLabel?: React.ReactNode;
 }
 
 export default function FeedingStep({
   onSave,
   onBack,
   initialData,
+  backLabel = "Back",
+  submitLabel = "Next",
 }: FeedingStepProps) {
   const [foodEntries, setFoodEntries] = useState<FoodEntry[]>(
     initialData?.foodEntries ?? []
@@ -213,8 +217,8 @@ export default function FeedingStep({
         />
       </Field>
 
-      {onBack && <Button onClick={onBack}>Back</Button>}
-      <Button type="submit">Next</Button>
+      <Button onClick={onBack}>{backLabel}</Button>
+      <Button type="submit">{submitLabel}</Button>
     </form>
   );
 }

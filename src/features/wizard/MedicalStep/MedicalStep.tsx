@@ -12,6 +12,8 @@ interface MedicalStepProps {
   onSave?: (data: MedicalData) => void;
   onBack?: () => void;
   initialData?: MedicalData;
+  backLabel?: React.ReactNode;
+  submitLabel?: React.ReactNode;
 }
 
 const emptyVet: VetInfo = { name: "", clinicName: "", phone: "", address: "" };
@@ -20,6 +22,8 @@ export default function MedicalStep({
   onSave,
   onBack,
   initialData,
+  backLabel = "Back",
+  submitLabel = "Next",
 }: MedicalStepProps) {
   const [vet, setVet] = useState<VetInfo>(initialData?.vet ?? emptyVet);
   const [emergencyContacts, setEmergencyContacts] = useState<
@@ -222,8 +226,8 @@ export default function MedicalStep({
         />
       </Field>
 
-      {onBack && <Button onClick={onBack}>Back</Button>}
-      <Button type="submit">Next</Button>
+      <Button onClick={onBack}>{backLabel}</Button>
+      <Button type="submit">{submitLabel}</Button>
     </form>
   );
 }

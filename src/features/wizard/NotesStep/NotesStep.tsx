@@ -8,13 +8,15 @@ interface NotesStepProps {
   onSave?: (data: NotesData) => void;
   onBack?: () => void;
   initialData?: NotesData;
-  submitLabel?: string;
+  backLabel?: React.ReactNode;
+  submitLabel?: React.ReactNode;
 }
 
 export default function NotesStep({
   onSave,
   onBack,
   initialData,
+  backLabel = "Back",
   submitLabel = "Next",
 }: NotesStepProps) {
   const [specialNotes, setSpecialNotes] = useState<SpecialNote[]>(
@@ -107,9 +109,7 @@ export default function NotesStep({
         Add note
       </Button>
 
-      <Button onClick={onBack} disabled={!onBack}>
-        Back
-      </Button>
+      <Button onClick={onBack}>{backLabel}</Button>
       <Button type="submit">{submitLabel}</Button>
     </form>
   );

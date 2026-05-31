@@ -8,12 +8,16 @@ interface BasicsStepProps {
   onSave?: (data: BasicsData) => void;
   onBack?: () => void;
   initialData?: BasicsData;
+  backLabel?: React.ReactNode;
+  submitLabel?: React.ReactNode;
 }
 
 export default function BasicsStep({
   onSave,
   onBack,
   initialData,
+  backLabel = "Back",
+  submitLabel = "Next",
 }: BasicsStepProps) {
   const [name, setName] = useState(initialData?.name ?? "");
   const [breed, setBreed] = useState(initialData?.breed ?? "");
@@ -72,10 +76,8 @@ export default function BasicsStep({
         <Input type="file" onChange={handlePhotoChange} />
       </Field>
       {photoError && <p role="alert">{photoError}</p>}
-      <Button onClick={onBack} disabled={!onBack}>
-        Back
-      </Button>
-      <Button type="submit">Next</Button>
+      <Button onClick={onBack}>{backLabel}</Button>
+      <Button type="submit">{submitLabel}</Button>
     </form>
   );
 }
