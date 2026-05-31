@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { ActivitySlot, RoutineData } from "../../../types/profile";
 import { Button, Input } from "../../../primitives";
+import RoutineChart from "../../../components/RoutineChart/RoutineChart";
 
 interface RoutineStepProps {
   onSave?: (data: RoutineData) => void;
@@ -52,8 +53,22 @@ export default function RoutineStep({
     onSave?.({ slots });
   }
 
+  const chartSlots = slots.reduce<
+    Array<{ label: string; start: string; hours: number; colorIndex: number }>
+  >((acc, slot, i) => {
+    const totalHours = acc.reduce((sum, s) => sum + s.hours, 0);
+    const h = Math.floor(totalHours);
+    const m = Math.round((totalHours - h) * 60);
+    const start = `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    return [
+      ...acc,
+      { label: slot.label, start, hours: slot.durationHours, colorIndex: i },
+    ];
+  }, []);
+
   return (
     <form onSubmit={handleSubmit}>
+      <RoutineChart slots={chartSlots} size={200} />
       <table>
         <thead>
           <tr>
@@ -97,7 +112,9 @@ export default function RoutineStep({
 
       <Button onClick={addSlot}>Add slot</Button>
 
-      {onBack && <Button onClick={onBack}>Back</Button>}
+      <Button onClick={onBack} disabled={!onBack}>
+        Back
+      </Button>
       <Button type="submit">Next</Button>
     </form>
   );

@@ -19,7 +19,7 @@ const ALL_STEPS: WizardStep[] = [
 
 export default function DashboardPage() {
   const navigate = useNavigate();
-  const { profiles, createProfile, deleteProfile } = useProfiles();
+  const { profiles, loaded, createProfile, deleteProfile } = useProfiles();
   const { enqueue } = useToast();
   const [mergeMode, setMergeMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -61,15 +61,17 @@ export default function DashboardPage() {
         <Wordmark />
       </nav>
       <main>
-        <Button
-          disabled={!canMerge}
-          onClick={() => {
-            setMergeMode(true);
-            setSelectedIds([]);
-          }}
-        >
-          Merge guides
-        </Button>
+        {loaded && (
+          <Button
+            disabled={!canMerge}
+            onClick={() => {
+              setMergeMode(true);
+              setSelectedIds([]);
+            }}
+          >
+            Merge guides
+          </Button>
+        )}
         {profiles.length === 0 ? (
           <p>Get started — create your first profile above.</p>
         ) : (

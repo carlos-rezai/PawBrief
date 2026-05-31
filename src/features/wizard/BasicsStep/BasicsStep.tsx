@@ -72,7 +72,9 @@ export default function BasicsStep({
         <Input type="file" onChange={handlePhotoChange} />
       </Field>
       {photoError && <p role="alert">{photoError}</p>}
-      {onBack && <Button onClick={onBack}>Back</Button>}
+      <Button onClick={onBack} disabled={!onBack}>
+        Back
+      </Button>
       <Button type="submit">Next</Button>
     </form>
   );

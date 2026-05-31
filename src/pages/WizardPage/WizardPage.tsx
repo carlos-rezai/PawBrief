@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProfile, useProfiles } from "../../features/profile";
 import {
@@ -9,6 +9,10 @@ import {
   NotesStep,
   RoutineStep,
 } from "../../features/wizard";
+import Stepper from "../../components/Stepper/Stepper";
+import Modal from "../../primitives/Modal/Modal";
+import Button from "../../primitives/Button/Button";
+import { useToast } from "../../components/Toast/Toast";
 import type { StepData, WizardStep } from "../../types/profile";
 
 const STEP_ORDER: WizardStep[] = [
@@ -20,13 +24,24 @@ const STEP_ORDER: WizardStep[] = [
   "notes",
 ];
 
+const STEP_LABELS: Record<WizardStep, string> = {
+  basics: "Basics",
+  feeding: "Feeding",
+  routine: "Routine",
+  favorites: "Favorites",
+  medical: "Medical",
+  notes: "Notes",
+};
+
 export default function WizardPage() {
   const { id, step } = useParams<{ id: string; step: string }>();
   const navigate = useNavigate();
+  const { enqueue } = useToast();
   const { createProfile } = useProfiles();
   const { profile, loading, saveStep } = useProfile(
     id === "new" || !id ? "" : id
   );
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     if (id === "new" || !id) {
@@ -43,13 +58,15 @@ export default function WizardPage() {
   const prevStep = stepIndex > 0 ? STEP_ORDER[stepIndex - 1] : null;
   const nextStep =
     stepIndex < STEP_ORDER.length - 1 ? STEP_ORDER[stepIndex + 1] : null;
+  const isEditMode = (profile?.completedSteps.length ?? 0) > 0;
 
   const onSave = async (data: StepData) => {
     await saveStep(currentStep, data);
+    enqueue("Draft saved");
     if (nextStep) {
       navigate(`/wizard/${id}/step/${nextStep}`);
     } else {
-      navigate(`/preview/${id}`);
+      setShowSuccess(true);
     }
   };
 
@@ -57,77 +74,79 @@ export default function WizardPage() {
     ? () => navigate(`/wizard/${id}/step/${prevStep}`)
     : undefined;
 
-  if (currentStep === "basics") {
-    return (
-      <main>
-        <BasicsStep
-          initialData={profile?.basics}
-          onSave={onSave}
-          onBack={onBack}
-        />
-      </main>
-    );
+  function handleStepClick(index: number) {
+    if (isEditMode) {
+      navigate(`/wizard/${id}/step/${STEP_ORDER[index]}`);
+    }
   }
 
-  if (currentStep === "feeding") {
-    return (
+  return (
+    <>
+      <Stepper currentStep={stepIndex} onStepClick={handleStepClick} />
       <main>
-        <FeedingStep
-          initialData={profile?.feeding}
-          onSave={onSave}
-          onBack={onBack}
-        />
+        <h2>{STEP_LABELS[currentStep]}</h2>
+        {currentStep === "basics" && (
+          <BasicsStep
+            initialData={profile?.basics}
+            onSave={onSave}
+            onBack={onBack}
+          />
+        )}
+        {currentStep === "feeding" && (
+          <FeedingStep
+            initialData={profile?.feeding}
+            onSave={onSave}
+            onBack={onBack}
+          />
+        )}
+        {currentStep === "routine" && (
+          <RoutineStep
+            initialData={profile?.routine}
+            onSave={onSave}
+            onBack={onBack}
+          />
+        )}
+        {currentStep === "favorites" && (
+          <FavoritesStep
+            initialData={profile?.favorites}
+            onSave={onSave}
+            onBack={onBack}
+          />
+        )}
+        {currentStep === "medical" && (
+          <MedicalStep
+            initialData={profile?.medical}
+            onSave={onSave}
+            onBack={onBack}
+          />
+        )}
+        {currentStep === "notes" && (
+          <NotesStep
+            initialData={profile?.notes}
+            onSave={onSave}
+            onBack={onBack}
+            submitLabel="Finish"
+          />
+        )}
       </main>
-    );
-  }
-
-  if (currentStep === "routine") {
-    return (
-      <main>
-        <RoutineStep
-          initialData={profile?.routine}
-          onSave={onSave}
-          onBack={onBack}
-        />
-      </main>
-    );
-  }
-
-  if (currentStep === "favorites") {
-    return (
-      <main>
-        <FavoritesStep
-          initialData={profile?.favorites}
-          onSave={onSave}
-          onBack={onBack}
-        />
-      </main>
-    );
-  }
-
-  if (currentStep === "medical") {
-    return (
-      <main>
-        <MedicalStep
-          initialData={profile?.medical}
-          onSave={onSave}
-          onBack={onBack}
-        />
-      </main>
-    );
-  }
-
-  if (currentStep === "notes") {
-    return (
-      <main>
-        <NotesStep
-          initialData={profile?.notes}
-          onSave={onSave}
-          onBack={onBack}
-        />
-      </main>
-    );
-  }
-
-  return <main>Wizard</main>;
+      {showSuccess && (
+        <Modal
+          onClose={() => {
+            setShowSuccess(false);
+            navigate("/");
+          }}
+        >
+          <p>Your guide is ready!</p>
+          <Button
+            onClick={() => {
+              setShowSuccess(false);
+              navigate("/");
+            }}
+          >
+            Done
+          </Button>
+        </Modal>
+      )}
+    </>
+  );
 }

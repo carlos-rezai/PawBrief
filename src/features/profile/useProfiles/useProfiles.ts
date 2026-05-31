@@ -8,15 +8,20 @@ import type { CatProfile } from "../../../types/profile";
 
 interface UseProfilesReturn {
   profiles: CatProfile[];
+  loaded: boolean;
   createProfile: () => Promise<string>;
   deleteProfile: (id: string) => Promise<void>;
 }
 
 export function useProfiles(): UseProfilesReturn {
   const [profiles, setProfiles] = useState<CatProfile[]>([]);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    getAllProfiles().then(setProfiles);
+    getAllProfiles().then((p) => {
+      setProfiles(p);
+      setLoaded(true);
+    });
   }, []);
 
   const createProfile = useCallback(async (): Promise<string> => {
@@ -38,5 +43,5 @@ export function useProfiles(): UseProfilesReturn {
     setProfiles((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
-  return { profiles, createProfile, deleteProfile };
+  return { profiles, loaded, createProfile, deleteProfile };
 }
