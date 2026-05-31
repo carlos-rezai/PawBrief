@@ -8,6 +8,31 @@ import { useToast } from "../../components/Toast/Toast";
 import type { CatProfile } from "../../types/profile";
 import { getNextStep } from "../../utils/getNextStep";
 import { STEP_ORDER } from "../../utils/wizardSteps";
+import {
+  DashContent,
+  DashHeader,
+  DashHeaderLeft,
+  DashHeaderSubtitle,
+  DashHeaderTitle,
+  DashNavbar,
+  DashNavbarInner,
+} from "./DashboardPage.styles";
+
+const mergeIcon = (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 18 18"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M4 3v3a4 4 0 0 0 4 4h6M4 15v-3a4 4 0 0 1 4-4M12 7l3 3-3 3" />
+  </svg>
+);
 
 export default function DashboardPage() {
   const navigate = useNavigate();
@@ -49,21 +74,49 @@ export default function DashboardPage() {
 
   return (
     <>
-      <nav>
-        <Wordmark />
-      </nav>
-      <main>
-        {loaded && (
-          <Button
-            disabled={!canMerge}
-            onClick={() => {
-              setMergeMode(true);
-              setSelectedIds([]);
-            }}
-          >
-            Merge guides
-          </Button>
-        )}
+      <DashNavbar>
+        <DashNavbarInner>
+          <Wordmark />
+        </DashNavbarInner>
+      </DashNavbar>
+      <DashContent>
+        <DashHeader>
+          <DashHeaderLeft>
+            <DashHeaderTitle>
+              {mergeMode ? "Select two cats to merge" : "Your cats"}
+            </DashHeaderTitle>
+            <DashHeaderSubtitle>
+              {mergeMode
+                ? "Their guides will sit side-by-side in one PDF."
+                : `${profiles.length} profile${profiles.length !== 1 ? "s" : ""} · ${completeProfiles.length} ready to print`}
+            </DashHeaderSubtitle>
+          </DashHeaderLeft>
+          <div>
+            {mergeMode ? (
+              <Button
+                kind="secondary"
+                onClick={() => {
+                  setMergeMode(false);
+                  setSelectedIds([]);
+                }}
+              >
+                Cancel
+              </Button>
+            ) : (
+              <Button
+                kind="secondary"
+                disabled={!canMerge}
+                onClick={() => {
+                  setMergeMode(true);
+                  setSelectedIds([]);
+                }}
+                style={{ display: "inline-flex", alignItems: "center", gap: 7 }}
+              >
+                {mergeIcon} Merge guides
+              </Button>
+            )}
+          </div>
+        </DashHeader>
         {profiles.length === 0 ? (
           <p>Get started — create your first profile above.</p>
         ) : (
@@ -126,7 +179,7 @@ export default function DashboardPage() {
           </ul>
         )}
         <button onClick={handleCreateProfile}>New cat profile</button>
-      </main>
+      </DashContent>
 
       {mergeMode && (
         <div>
