@@ -17,3 +17,21 @@ describe("Textarea", () => {
     expect(onChange).toHaveBeenCalled();
   });
 });
+
+describe("Textarea hasError", () => {
+  it("sets aria-invalid when hasError is true", () => {
+    render(<Textarea aria-label="notes" hasError />);
+    expect(screen.getByRole("textbox", { name: /notes/i })).toHaveAttribute(
+      "aria-invalid",
+      "true"
+    );
+  });
+
+  it("does not set aria-invalid when hasError is omitted", () => {
+    render(<Textarea aria-label="notes" />);
+    expect(screen.getByRole("textbox", { name: /notes/i })).not.toHaveAttribute(
+      "aria-invalid",
+      "true"
+    );
+  });
+});

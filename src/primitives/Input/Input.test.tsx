@@ -22,3 +22,21 @@ describe("Input", () => {
     expect(onChange).toHaveBeenCalled();
   });
 });
+
+describe("Input hasError", () => {
+  it("sets aria-invalid when hasError is true", () => {
+    render(<Input aria-label="name" hasError />);
+    expect(screen.getByLabelText(/name/i)).toHaveAttribute(
+      "aria-invalid",
+      "true"
+    );
+  });
+
+  it("does not set aria-invalid when hasError is omitted", () => {
+    render(<Input aria-label="name" />);
+    expect(screen.getByLabelText(/name/i)).not.toHaveAttribute(
+      "aria-invalid",
+      "true"
+    );
+  });
+});

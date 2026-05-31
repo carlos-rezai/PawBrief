@@ -37,3 +37,40 @@ describe("Select", () => {
     expect(onChange).toHaveBeenCalled();
   });
 });
+
+describe("Select hasError", () => {
+  it("sets aria-invalid when hasError is true", () => {
+    render(
+      <Select aria-label="unit" hasError>
+        <option value="a">A</option>
+      </Select>
+    );
+    expect(screen.getByRole("combobox", { name: /unit/i })).toHaveAttribute(
+      "aria-invalid",
+      "true"
+    );
+  });
+
+  it("does not set aria-invalid when hasError is omitted", () => {
+    render(
+      <Select aria-label="unit">
+        <option value="a">A</option>
+      </Select>
+    );
+    expect(screen.getByRole("combobox", { name: /unit/i })).not.toHaveAttribute(
+      "aria-invalid",
+      "true"
+    );
+  });
+});
+
+describe("Select custom chevron", () => {
+  it("renders a custom SVG chevron alongside the select", () => {
+    const { container } = render(
+      <Select aria-label="unit">
+        <option value="a">A</option>
+      </Select>
+    );
+    expect(container.querySelector("svg")).toBeInTheDocument();
+  });
+});
