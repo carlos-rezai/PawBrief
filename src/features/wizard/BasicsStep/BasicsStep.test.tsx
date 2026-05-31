@@ -2,7 +2,7 @@ import "fake-indexeddb/auto";
 import { IDBFactory } from "fake-indexeddb";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import BasicsStep from "./BasicsStep";
 
 beforeEach(() => {
@@ -15,6 +15,12 @@ beforeEach(() => {
     .mockImplementation((cb: BlobCallback) =>
       cb(new Blob(["img"], { type: "image/jpeg" }))
     ) as unknown as typeof HTMLCanvasElement.prototype.toBlob;
+  globalThis.URL.createObjectURL = vi.fn(() => "blob:fake-preview-url");
+  globalThis.URL.revokeObjectURL = vi.fn();
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 function renderBasicsStep() {
@@ -61,6 +67,19 @@ describe("BasicsStep photo upload", () => {
       })
     );
     expect(await screen.findByRole("alert")).toBeInTheDocument();
+  });
+
+  it("shows a preview image immediately after a valid photo is selected", async () => {
+    const user = userEvent.setup();
+    renderBasicsStep();
+    const input = screen.getByLabelText(/photo/i);
+    await user.upload(
+      input,
+      new File(["fake-image"], "cat.jpg", { type: "image/jpeg" })
+    );
+    const preview = await screen.findByAltText(/cat photo preview/i);
+    expect(preview).toBeInTheDocument();
+    expect(preview).toHaveAttribute("src", "blob:fake-preview-url");
   });
 
   it("submitting with a photo file calls onSave with a non-null photoId", async () => {

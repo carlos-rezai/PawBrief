@@ -67,6 +67,39 @@ export const AgeGrid = styled.div`
   gap: 10px;
 `;
 
+export const PhotoPreview = styled.img`
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  z-index: 0;
+`;
+
+export const PhotoChangeOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.42);
+  color: white;
+  font-size: 12.5px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+
+  ${PhotoCircle}:hover & {
+    opacity: 1;
+  }
+`;
+
 export const PhotoFileInput = styled.input`
   position: absolute;
   inset: 0;
@@ -74,6 +107,7 @@ export const PhotoFileInput = styled.input`
   cursor: pointer;
   width: 100%;
   height: 100%;
+  z-index: 2;
 `;
 
 export const FullInput = styled.input`

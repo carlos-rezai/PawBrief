@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { BasicsData } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
-import { savePhoto } from "../../profile";
+import { getPhoto, savePhoto } from "../../profile";
 import { Button, Field, Select } from "../../../primitives";
 import { IconCamera } from "../../../primitives/icons";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
@@ -10,10 +10,12 @@ import {
   BasicsBody,
   FieldsCol,
   FullInput,
+  PhotoChangeOverlay,
   PhotoCircle,
   PhotoCircleText,
   PhotoCol,
   PhotoFileInput,
+  PhotoPreview,
 } from "./BasicsStep.styles";
 
 interface BasicsStepProps {
@@ -39,6 +41,42 @@ export default function BasicsStep({
   );
   const [pendingPhoto, setPendingPhoto] = useState<File | null>(null);
   const [photoError, setPhotoError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // Immediate preview from a newly selected file
+  useEffect(() => {
+    if (!pendingPhoto) return;
+    let url: string | null = null;
+    try {
+      url = URL.createObjectURL(pendingPhoto);
+      setPreviewUrl(url);
+    } catch {
+      // not available in some test environments
+    }
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [pendingPhoto]);
+
+  // Preview from an existing stored photo when editing a profile
+  useEffect(() => {
+    if (!initialData?.photoId) return;
+    let active = true;
+    let objectUrl: string | null = null;
+    getPhoto(initialData.photoId).then((blob) => {
+      if (!active || !blob) return;
+      try {
+        objectUrl = URL.createObjectURL(blob);
+        setPreviewUrl(objectUrl);
+      } catch {
+        // not available in some test environments
+      }
+    });
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [initialData?.photoId]);
 
   function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -67,10 +105,22 @@ export default function BasicsStep({
       <BasicsBody>
         <PhotoCol>
           <PhotoCircle>
-            <IconCamera />
-            <PhotoCircleText className="photo-circle-text">
-              Add photo
-            </PhotoCircleText>
+            {previewUrl ? (
+              <>
+                <PhotoPreview src={previewUrl} alt="Cat photo preview" />
+                <PhotoChangeOverlay>
+                  <IconCamera />
+                  Change photo
+                </PhotoChangeOverlay>
+              </>
+            ) : (
+              <>
+                <IconCamera />
+                <PhotoCircleText className="photo-circle-text">
+                  Add photo
+                </PhotoCircleText>
+              </>
+            )}
             <PhotoFileInput
               type="file"
               aria-label="Photo"
