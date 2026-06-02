@@ -227,39 +227,41 @@ export default function FeedingStep({
       </StepSection>
 
       <StepSection title="Serving">
-        {servings.length > 0 && (
-          <ServingHeaders>
-            <span>Amount (g)</span>
-            <span>Time</span>
-            <span />
-          </ServingHeaders>
-        )}
-        <EntryList>
-          {servings.map((s, i) => (
-            <ServingRow key={i}>
-              <Input
-                type="number"
-                aria-label="Serving amount"
-                value={s.grams}
-                onChange={(e) => updateServing(i, "grams", e.target.value)}
-                placeholder="70"
-              />
-              <Input
-                type="time"
-                aria-label="Feeding time"
-                value={s.time}
-                onChange={(e) => updateServing(i, "time", e.target.value)}
-              />
-              <RemoveButton
-                type="button"
-                title="Remove serving"
-                onClick={() => removeServing(i)}
-              >
-                <IconX />
-              </RemoveButton>
-            </ServingRow>
-          ))}
-        </EntryList>
+        <div>
+          {servings.length > 0 && (
+            <ServingHeaders>
+              <span>Amount (g)</span>
+              <span>Time</span>
+              <span />
+            </ServingHeaders>
+          )}
+          <EntryList>
+            {servings.map((s, i) => (
+              <ServingRow key={i}>
+                <Input
+                  type="number"
+                  aria-label="Serving amount"
+                  value={s.grams}
+                  onChange={(e) => updateServing(i, "grams", e.target.value)}
+                  placeholder="70"
+                />
+                <Input
+                  type="time"
+                  aria-label="Feeding time"
+                  value={s.time}
+                  onChange={(e) => updateServing(i, "time", e.target.value)}
+                />
+                <RemoveButton
+                  type="button"
+                  title="Remove serving"
+                  onClick={() => removeServing(i)}
+                >
+                  <IconX />
+                </RemoveButton>
+              </ServingRow>
+            ))}
+          </EntryList>
+        </div>
         <AddEntryButton type="button" onClick={addServing}>
           <IconPlus size={14} /> Add serving
         </AddEntryButton>

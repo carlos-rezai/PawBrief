@@ -19,8 +19,15 @@ const SectionHint = styled.p`
   margin: 2px 0 8px;
 `;
 
+const SectionContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing[3]}px;
+`;
+
 SectionTitle.defaultProps = { theme: defaultTheme };
 SectionHint.defaultProps = { theme: defaultTheme };
+SectionContent.defaultProps = { theme: defaultTheme };
 
 interface StepSectionProps {
   title?: string;
@@ -39,7 +46,7 @@ export default function StepSection({
     <SectionWrapper $first={first}>
       {title && <SectionTitle>{title}</SectionTitle>}
       {hint && <SectionHint>{hint}</SectionHint>}
-      {children}
+      <SectionContent>{children}</SectionContent>
     </SectionWrapper>
   );
 }

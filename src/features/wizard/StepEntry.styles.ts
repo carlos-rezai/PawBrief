@@ -53,7 +53,6 @@ export const RemoveButton = styled.button`
 `;
 
 export const AddEntryButton = styled.button`
-  margin-top: ${({ theme }) => theme.spacing[3]}px;
   width: 100%;
   display: inline-flex;
   align-items: center;
