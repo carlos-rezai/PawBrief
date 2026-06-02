@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type {
   FeedingData,
   FoodEntry,
@@ -7,7 +7,13 @@ import type {
 } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
-import { Button, Field, Input, Textarea } from "../../../primitives";
+import {
+  Button,
+  Field,
+  Input,
+  PhotoUpload,
+  Textarea,
+} from "../../../primitives";
 import { IconPlus, IconX } from "../../../primitives/icons";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import StepSection from "../StepSection";
@@ -58,7 +64,24 @@ export default function FeedingStep({
   const [pendingPlatingPhoto, setPendingPlatingPhoto] = useState<File | null>(
     null
   );
+  const [platingPreviewUrl, setPlatingPreviewUrl] = useState<string | null>(
+    null
+  );
   const [photoError, setPhotoError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!pendingPlatingPhoto) return;
+    let url: string | null = null;
+    try {
+      url = URL.createObjectURL(pendingPlatingPhoto);
+      setPlatingPreviewUrl(url);
+    } catch {
+      // not available in some test environments
+    }
+    return () => {
+      if (url) URL.revokeObjectURL(url);
+    };
+  }, [pendingPlatingPhoto]);
 
   function addFoodEntry() {
     setFoodEntries((prev) => [...prev, { brand: "", flavor: "", texture: "" }]);
@@ -122,13 +145,10 @@ export default function FeedingStep({
     setSupplementEntries((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  function handlePhotoChange(file: File) {
     const error = validatePhoto(file);
     if (error) {
       setPhotoError(error);
-      e.target.value = "";
       return;
     }
     setPhotoError(null);
@@ -285,10 +305,13 @@ export default function FeedingStep({
             onChange={(e) => setPlatingInstructions(e.target.value)}
           />
         </Field>
-        <Field label="Plating photo">
-          <Input type="file" onChange={handlePhotoChange} />
-        </Field>
-        {photoError && <p role="alert">{photoError}</p>}
+        <PhotoUpload
+          label="Plating photo"
+          height={108}
+          previewUrl={platingPreviewUrl}
+          onChange={handlePhotoChange}
+          error={photoError}
+        />
       </StepSection>
 
       <StepSection title="Dietary notes">

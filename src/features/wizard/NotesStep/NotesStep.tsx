@@ -2,7 +2,13 @@ import { useState } from "react";
 import type { NotesData, SpecialNote } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
-import { Button, Field, Input, Textarea } from "../../../primitives";
+import {
+  Button,
+  Field,
+  Input,
+  PhotoUpload,
+  Textarea,
+} from "../../../primitives";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import StepSection from "../StepSection";
 import { NoteCard } from "./NotesStep.styles";
@@ -28,16 +34,10 @@ export default function NotesStep({
   const [pendingPhotos, setPendingPhotos] = useState<Record<number, File>>({});
   const [photoErrors, setPhotoErrors] = useState<Record<number, string>>({});
 
-  function handlePhotoChange(
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  function handlePhotoChange(index: number, file: File) {
     const error = validatePhoto(file);
     if (error) {
       setPhotoErrors((prev) => ({ ...prev, [index]: error }));
-      e.target.value = "";
     } else {
       setPhotoErrors((prev) => {
         const next = { ...prev };
@@ -97,10 +97,12 @@ export default function NotesStep({
                 }
               />
             </Field>
-            <Field label="Photo">
-              <Input type="file" onChange={(e) => handlePhotoChange(i, e)} />
-            </Field>
-            {photoErrors[i] && <p role="alert">{photoErrors[i]}</p>}
+            <PhotoUpload
+              label="Photo"
+              height={96}
+              onChange={(file) => handlePhotoChange(i, file)}
+              error={photoErrors[i]}
+            />
             <Button
               onClick={() =>
                 setSpecialNotes((prev) => prev.filter((_, idx) => idx !== i))

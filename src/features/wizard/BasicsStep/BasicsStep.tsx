@@ -2,20 +2,9 @@ import { useEffect, useState } from "react";
 import type { BasicsData } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { getPhoto, savePhoto } from "../../profile";
-import { Button, Field, Input, Select } from "../../../primitives";
-import { IconCamera } from "../../../primitives/icons";
+import { Button, Field, Input, PhotoUpload, Select } from "../../../primitives";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
-import {
-  AgeGrid,
-  BasicsBody,
-  FieldsCol,
-  PhotoChangeOverlay,
-  PhotoCircle,
-  PhotoCircleText,
-  PhotoCol,
-  PhotoFileInput,
-  PhotoPreview,
-} from "./BasicsStep.styles";
+import { AgeGrid, BasicsBody, FieldsCol, PhotoCol } from "./BasicsStep.styles";
 
 interface BasicsStepProps {
   onSave?: (data: BasicsData) => void;
@@ -77,13 +66,10 @@ export default function BasicsStep({
     };
   }, [initialData?.photoId]);
 
-  function handlePhotoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  function handlePhotoChange(file: File) {
     const error = validatePhoto(file);
     if (error) {
       setPhotoError(error);
-      e.target.value = "";
       return;
     }
     setPhotoError(null);
@@ -103,30 +89,15 @@ export default function BasicsStep({
     <form onSubmit={handleSubmit}>
       <BasicsBody>
         <PhotoCol>
-          <PhotoCircle>
-            {previewUrl ? (
-              <>
-                <PhotoPreview src={previewUrl} alt="Cat photo preview" />
-                <PhotoChangeOverlay>
-                  <IconCamera />
-                  Change photo
-                </PhotoChangeOverlay>
-              </>
-            ) : (
-              <>
-                <IconCamera />
-                <PhotoCircleText className="photo-circle-text">
-                  Add photo
-                </PhotoCircleText>
-              </>
-            )}
-            <PhotoFileInput
-              type="file"
-              aria-label="Photo"
-              onChange={handlePhotoChange}
-            />
-          </PhotoCircle>
-          {photoError && <p role="alert">{photoError}</p>}
+          <PhotoUpload
+            label="Photo"
+            round
+            height={124}
+            previewUrl={previewUrl}
+            previewAlt="Cat photo preview"
+            onChange={handlePhotoChange}
+            error={photoError}
+          />
         </PhotoCol>
 
         <FieldsCol>
