@@ -152,8 +152,11 @@ export default function SinglePDF({
                 {entry.brand} — {entry.flavor} ({entry.texture})
               </Text>
             ))}
-            <Text>Serving: {feeding.servingGrams}g</Text>
-            <Text>Times: {feeding.feedingTimes.join(", ")}</Text>
+            {feeding.servings.map((s, i) => (
+              <Text key={i}>
+                {s.grams}g at {s.time}
+              </Text>
+            ))}
             {feeding.platingInstructions && (
               <Text>Instructions: {feeding.platingInstructions}</Text>
             )}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import type {
   FeedingData,
   FoodEntry,
+  ServingEntry,
   SupplementEntry,
 } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
@@ -17,7 +18,12 @@ import {
   EntryLabel,
   RemoveButton,
 } from "../StepEntry.styles";
-import { ThreeColGrid, TimeRow, TwoColGrid } from "./FeedingStep.styles";
+import {
+  ServingHeaders,
+  ServingRow,
+  ThreeColGrid,
+  TwoColGrid,
+} from "./FeedingStep.styles";
 
 interface FeedingStepProps {
   onSave?: (data: FeedingData) => void;
@@ -37,11 +43,8 @@ export default function FeedingStep({
   const [foodEntries, setFoodEntries] = useState<FoodEntry[]>(
     initialData?.foodEntries ?? []
   );
-  const [servingGrams, setServingGrams] = useState(
-    initialData?.servingGrams ?? 0
-  );
-  const [feedingTimes, setFeedingTimes] = useState<string[]>(
-    initialData?.feedingTimes ?? []
+  const [servings, setServings] = useState<ServingEntry[]>(
+    initialData?.servings ?? []
   );
   const [supplementEntries, setSupplementEntries] = useState<SupplementEntry[]>(
     initialData?.supplementEntries ?? []
@@ -77,16 +80,26 @@ export default function FeedingStep({
     setFoodEntries((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function addFeedingTime() {
-    setFeedingTimes((prev) => [...prev, ""]);
+  function addServing() {
+    setServings((prev) => [...prev, { grams: 0, time: "" }]);
   }
 
-  function updateFeedingTime(index: number, value: string) {
-    setFeedingTimes((prev) => prev.map((t, i) => (i === index ? value : t)));
+  function updateServing(
+    index: number,
+    field: keyof ServingEntry,
+    value: string
+  ) {
+    setServings((prev) =>
+      prev.map((s, i) =>
+        i === index
+          ? { ...s, [field]: field === "grams" ? Number(value) : value }
+          : s
+      )
+    );
   }
 
-  function removeFeedingTime(index: number) {
-    setFeedingTimes((prev) => prev.filter((_, i) => i !== index));
+  function removeServing(index: number) {
+    setServings((prev) => prev.filter((_, i) => i !== index));
   }
 
   function addSupplement() {
@@ -130,8 +143,7 @@ export default function FeedingStep({
     }
     onSave?.({
       foodEntries,
-      servingGrams,
-      feedingTimes,
+      servings,
       supplementEntries,
       platingInstructions,
       platingPhotoId,
@@ -188,37 +200,40 @@ export default function FeedingStep({
       </StepSection>
 
       <StepSection title="Serving">
-        <TwoColGrid>
-          <Field label="Serving amount (g)">
+        {servings.length > 0 && (
+          <ServingHeaders>
+            <span>Amount (g)</span>
+            <span>Time</span>
+            <span />
+          </ServingHeaders>
+        )}
+        {servings.map((s, i) => (
+          <ServingRow key={i}>
             <Input
               type="number"
-              value={servingGrams}
-              onChange={(e) => setServingGrams(Number(e.target.value))}
+              aria-label="Serving amount"
+              value={s.grams}
+              onChange={(e) => updateServing(i, "grams", e.target.value)}
+              placeholder="70"
             />
-          </Field>
-          <div>
-            {feedingTimes.map((time, i) => (
-              <TimeRow key={i}>
-                <Input
-                  type="time"
-                  aria-label="Feeding time"
-                  value={time}
-                  onChange={(e) => updateFeedingTime(i, e.target.value)}
-                />
-                <RemoveButton
-                  type="button"
-                  title="Remove feeding time"
-                  onClick={() => removeFeedingTime(i)}
-                >
-                  <IconX />
-                </RemoveButton>
-              </TimeRow>
-            ))}
-            <AddEntryButton type="button" onClick={addFeedingTime}>
-              <IconPlus size={14} /> Add feeding time
-            </AddEntryButton>
-          </div>
-        </TwoColGrid>
+            <Input
+              type="time"
+              aria-label="Feeding time"
+              value={s.time}
+              onChange={(e) => updateServing(i, "time", e.target.value)}
+            />
+            <RemoveButton
+              type="button"
+              title="Remove serving"
+              onClick={() => removeServing(i)}
+            >
+              <IconX />
+            </RemoveButton>
+          </ServingRow>
+        ))}
+        <AddEntryButton type="button" onClick={addServing}>
+          <IconPlus size={14} /> Add serving
+        </AddEntryButton>
       </StepSection>
 
       <StepSection

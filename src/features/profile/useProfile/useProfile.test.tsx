@@ -69,8 +69,10 @@ describe("useProfile", () => {
         foodEntries: [
           { brand: "Royal Canin", flavor: "chicken", texture: "dry" },
         ],
-        servingGrams: 50,
-        feedingTimes: ["08:00", "18:00"],
+        servings: [
+          { grams: 50, time: "08:00" },
+          { grams: 50, time: "18:00" },
+        ],
         supplementEntries: [],
         platingInstructions: "Mix with water",
       });

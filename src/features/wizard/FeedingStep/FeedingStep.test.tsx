@@ -52,30 +52,38 @@ describe("FeedingStep food entries", () => {
   });
 });
 
-describe("FeedingStep serving amount", () => {
-  it("has a numeric serving amount field", () => {
+describe("FeedingStep servings", () => {
+  it("renders with no servings and an add serving button", () => {
     renderFeedingStep();
-    const input = screen.getByLabelText(/serving amount/i);
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute("type", "number");
-  });
-});
-
-describe("FeedingStep feeding times", () => {
-  it("clicking add feeding time appends a time entry", async () => {
-    const user = userEvent.setup();
-    renderFeedingStep();
-    await user.click(screen.getByRole("button", { name: /add feeding time/i }));
-    expect(screen.getAllByLabelText(/feeding time/i)).toHaveLength(1);
+    expect(
+      screen.getByRole("button", { name: /add serving/i })
+    ).toBeInTheDocument();
+    expect(screen.queryByLabelText(/serving amount/i)).not.toBeInTheDocument();
   });
 
-  it("clicking remove on a feeding time entry removes it", async () => {
+  it("clicking add serving appends a row with amount and time fields", async () => {
     const user = userEvent.setup();
     renderFeedingStep();
-    await user.click(screen.getByRole("button", { name: /add feeding time/i }));
-    await user.click(
-      screen.getByRole("button", { name: /remove feeding time/i })
-    );
+    await user.click(screen.getByRole("button", { name: /add serving/i }));
+    expect(screen.getByLabelText(/serving amount/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/feeding time/i)).toBeInTheDocument();
+  });
+
+  it("adding two servings shows two full rows", async () => {
+    const user = userEvent.setup();
+    renderFeedingStep();
+    await user.click(screen.getByRole("button", { name: /add serving/i }));
+    await user.click(screen.getByRole("button", { name: /add serving/i }));
+    expect(screen.getAllByLabelText(/serving amount/i)).toHaveLength(2);
+    expect(screen.getAllByLabelText(/feeding time/i)).toHaveLength(2);
+  });
+
+  it("clicking remove on a serving entry removes that row", async () => {
+    const user = userEvent.setup();
+    renderFeedingStep();
+    await user.click(screen.getByRole("button", { name: /add serving/i }));
+    await user.click(screen.getByRole("button", { name: /remove serving/i }));
+    expect(screen.queryByLabelText(/serving amount/i)).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/feeding time/i)).not.toBeInTheDocument();
   });
 });
@@ -154,8 +162,7 @@ describe("FeedingStep initialData", () => {
       foodEntries: [
         { brand: "Royal Canin", flavor: "Chicken", texture: "dry" },
       ],
-      servingGrams: 50,
-      feedingTimes: [],
+      servings: [],
       supplementEntries: [],
       platingInstructions: "",
     };
@@ -179,8 +186,7 @@ describe("FeedingStep onSave", () => {
     expect(onSave).toHaveBeenCalledOnce();
     const saved = onSave.mock.calls[0][0];
     expect(saved).toHaveProperty("foodEntries");
-    expect(saved).toHaveProperty("servingGrams");
-    expect(saved).toHaveProperty("feedingTimes");
+    expect(saved).toHaveProperty("servings");
     expect(saved).toHaveProperty("supplementEntries");
     expect(saved).toHaveProperty("platingInstructions");
   });

@@ -17,8 +17,7 @@ beforeEach(() => {
 
 const feedingData: FeedingData = {
   foodEntries: [{ brand: "Royal Canin", flavor: "Chicken", texture: "dry" }],
-  servingGrams: 50,
-  feedingTimes: ["08:00"],
+  servings: [{ grams: 50, time: "08:00" }],
   supplementEntries: [],
   platingInstructions: "",
 };

@@ -20,6 +20,11 @@ export interface FoodEntry {
   texture: string;
 }
 
+export interface ServingEntry {
+  grams: number;
+  time: string;
+}
+
 export interface SupplementEntry {
   brand: string;
   flavor: string;
@@ -27,8 +32,7 @@ export interface SupplementEntry {
 
 export interface FeedingData {
   foodEntries: FoodEntry[];
-  servingGrams: number;
-  feedingTimes: string[];
+  servings: ServingEntry[];
   supplementEntries: SupplementEntry[];
   platingInstructions: string;
   platingPhotoId?: string;

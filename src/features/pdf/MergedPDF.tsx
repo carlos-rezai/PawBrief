@@ -105,8 +105,11 @@ export default function MergedPDF({ profileA, profileB }: MergedPDFProps) {
                   {entry.brand} — {entry.flavor}
                 </Text>
               ))}
-              <Text>Serving: {profileA.feeding.servingGrams}g</Text>
-              <Text>Times: {profileA.feeding.feedingTimes.join(", ")}</Text>
+              {profileA.feeding.servings.map((s, i) => (
+                <Text key={i}>
+                  {s.grams}g at {s.time}
+                </Text>
+              ))}
             </View>
             <View style={styles.col}>
               <Text style={styles.sectionTitle}>Feeding</Text>
@@ -115,8 +118,11 @@ export default function MergedPDF({ profileA, profileB }: MergedPDFProps) {
                   {entry.brand} — {entry.flavor}
                 </Text>
               ))}
-              <Text>Serving: {profileB.feeding.servingGrams}g</Text>
-              <Text>Times: {profileB.feeding.feedingTimes.join(", ")}</Text>
+              {profileB.feeding.servings.map((s, i) => (
+                <Text key={i}>
+                  {s.grams}g at {s.time}
+                </Text>
+              ))}
             </View>
           </View>
         )}
