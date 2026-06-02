@@ -22,6 +22,7 @@ import {
   EntryCard,
   EntryHeader,
   EntryLabel,
+  EntryList,
   RemoveButton,
 } from "../StepEntry.styles";
 import {
@@ -178,42 +179,48 @@ export default function FeedingStep({
         title="Food"
         hint="What you serve, and how it's prepared."
       >
-        {foodEntries.map((entry, i) => (
-          <EntryCard key={i}>
-            <EntryHeader>
-              <EntryLabel>Food {i + 1}</EntryLabel>
-              <RemoveButton
-                type="button"
-                title="Remove food entry"
-                onClick={() => removeFoodEntry(i)}
-              >
-                <IconX />
-              </RemoveButton>
-            </EntryHeader>
-            <ThreeColGrid>
-              <Field label="Brand">
-                <Input
-                  value={entry.brand}
-                  onChange={(e) => updateFoodEntry(i, "brand", e.target.value)}
-                />
-              </Field>
-              <Field label="Flavor">
-                <Input
-                  value={entry.flavor}
-                  onChange={(e) => updateFoodEntry(i, "flavor", e.target.value)}
-                />
-              </Field>
-              <Field label="Texture">
-                <Input
-                  value={entry.texture}
-                  onChange={(e) =>
-                    updateFoodEntry(i, "texture", e.target.value)
-                  }
-                />
-              </Field>
-            </ThreeColGrid>
-          </EntryCard>
-        ))}
+        <EntryList>
+          {foodEntries.map((entry, i) => (
+            <EntryCard key={i}>
+              <EntryHeader>
+                <EntryLabel>Food {i + 1}</EntryLabel>
+                <RemoveButton
+                  type="button"
+                  title="Remove food entry"
+                  onClick={() => removeFoodEntry(i)}
+                >
+                  <IconX />
+                </RemoveButton>
+              </EntryHeader>
+              <ThreeColGrid>
+                <Field label="Brand">
+                  <Input
+                    value={entry.brand}
+                    onChange={(e) =>
+                      updateFoodEntry(i, "brand", e.target.value)
+                    }
+                  />
+                </Field>
+                <Field label="Flavor">
+                  <Input
+                    value={entry.flavor}
+                    onChange={(e) =>
+                      updateFoodEntry(i, "flavor", e.target.value)
+                    }
+                  />
+                </Field>
+                <Field label="Texture">
+                  <Input
+                    value={entry.texture}
+                    onChange={(e) =>
+                      updateFoodEntry(i, "texture", e.target.value)
+                    }
+                  />
+                </Field>
+              </ThreeColGrid>
+            </EntryCard>
+          ))}
+        </EntryList>
         <AddEntryButton type="button" onClick={addFoodEntry}>
           <IconPlus size={14} /> Add food entry
         </AddEntryButton>
@@ -227,30 +234,32 @@ export default function FeedingStep({
             <span />
           </ServingHeaders>
         )}
-        {servings.map((s, i) => (
-          <ServingRow key={i}>
-            <Input
-              type="number"
-              aria-label="Serving amount"
-              value={s.grams}
-              onChange={(e) => updateServing(i, "grams", e.target.value)}
-              placeholder="70"
-            />
-            <Input
-              type="time"
-              aria-label="Feeding time"
-              value={s.time}
-              onChange={(e) => updateServing(i, "time", e.target.value)}
-            />
-            <RemoveButton
-              type="button"
-              title="Remove serving"
-              onClick={() => removeServing(i)}
-            >
-              <IconX />
-            </RemoveButton>
-          </ServingRow>
-        ))}
+        <EntryList>
+          {servings.map((s, i) => (
+            <ServingRow key={i}>
+              <Input
+                type="number"
+                aria-label="Serving amount"
+                value={s.grams}
+                onChange={(e) => updateServing(i, "grams", e.target.value)}
+                placeholder="70"
+              />
+              <Input
+                type="time"
+                aria-label="Feeding time"
+                value={s.time}
+                onChange={(e) => updateServing(i, "time", e.target.value)}
+              />
+              <RemoveButton
+                type="button"
+                title="Remove serving"
+                onClick={() => removeServing(i)}
+              >
+                <IconX />
+              </RemoveButton>
+            </ServingRow>
+          ))}
+        </EntryList>
         <AddEntryButton type="button" onClick={addServing}>
           <IconPlus size={14} /> Add serving
         </AddEntryButton>
@@ -260,36 +269,40 @@ export default function FeedingStep({
         title="Supplements"
         hint="Vitamins or routine additions — not prescribed medications."
       >
-        {supplementEntries.map((entry, i) => (
-          <EntryCard key={i} data-testid="supplement-entry">
-            <EntryHeader>
-              <EntryLabel>Supplement {i + 1}</EntryLabel>
-              <RemoveButton
-                type="button"
-                title="Remove supplement"
-                onClick={() => removeSupplement(i)}
-              >
-                <IconX />
-              </RemoveButton>
-            </EntryHeader>
-            <TwoColGrid>
-              <Field label="Brand">
-                <Input
-                  value={entry.brand}
-                  onChange={(e) => updateSupplement(i, "brand", e.target.value)}
-                />
-              </Field>
-              <Field label="Flavor">
-                <Input
-                  value={entry.flavor}
-                  onChange={(e) =>
-                    updateSupplement(i, "flavor", e.target.value)
-                  }
-                />
-              </Field>
-            </TwoColGrid>
-          </EntryCard>
-        ))}
+        <EntryList>
+          {supplementEntries.map((entry, i) => (
+            <EntryCard key={i} data-testid="supplement-entry">
+              <EntryHeader>
+                <EntryLabel>Supplement {i + 1}</EntryLabel>
+                <RemoveButton
+                  type="button"
+                  title="Remove supplement"
+                  onClick={() => removeSupplement(i)}
+                >
+                  <IconX />
+                </RemoveButton>
+              </EntryHeader>
+              <TwoColGrid>
+                <Field label="Brand">
+                  <Input
+                    value={entry.brand}
+                    onChange={(e) =>
+                      updateSupplement(i, "brand", e.target.value)
+                    }
+                  />
+                </Field>
+                <Field label="Flavor">
+                  <Input
+                    value={entry.flavor}
+                    onChange={(e) =>
+                      updateSupplement(i, "flavor", e.target.value)
+                    }
+                  />
+                </Field>
+              </TwoColGrid>
+            </EntryCard>
+          ))}
+        </EntryList>
         <AddEntryButton type="button" onClick={addSupplement}>
           <IconPlus size={14} /> Add supplement
         </AddEntryButton>

@@ -1,6 +1,12 @@
 import styled from "styled-components";
 import { theme as defaultTheme } from "../../tokens";
 
+export const EntryList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing[3]}px;
+`;
+
 export const EntryCard = styled.div`
   background: ${({ theme }) => theme.colors.surfaceAlt};
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -47,7 +53,7 @@ export const RemoveButton = styled.button`
 `;
 
 export const AddEntryButton = styled.button`
-  margin-top: 10px;
+  margin-top: ${({ theme }) => theme.spacing[3]}px;
   width: 100%;
   display: inline-flex;
   align-items: center;
@@ -70,6 +76,7 @@ export const AddEntryButton = styled.button`
   }
 `;
 
+EntryList.defaultProps = { theme: defaultTheme };
 EntryCard.defaultProps = { theme: defaultTheme };
 EntryHeader.defaultProps = { theme: defaultTheme };
 EntryLabel.defaultProps = { theme: defaultTheme };

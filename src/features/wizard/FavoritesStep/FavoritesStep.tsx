@@ -13,6 +13,7 @@ import {
   EntryCard,
   EntryHeader,
   EntryLabel,
+  EntryList,
   RemoveButton,
 } from "../StepEntry.styles";
 import { ToyGrid, TreatGrid } from "./FavoritesStep.styles";
@@ -54,48 +55,50 @@ export default function FavoritesStep({
   return (
     <form onSubmit={handleSubmit}>
       <StepSection first title="Toys">
-        {toyEntries.map((entry, i) => (
-          <EntryCard key={i} data-testid="toy-entry">
-            <EntryHeader>
-              <EntryLabel>Toy {i + 1}</EntryLabel>
-              <RemoveButton
-                type="button"
-                title="Remove toy"
-                onClick={() =>
-                  setToyEntries((prev) => prev.filter((_, idx) => idx !== i))
-                }
-              >
-                <IconX />
-              </RemoveButton>
-            </EntryHeader>
-            <ToyGrid>
-              <Field label="Name">
-                <Input
-                  value={entry.name}
-                  onChange={(e) =>
-                    setToyEntries((prev) =>
-                      prev.map((t, idx) =>
-                        idx === i ? { ...t, name: e.target.value } : t
-                      )
-                    )
+        <EntryList>
+          {toyEntries.map((entry, i) => (
+            <EntryCard key={i} data-testid="toy-entry">
+              <EntryHeader>
+                <EntryLabel>Toy {i + 1}</EntryLabel>
+                <RemoveButton
+                  type="button"
+                  title="Remove toy"
+                  onClick={() =>
+                    setToyEntries((prev) => prev.filter((_, idx) => idx !== i))
                   }
-                />
-              </Field>
-              <Field label="Description" optional>
-                <Input
-                  value={entry.description ?? ""}
-                  onChange={(e) =>
-                    setToyEntries((prev) =>
-                      prev.map((t, idx) =>
-                        idx === i ? { ...t, description: e.target.value } : t
+                >
+                  <IconX />
+                </RemoveButton>
+              </EntryHeader>
+              <ToyGrid>
+                <Field label="Name">
+                  <Input
+                    value={entry.name}
+                    onChange={(e) =>
+                      setToyEntries((prev) =>
+                        prev.map((t, idx) =>
+                          idx === i ? { ...t, name: e.target.value } : t
+                        )
                       )
-                    )
-                  }
-                />
-              </Field>
-            </ToyGrid>
-          </EntryCard>
-        ))}
+                    }
+                  />
+                </Field>
+                <Field label="Description" optional>
+                  <Input
+                    value={entry.description ?? ""}
+                    onChange={(e) =>
+                      setToyEntries((prev) =>
+                        prev.map((t, idx) =>
+                          idx === i ? { ...t, description: e.target.value } : t
+                        )
+                      )
+                    }
+                  />
+                </Field>
+              </ToyGrid>
+            </EntryCard>
+          ))}
+        </EntryList>
         <AddEntryButton
           type="button"
           onClick={() => setToyEntries((prev) => [...prev, { name: "" }])}
@@ -105,48 +108,52 @@ export default function FavoritesStep({
       </StepSection>
 
       <StepSection title="Treats">
-        {treatEntries.map((entry, i) => (
-          <EntryCard key={i} data-testid="treat-entry">
-            <EntryHeader>
-              <EntryLabel>Treat {i + 1}</EntryLabel>
-              <RemoveButton
-                type="button"
-                title="Remove treat"
-                onClick={() =>
-                  setTreatEntries((prev) => prev.filter((_, idx) => idx !== i))
-                }
-              >
-                <IconX />
-              </RemoveButton>
-            </EntryHeader>
-            <TreatGrid>
-              <Field label="Brand">
-                <Input
-                  value={entry.brand}
-                  onChange={(e) =>
+        <EntryList>
+          {treatEntries.map((entry, i) => (
+            <EntryCard key={i} data-testid="treat-entry">
+              <EntryHeader>
+                <EntryLabel>Treat {i + 1}</EntryLabel>
+                <RemoveButton
+                  type="button"
+                  title="Remove treat"
+                  onClick={() =>
                     setTreatEntries((prev) =>
-                      prev.map((t, idx) =>
-                        idx === i ? { ...t, brand: e.target.value } : t
-                      )
+                      prev.filter((_, idx) => idx !== i)
                     )
                   }
-                />
-              </Field>
-              <Field label="Flavor">
-                <Input
-                  value={entry.flavor}
-                  onChange={(e) =>
-                    setTreatEntries((prev) =>
-                      prev.map((t, idx) =>
-                        idx === i ? { ...t, flavor: e.target.value } : t
+                >
+                  <IconX />
+                </RemoveButton>
+              </EntryHeader>
+              <TreatGrid>
+                <Field label="Brand">
+                  <Input
+                    value={entry.brand}
+                    onChange={(e) =>
+                      setTreatEntries((prev) =>
+                        prev.map((t, idx) =>
+                          idx === i ? { ...t, brand: e.target.value } : t
+                        )
                       )
-                    )
-                  }
-                />
-              </Field>
-            </TreatGrid>
-          </EntryCard>
-        ))}
+                    }
+                  />
+                </Field>
+                <Field label="Flavor">
+                  <Input
+                    value={entry.flavor}
+                    onChange={(e) =>
+                      setTreatEntries((prev) =>
+                        prev.map((t, idx) =>
+                          idx === i ? { ...t, flavor: e.target.value } : t
+                        )
+                      )
+                    }
+                  />
+                </Field>
+              </TreatGrid>
+            </EntryCard>
+          ))}
+        </EntryList>
         <AddEntryButton
           type="button"
           onClick={() =>
@@ -161,54 +168,60 @@ export default function FavoritesStep({
         title="Comfort items"
         hint="Blankets, beds, anything that soothes them."
       >
-        {comfortItems.map((item, i) => (
-          <div key={i} data-testid="comfort-item">
-            <Field label="Comfort item">
-              <Input
-                value={item}
-                onChange={(e) =>
-                  setComfortItems((prev) =>
-                    prev.map((c, idx) => (idx === i ? e.target.value : c))
-                  )
+        <EntryList>
+          {comfortItems.map((item, i) => (
+            <div key={i} data-testid="comfort-item">
+              <Field label="Comfort item">
+                <Input
+                  value={item}
+                  onChange={(e) =>
+                    setComfortItems((prev) =>
+                      prev.map((c, idx) => (idx === i ? e.target.value : c))
+                    )
+                  }
+                />
+              </Field>
+              <Button
+                onClick={() =>
+                  setComfortItems((prev) => prev.filter((_, idx) => idx !== i))
                 }
-              />
-            </Field>
-            <Button
-              onClick={() =>
-                setComfortItems((prev) => prev.filter((_, idx) => idx !== i))
-              }
-            >
-              Remove comfort item
-            </Button>
-          </div>
-        ))}
+              >
+                Remove comfort item
+              </Button>
+            </div>
+          ))}
+        </EntryList>
         <Button onClick={() => setComfortItems((prev) => [...prev, ""])}>
           Add comfort item
         </Button>
       </StepSection>
 
       <StepSection title="Favourite spots">
-        {favouriteSpots.map((spot, i) => (
-          <div key={i} data-testid="favourite-spot">
-            <Field label="Favourite spot">
-              <Input
-                value={spot}
-                onChange={(e) =>
+        <EntryList>
+          {favouriteSpots.map((spot, i) => (
+            <div key={i} data-testid="favourite-spot">
+              <Field label="Favourite spot">
+                <Input
+                  value={spot}
+                  onChange={(e) =>
+                    setFavouriteSpots((prev) =>
+                      prev.map((s, idx) => (idx === i ? e.target.value : s))
+                    )
+                  }
+                />
+              </Field>
+              <Button
+                onClick={() =>
                   setFavouriteSpots((prev) =>
-                    prev.map((s, idx) => (idx === i ? e.target.value : s))
+                    prev.filter((_, idx) => idx !== i)
                   )
                 }
-              />
-            </Field>
-            <Button
-              onClick={() =>
-                setFavouriteSpots((prev) => prev.filter((_, idx) => idx !== i))
-              }
-            >
-              Remove favourite spot
-            </Button>
-          </div>
-        ))}
+              >
+                Remove favourite spot
+              </Button>
+            </div>
+          ))}
+        </EntryList>
         <Button onClick={() => setFavouriteSpots((prev) => [...prev, ""])}>
           Add favourite spot
         </Button>

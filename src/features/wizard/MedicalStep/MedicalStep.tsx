@@ -15,6 +15,7 @@ import {
   EntryCard,
   EntryHeader,
   EntryLabel,
+  EntryList,
   RemoveButton,
 } from "../StepEntry.styles";
 import {
@@ -114,62 +115,64 @@ export default function MedicalStep({
       </StepSection>
 
       <StepSection title="Emergency contacts">
-        {emergencyContacts.map((contact, i) => (
-          <EntryCard key={i} data-testid="emergency-contact">
-            <EntryHeader>
-              <EntryLabel>Contact {i + 1}</EntryLabel>
-              <RemoveButton
-                type="button"
-                title="Remove emergency contact"
-                onClick={() =>
-                  setEmergencyContacts((prev) =>
-                    prev.filter((_, idx) => idx !== i)
-                  )
-                }
-              >
-                <IconX />
-              </RemoveButton>
-            </EntryHeader>
-            <ContactGrid>
-              <Field label="Name">
-                <Input
-                  value={contact.name}
-                  onChange={(e) =>
+        <EntryList>
+          {emergencyContacts.map((contact, i) => (
+            <EntryCard key={i} data-testid="emergency-contact">
+              <EntryHeader>
+                <EntryLabel>Contact {i + 1}</EntryLabel>
+                <RemoveButton
+                  type="button"
+                  title="Remove emergency contact"
+                  onClick={() =>
                     setEmergencyContacts((prev) =>
-                      prev.map((c, idx) =>
-                        idx === i ? { ...c, name: e.target.value } : c
-                      )
+                      prev.filter((_, idx) => idx !== i)
                     )
                   }
-                />
-              </Field>
-              <Field label="Phone">
-                <Input
-                  value={contact.phone}
-                  onChange={(e) =>
-                    setEmergencyContacts((prev) =>
-                      prev.map((c, idx) =>
-                        idx === i ? { ...c, phone: e.target.value } : c
+                >
+                  <IconX />
+                </RemoveButton>
+              </EntryHeader>
+              <ContactGrid>
+                <Field label="Name">
+                  <Input
+                    value={contact.name}
+                    onChange={(e) =>
+                      setEmergencyContacts((prev) =>
+                        prev.map((c, idx) =>
+                          idx === i ? { ...c, name: e.target.value } : c
+                        )
                       )
-                    )
-                  }
-                />
-              </Field>
-              <Field label="Relationship">
-                <Input
-                  value={contact.relationship}
-                  onChange={(e) =>
-                    setEmergencyContacts((prev) =>
-                      prev.map((c, idx) =>
-                        idx === i ? { ...c, relationship: e.target.value } : c
+                    }
+                  />
+                </Field>
+                <Field label="Phone">
+                  <Input
+                    value={contact.phone}
+                    onChange={(e) =>
+                      setEmergencyContacts((prev) =>
+                        prev.map((c, idx) =>
+                          idx === i ? { ...c, phone: e.target.value } : c
+                        )
                       )
-                    )
-                  }
-                />
-              </Field>
-            </ContactGrid>
-          </EntryCard>
-        ))}
+                    }
+                  />
+                </Field>
+                <Field label="Relationship">
+                  <Input
+                    value={contact.relationship}
+                    onChange={(e) =>
+                      setEmergencyContacts((prev) =>
+                        prev.map((c, idx) =>
+                          idx === i ? { ...c, relationship: e.target.value } : c
+                        )
+                      )
+                    }
+                  />
+                </Field>
+              </ContactGrid>
+            </EntryCard>
+          ))}
+        </EntryList>
         <AddEntryButton
           type="button"
           onClick={() =>
@@ -187,72 +190,74 @@ export default function MedicalStep({
         title="Medications"
         hint="Prescribed treatments — name, dosage, frequency, how to give it."
       >
-        {medications.map((med, i) => (
-          <EntryCard key={i} data-testid="medication">
-            <EntryHeader>
-              <EntryLabel>Medication {i + 1}</EntryLabel>
-              <RemoveButton
-                type="button"
-                title="Remove medication"
-                onClick={() =>
-                  setMedications((prev) => prev.filter((_, idx) => idx !== i))
-                }
-              >
-                <IconX />
-              </RemoveButton>
-            </EntryHeader>
-            <MedTopGrid>
-              <Field label="Name">
-                <Input
-                  value={med.name}
+        <EntryList>
+          {medications.map((med, i) => (
+            <EntryCard key={i} data-testid="medication">
+              <EntryHeader>
+                <EntryLabel>Medication {i + 1}</EntryLabel>
+                <RemoveButton
+                  type="button"
+                  title="Remove medication"
+                  onClick={() =>
+                    setMedications((prev) => prev.filter((_, idx) => idx !== i))
+                  }
+                >
+                  <IconX />
+                </RemoveButton>
+              </EntryHeader>
+              <MedTopGrid>
+                <Field label="Name">
+                  <Input
+                    value={med.name}
+                    onChange={(e) =>
+                      setMedications((prev) =>
+                        prev.map((m, idx) =>
+                          idx === i ? { ...m, name: e.target.value } : m
+                        )
+                      )
+                    }
+                  />
+                </Field>
+                <Field label="Dosage">
+                  <Input
+                    value={med.dosage}
+                    onChange={(e) =>
+                      setMedications((prev) =>
+                        prev.map((m, idx) =>
+                          idx === i ? { ...m, dosage: e.target.value } : m
+                        )
+                      )
+                    }
+                  />
+                </Field>
+                <Field label="Frequency">
+                  <Input
+                    value={med.frequency}
+                    onChange={(e) =>
+                      setMedications((prev) =>
+                        prev.map((m, idx) =>
+                          idx === i ? { ...m, frequency: e.target.value } : m
+                        )
+                      )
+                    }
+                  />
+                </Field>
+              </MedTopGrid>
+              <Field label="Instructions">
+                <Textarea
+                  value={med.instructions}
                   onChange={(e) =>
                     setMedications((prev) =>
                       prev.map((m, idx) =>
-                        idx === i ? { ...m, name: e.target.value } : m
+                        idx === i ? { ...m, instructions: e.target.value } : m
                       )
                     )
                   }
                 />
               </Field>
-              <Field label="Dosage">
-                <Input
-                  value={med.dosage}
-                  onChange={(e) =>
-                    setMedications((prev) =>
-                      prev.map((m, idx) =>
-                        idx === i ? { ...m, dosage: e.target.value } : m
-                      )
-                    )
-                  }
-                />
-              </Field>
-              <Field label="Frequency">
-                <Input
-                  value={med.frequency}
-                  onChange={(e) =>
-                    setMedications((prev) =>
-                      prev.map((m, idx) =>
-                        idx === i ? { ...m, frequency: e.target.value } : m
-                      )
-                    )
-                  }
-                />
-              </Field>
-            </MedTopGrid>
-            <Field label="Instructions">
-              <Textarea
-                value={med.instructions}
-                onChange={(e) =>
-                  setMedications((prev) =>
-                    prev.map((m, idx) =>
-                      idx === i ? { ...m, instructions: e.target.value } : m
-                    )
-                  )
-                }
-              />
-            </Field>
-          </EntryCard>
-        ))}
+            </EntryCard>
+          ))}
+        </EntryList>
         <AddEntryButton
           type="button"
           onClick={() =>

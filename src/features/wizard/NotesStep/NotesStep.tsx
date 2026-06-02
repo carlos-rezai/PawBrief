@@ -9,6 +9,7 @@ import {
   PhotoUpload,
   Textarea,
 } from "../../../primitives";
+import { EntryList } from "../StepEntry.styles";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import StepSection from "../StepSection";
 import { NoteCard } from "./NotesStep.styles";
@@ -70,48 +71,50 @@ export default function NotesStep({
         title="Special notes"
         hint="Anything the other steps didn't cover — quirks, house rules, do's and don'ts."
       >
-        {specialNotes.map((note, i) => (
-          <NoteCard key={i} data-testid="special-note">
-            <Field label="Title">
-              <Input
-                value={note.title}
-                onChange={(e) =>
-                  setSpecialNotes((prev) =>
-                    prev.map((n, idx) =>
-                      idx === i ? { ...n, title: e.target.value } : n
+        <EntryList>
+          {specialNotes.map((note, i) => (
+            <NoteCard key={i} data-testid="special-note">
+              <Field label="Title">
+                <Input
+                  value={note.title}
+                  onChange={(e) =>
+                    setSpecialNotes((prev) =>
+                      prev.map((n, idx) =>
+                        idx === i ? { ...n, title: e.target.value } : n
+                      )
                     )
-                  )
-                }
-              />
-            </Field>
-            <Field label="Body">
-              <Textarea
-                value={note.body}
-                placeholder="What should the sitter know?"
-                onChange={(e) =>
-                  setSpecialNotes((prev) =>
-                    prev.map((n, idx) =>
-                      idx === i ? { ...n, body: e.target.value } : n
+                  }
+                />
+              </Field>
+              <Field label="Body">
+                <Textarea
+                  value={note.body}
+                  placeholder="What should the sitter know?"
+                  onChange={(e) =>
+                    setSpecialNotes((prev) =>
+                      prev.map((n, idx) =>
+                        idx === i ? { ...n, body: e.target.value } : n
+                      )
                     )
-                  )
-                }
+                  }
+                />
+              </Field>
+              <PhotoUpload
+                label="Photo"
+                height={96}
+                onChange={(file) => handlePhotoChange(i, file)}
+                error={photoErrors[i]}
               />
-            </Field>
-            <PhotoUpload
-              label="Photo"
-              height={96}
-              onChange={(file) => handlePhotoChange(i, file)}
-              error={photoErrors[i]}
-            />
-            <Button
-              onClick={() =>
-                setSpecialNotes((prev) => prev.filter((_, idx) => idx !== i))
-              }
-            >
-              Remove note
-            </Button>
-          </NoteCard>
-        ))}
+              <Button
+                onClick={() =>
+                  setSpecialNotes((prev) => prev.filter((_, idx) => idx !== i))
+                }
+              >
+                Remove note
+              </Button>
+            </NoteCard>
+          ))}
+        </EntryList>
         <Button
           onClick={() =>
             setSpecialNotes((prev) => [...prev, { title: "", body: "" }])
