@@ -4,7 +4,7 @@ import type {
   ToyEntry,
   TreatEntry,
 } from "../../../types/profile";
-import { Field, Input } from "../../../primitives";
+import { Button, Field, Input, Tooltip } from "../../../primitives";
 import { IconPlus, IconX } from "../../../primitives/icons";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
 import StepSection from "../StepSection";
@@ -17,7 +17,6 @@ import {
   RemoveButton,
 } from "../StepEntry.styles";
 import { ToyGrid, TreatGrid } from "./FavoritesStep.styles";
-import { Button } from "../../../primitives";
 
 interface FavoritesStepProps {
   onSave?: (data: FavoritesData) => void;
@@ -60,15 +59,19 @@ export default function FavoritesStep({
             <EntryCard key={i} data-testid="toy-entry">
               <EntryHeader>
                 <EntryLabel>Toy {i + 1}</EntryLabel>
-                <RemoveButton
-                  type="button"
-                  title="Remove toy"
-                  onClick={() =>
-                    setToyEntries((prev) => prev.filter((_, idx) => idx !== i))
-                  }
-                >
-                  <IconX />
-                </RemoveButton>
+                <Tooltip content="Delete">
+                  <RemoveButton
+                    type="button"
+                    aria-label="Remove toy"
+                    onClick={() =>
+                      setToyEntries((prev) =>
+                        prev.filter((_, idx) => idx !== i)
+                      )
+                    }
+                  >
+                    <IconX />
+                  </RemoveButton>
+                </Tooltip>
               </EntryHeader>
               <ToyGrid>
                 <Field label="Name">
@@ -113,17 +116,19 @@ export default function FavoritesStep({
             <EntryCard key={i} data-testid="treat-entry">
               <EntryHeader>
                 <EntryLabel>Treat {i + 1}</EntryLabel>
-                <RemoveButton
-                  type="button"
-                  title="Remove treat"
-                  onClick={() =>
-                    setTreatEntries((prev) =>
-                      prev.filter((_, idx) => idx !== i)
-                    )
-                  }
-                >
-                  <IconX />
-                </RemoveButton>
+                <Tooltip content="Delete">
+                  <RemoveButton
+                    type="button"
+                    aria-label="Remove treat"
+                    onClick={() =>
+                      setTreatEntries((prev) =>
+                        prev.filter((_, idx) => idx !== i)
+                      )
+                    }
+                  >
+                    <IconX />
+                  </RemoveButton>
+                </Tooltip>
               </EntryHeader>
               <TreatGrid>
                 <Field label="Brand">
@@ -170,61 +175,81 @@ export default function FavoritesStep({
       >
         <EntryList>
           {comfortItems.map((item, i) => (
-            <div key={i} data-testid="comfort-item">
-              <Field label="Comfort item">
-                <Input
-                  value={item}
-                  onChange={(e) =>
-                    setComfortItems((prev) =>
-                      prev.map((c, idx) => (idx === i ? e.target.value : c))
-                    )
-                  }
-                />
-              </Field>
-              <Button
-                onClick={() =>
-                  setComfortItems((prev) => prev.filter((_, idx) => idx !== i))
+            <EntryCard key={i} data-testid="comfort-item">
+              <EntryHeader>
+                <EntryLabel>Comfort item {i + 1}</EntryLabel>
+                <Tooltip content="Delete">
+                  <RemoveButton
+                    type="button"
+                    aria-label="Remove comfort item"
+                    onClick={() =>
+                      setComfortItems((prev) =>
+                        prev.filter((_, idx) => idx !== i)
+                      )
+                    }
+                  >
+                    <IconX />
+                  </RemoveButton>
+                </Tooltip>
+              </EntryHeader>
+              <Input
+                value={item}
+                placeholder="e.g. blue fleece blanket"
+                onChange={(e) =>
+                  setComfortItems((prev) =>
+                    prev.map((c, idx) => (idx === i ? e.target.value : c))
+                  )
                 }
-              >
-                Remove comfort item
-              </Button>
-            </div>
+              />
+            </EntryCard>
           ))}
         </EntryList>
-        <Button onClick={() => setComfortItems((prev) => [...prev, ""])}>
-          Add comfort item
-        </Button>
+        <AddEntryButton
+          type="button"
+          onClick={() => setComfortItems((prev) => [...prev, ""])}
+        >
+          <IconPlus size={14} /> Add comfort item
+        </AddEntryButton>
       </StepSection>
 
       <StepSection title="Favourite spots">
         <EntryList>
           {favouriteSpots.map((spot, i) => (
-            <div key={i} data-testid="favourite-spot">
-              <Field label="Favourite spot">
-                <Input
-                  value={spot}
-                  onChange={(e) =>
-                    setFavouriteSpots((prev) =>
-                      prev.map((s, idx) => (idx === i ? e.target.value : s))
-                    )
-                  }
-                />
-              </Field>
-              <Button
-                onClick={() =>
+            <EntryCard key={i} data-testid="favourite-spot">
+              <EntryHeader>
+                <EntryLabel>Favourite spot {i + 1}</EntryLabel>
+                <Tooltip content="Delete">
+                  <RemoveButton
+                    type="button"
+                    aria-label="Remove favourite spot"
+                    onClick={() =>
+                      setFavouriteSpots((prev) =>
+                        prev.filter((_, idx) => idx !== i)
+                      )
+                    }
+                  >
+                    <IconX />
+                  </RemoveButton>
+                </Tooltip>
+              </EntryHeader>
+              <Input
+                value={spot}
+                placeholder="e.g. sunny windowsill"
+                onChange={(e) =>
                   setFavouriteSpots((prev) =>
-                    prev.filter((_, idx) => idx !== i)
+                    prev.map((s, idx) => (idx === i ? e.target.value : s))
                   )
                 }
-              >
-                Remove favourite spot
-              </Button>
-            </div>
+              />
+            </EntryCard>
           ))}
         </EntryList>
-        <Button onClick={() => setFavouriteSpots((prev) => [...prev, ""])}>
-          Add favourite spot
-        </Button>
+        <AddEntryButton
+          type="button"
+          onClick={() => setFavouriteSpots((prev) => [...prev, ""])}
+        >
+          <IconPlus size={14} /> Add favourite spot
+        </AddEntryButton>
       </StepSection>
 
       <StepFooter>
