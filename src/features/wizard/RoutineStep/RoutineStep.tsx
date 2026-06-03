@@ -34,6 +34,7 @@ const DEFAULT_SLOTS: ActivitySlot[] = [
   { label: "Feeding", start: "07:30", hours: 1, colorIndex: 1 },
   { label: "Playtime", start: "09:00", hours: 2, colorIndex: 2 },
   { label: "Cuddle time", start: "18:00", hours: 2, colorIndex: 3 },
+  { label: "Window watching", start: "14:00", hours: 2, colorIndex: 4 },
 ];
 
 export default function RoutineStep({

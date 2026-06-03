@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { theme } from "../../../tokens";
 import RoutineStep from "./RoutineStep";
 
-const DEFAULT_SLOT_COUNT = 4;
+const DEFAULT_SLOT_COUNT = 5;
 
 function renderRoutineStep(onSave = vi.fn()) {
   render(
@@ -16,7 +16,7 @@ function renderRoutineStep(onSave = vi.fn()) {
 }
 
 describe("RoutineStep default slots", () => {
-  it("opens with exactly four pre-populated activity slots", () => {
+  it("opens with exactly five pre-populated activity slots", () => {
     renderRoutineStep();
     expect(
       screen.getAllByRole("button", { name: /remove slot/i })
