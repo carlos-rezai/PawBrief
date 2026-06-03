@@ -5,7 +5,14 @@ import { useProfile } from "../../features/profile";
 import { usePhotoBlobUrls } from "../../features/preview/usePhotoBlobUrls";
 import SinglePDF from "../../features/pdf/SinglePDF";
 import { Button } from "../../primitives";
-import { PdfViewerContainer } from "./PreviewPage.styles";
+import Header from "../../components/Header/Header";
+import {
+  PreviewContent,
+  PreviewHeader,
+  PreviewTitle,
+  PreviewActions,
+  PdfViewerContainer,
+} from "./PreviewPage.styles";
 
 export default function PreviewPage() {
   const { id } = useParams<{ id: string }>();
@@ -23,27 +30,45 @@ export default function PreviewPage() {
   if (!profile) return null;
 
   const fileName = `${profile.basics?.name ?? "cat"}-care-guide.pdf`;
+  const catName = profile.basics?.name;
 
   return (
-    <main>
-      <PDFDownloadLink
-        document={<SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />}
-        fileName={fileName}
-      >
-        {({ loading: pdfLoading }) => (
-          <Button disabled={pdfLoading}>Download PDF</Button>
-        )}
-      </PDFDownloadLink>
-      <Button
-        onClick={() => navigate(`/wizard/${id}/step/basics?returnTo=preview`)}
-      >
-        Edit Profile
-      </Button>
-      <PdfViewerContainer>
-        <PDFViewer width="100%" height="100%">
-          <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
-        </PDFViewer>
-      </PdfViewerContainer>
-    </main>
+    <>
+      <Header />
+      <PreviewContent>
+        <PreviewHeader>
+          <PreviewTitle>
+            {catName ? `${catName}'s care guide` : "Care guide"}
+          </PreviewTitle>
+          <PreviewActions>
+            <Button
+              kind="secondary"
+              onClick={() =>
+                navigate(`/wizard/${id}/step/basics?returnTo=preview`)
+              }
+            >
+              Edit Profile
+            </Button>
+            <PDFDownloadLink
+              document={
+                <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
+              }
+              fileName={fileName}
+            >
+              {({ loading: pdfLoading }) => (
+                <Button kind="primary" disabled={pdfLoading}>
+                  Download PDF
+                </Button>
+              )}
+            </PDFDownloadLink>
+          </PreviewActions>
+        </PreviewHeader>
+        <PdfViewerContainer>
+          <PDFViewer width="100%" height="100%">
+            <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
+          </PDFViewer>
+        </PdfViewerContainer>
+      </PreviewContent>
+    </>
   );
 }
