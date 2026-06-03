@@ -72,14 +72,7 @@ export const EmptyStateDesc = styled.p`
 `;
 
 export const MergeBar = styled.div`
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 56px);
-  max-width: 1024px;
-  z-index: 30;
-  background: ${({ theme }) => theme.colors.bg};
+  background: ${({ theme }) => theme.colors.surface};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.input}px;
   padding: 12px 16px;
@@ -87,11 +80,7 @@ export const MergeBar = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-
-  @media (max-width: 640px) {
-    width: calc(100% - 32px);
-    bottom: 16px;
-  }
+  margin-bottom: 20px;
 `;
 
 export const MergeBarLeft = styled.div`
