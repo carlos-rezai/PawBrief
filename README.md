@@ -167,6 +167,8 @@ Types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`
 | SVG routine pie chart     | ✅ Complete |
 | IndexedDB persistence     | ✅ Complete |
 | Care guide preview        | ✅ Complete |
+| PDF guide design          | 🔜 Planned  |
+| Security review           | 🔜 Planned  |
 
 ---
 
