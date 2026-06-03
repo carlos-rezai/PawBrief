@@ -159,14 +159,14 @@ Types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`
 
 ## Build Status
 
-| Feature                   | Status         |
-| ------------------------- | -------------- |
-| Cat profile wizard        | ✅ Complete    |
-| Design handoff            | 🔄 In Progress |
-| PDF care guide generation | 🔜 Planned     |
-| SVG routine pie chart     | 🔜 Planned     |
-| localStorage persistence  | 🔜 Planned     |
-| Care guide preview        | 🔜 Planned     |
+| Feature                   | Status      |
+| ------------------------- | ----------- |
+| Cat profile wizard        | ✅ Complete |
+| Design handoff            | ✅ Complete |
+| PDF care guide generation | 🔜 Planned  |
+| SVG routine pie chart     | 🔜 Planned  |
+| localStorage persistence  | 🔜 Planned  |
+| Care guide preview        | 🔜 Planned  |
 
 ---
 
