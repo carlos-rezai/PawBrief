@@ -19,13 +19,15 @@ export const ChartCaption = styled.p`
 
 export const SlotHeaders = styled.div`
   display: flex;
+  align-items: center;
   gap: 10px;
-  padding: 0 10px;
+  padding: 0 10px 6px;
+  font-family: ${({ theme }) => theme.typography.family};
   font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.4px;
   text-transform: uppercase;
   color: ${({ theme }) => theme.colors.muted};
-  margin-bottom: 4px;
 
   @media (max-width: 640px) {
     display: none;
@@ -37,65 +39,109 @@ export const SlotRow = styled.div`
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
+  row-gap: 8px;
   background: ${({ theme }) => theme.colors.surfaceAlt};
   border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 8px;
+  border-radius: ${({ theme }) => theme.radii.input}px;
   padding: 8px 10px;
-  margin-bottom: 6px;
-`;
-
-export const ColorDot = styled.span<{ $color: string }>`
-  width: 14px;
-  height: 14px;
-  border-radius: 4px;
-  background: ${({ $color }) => $color};
-  flex-shrink: 0;
 `;
 
 export const SlotLabelInput = styled.input`
-  flex: 1;
-  min-width: 80px;
+  flex: 1 1 140px;
+  min-width: 0;
   background: transparent;
   border: none;
   outline: none;
+  font-family: ${({ theme }) => theme.typography.family};
   font-size: 14px;
-  color: inherit;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.ink};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.muted};
+    font-weight: 400;
+  }
 `;
 
 export const SlotTimeInput = styled.input`
   width: 104px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  font-family: ${({ theme }) => theme.typography.family};
+  font-size: 13.5px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.ink};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.input}px;
+  padding: 6px 8px;
+  outline: none;
+  transition:
+    border-color 0.14s,
+    box-shadow 0.14s;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.ring};
+  }
 `;
 
 export const SlotHoursWrapper = styled.span`
   display: flex;
   align-items: center;
-  gap: 4px;
-  width: 78px;
+  gap: 5px;
+  flex-shrink: 0;
 `;
 
 export const SlotHoursInput = styled.input`
-  width: 100%;
+  width: 52px;
+  text-align: center;
+  box-sizing: border-box;
+  font-family: ${({ theme }) => theme.typography.family};
+  font-size: 13.5px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.ink};
+  background: ${({ theme }) => theme.colors.surface};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.input}px;
+  padding: 6px 4px;
+  outline: none;
+  transition:
+    border-color 0.14s,
+    box-shadow 0.14s;
+
+  &:focus {
+    border-color: ${({ theme }) => theme.colors.primary};
+    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.ring};
+  }
 `;
 
 export const SlotHoursSuffix = styled.span`
-  font-size: 13px;
+  font-size: 12.5px;
   color: ${({ theme }) => theme.colors.muted};
 `;
 
 export const AddSlotButton = styled.button`
   width: 100%;
-  padding: 8px;
-  border: 1.5px dashed ${({ theme }) => theme.colors.border};
-  border-radius: 8px;
+  margin-top: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   background: transparent;
-  cursor: pointer;
-  font-size: 14px;
+  border: 1.5px dashed ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.input}px;
   color: ${({ theme }) => theme.colors.primary};
-  margin-top: 6px;
+  font-family: ${({ theme }) => theme.typography.family};
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 9px 15px;
+  cursor: pointer;
+  transition: all 0.14s;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
-    background: ${({ theme }) => theme.colors.surfaceAlt};
+    background: ${({ theme }) => theme.colors.surface};
   }
 `;
 
@@ -106,9 +152,12 @@ export const TotalLine = styled.p`
   margin: 8px 0 0;
 `;
 
+ChartCaption.defaultProps = { theme: defaultTheme };
 SlotHeaders.defaultProps = { theme: defaultTheme };
 SlotRow.defaultProps = { theme: defaultTheme };
+SlotLabelInput.defaultProps = { theme: defaultTheme };
+SlotTimeInput.defaultProps = { theme: defaultTheme };
+SlotHoursInput.defaultProps = { theme: defaultTheme };
 SlotHoursSuffix.defaultProps = { theme: defaultTheme };
 AddSlotButton.defaultProps = { theme: defaultTheme };
 TotalLine.defaultProps = { theme: defaultTheme };
-ChartCaption.defaultProps = { theme: defaultTheme };

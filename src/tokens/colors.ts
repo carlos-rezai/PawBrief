@@ -15,10 +15,14 @@ export const colors = {
 } as const;
 
 export const routinePalette = [
-  "#A0502B",
-  "#C2943D",
-  "#6B6B43",
-  "#7E5A48",
-  "#93A089",
-  "#CBB084",
+  "#A0502B", // burnt sienna
+  "#C2943D", // golden amber
+  "#6B6B43", // olive
+  "#7E5A48", // warm brown
+  "#93A089", // sage
+  "#CBB084", // sand
+  "#C07055", // copper terracotta
+  "#5C7B72", // earthy teal
+  "#9A7070", // dusty rose
+  "#7A8058", // warm moss
 ] as const;

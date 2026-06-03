@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { theme } from "../../../tokens";
 import RoutineStep from "./RoutineStep";
 
-const DEFAULT_SLOT_COUNT = 6;
+const DEFAULT_SLOT_COUNT = 4;
 
 function renderRoutineStep(onSave = vi.fn()) {
   render(
@@ -16,7 +16,7 @@ function renderRoutineStep(onSave = vi.fn()) {
 }
 
 describe("RoutineStep default slots", () => {
-  it("opens with exactly six pre-populated activity slots", () => {
+  it("opens with exactly four pre-populated activity slots", () => {
     renderRoutineStep();
     expect(
       screen.getAllByRole("button", { name: /remove slot/i })
@@ -40,7 +40,7 @@ describe("RoutineStep add and remove slots", () => {
   it("clicking Add slot appends a new editable row", async () => {
     const user = userEvent.setup();
     renderRoutineStep();
-    await user.click(screen.getByRole("button", { name: /add slot/i }));
+    await user.click(screen.getByRole("button", { name: /add activity/i }));
     expect(
       screen.getAllByRole("button", { name: /remove slot/i })
     ).toHaveLength(DEFAULT_SLOT_COUNT + 1);

@@ -1,14 +1,17 @@
 import { useState } from "react";
 import type { ActivitySlot, RoutineData } from "../../../types/profile";
-import { Button, Input } from "../../../primitives";
+import { Button } from "../../../primitives";
+import { IconPlus, IconX } from "../../../primitives/icons";
+import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import RoutineChart from "../../../components/RoutineChart/RoutineChart";
 import { routinePalette } from "../../../tokens";
 import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
+import { RemoveButton } from "../StepEntry.styles";
 import {
   AddSlotButton,
   ChartBlock,
   ChartCaption,
-  ColorDot,
+  SlotHeaders,
   SlotHoursInput,
   SlotHoursSuffix,
   SlotHoursWrapper,
@@ -30,9 +33,7 @@ const DEFAULT_SLOTS: ActivitySlot[] = [
   { label: "Sleep", start: "22:30", hours: 8.5, colorIndex: 0 },
   { label: "Feeding", start: "07:30", hours: 1, colorIndex: 1 },
   { label: "Playtime", start: "09:00", hours: 2, colorIndex: 2 },
-  { label: "Outdoor time", start: "11:00", hours: 2, colorIndex: 3 },
-  { label: "Cuddle time", start: "18:00", hours: 2, colorIndex: 4 },
-  { label: "Window watching", start: "14:00", hours: 2, colorIndex: 5 },
+  { label: "Cuddle time", start: "18:00", hours: 2, colorIndex: 3 },
 ];
 
 export default function RoutineStep({
@@ -63,8 +64,8 @@ export default function RoutineStep({
       ...prev,
       {
         label: "",
-        start: "00:00",
-        hours: 0,
+        start: "08:00",
+        hours: 1,
         colorIndex: prev.length % routinePalette.length,
       },
     ]);
@@ -82,51 +83,73 @@ export default function RoutineStep({
   return (
     <form onSubmit={handleSubmit}>
       <ChartBlock>
-        <RoutineChart slots={slots} size={200} />
+        <RoutineChart slots={slots} size={224} />
         <ChartCaption>
           Midnight sits at the top. Each block shows <strong>when</strong> it
-          happens — overlaps and gaps are fine. Colours are assigned
-          automatically.
+          happens — overlaps and gaps are fine.
         </ChartCaption>
       </ChartBlock>
 
-      {slots.map((slot, i) => (
-        <SlotRow key={i}>
-          <ColorDot
-            $color={routinePalette[slot.colorIndex % routinePalette.length]}
-          />
-          <SlotLabelInput
-            aria-label="Activity label"
-            value={slot.label}
-            onChange={(e) => updateSlot(i, "label", e.target.value)}
-          />
-          <SlotTimeInput
-            type="time"
-            aria-label="Start time"
-            value={slot.start}
-            onChange={(e) => updateSlot(i, "start", e.target.value)}
-          />
-          <SlotHoursWrapper>
-            <SlotHoursInput
-              type="number"
-              aria-label="Duration"
-              value={slot.hours}
-              onChange={(e) =>
-                updateSlot(i, "hours", Number(e.target.value) || 0)
-              }
+      <SlotHeaders>
+        <span style={{ width: 14, flexShrink: 0 }} />
+        <span style={{ flex: 1 }}>Activity</span>
+        <span style={{ width: 104, flexShrink: 0 }}>Starts at</span>
+        <span style={{ width: 62, flexShrink: 0 }}>Duration</span>
+        <span style={{ width: 28, flexShrink: 0 }} />
+      </SlotHeaders>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {slots.map((slot, i) => (
+          <SlotRow key={i}>
+            <ColorPicker
+              palette={routinePalette}
+              value={slot.colorIndex}
+              onChange={(idx) => updateSlot(i, "colorIndex", idx)}
             />
-            <SlotHoursSuffix>h</SlotHoursSuffix>
-          </SlotHoursWrapper>
-          <Button onClick={() => removeSlot(i)}>Remove slot</Button>
-        </SlotRow>
-      ))}
+            <SlotLabelInput
+              aria-label="Activity label"
+              value={slot.label}
+              placeholder="Activity"
+              onChange={(e) => updateSlot(i, "label", e.target.value)}
+            />
+            <SlotTimeInput
+              type="time"
+              aria-label="Start time"
+              value={slot.start}
+              onChange={(e) => updateSlot(i, "start", e.target.value)}
+            />
+            <SlotHoursWrapper>
+              <SlotHoursInput
+                type="number"
+                aria-label="Duration"
+                value={slot.hours}
+                min="0"
+                max="24"
+                step="0.5"
+                onChange={(e) =>
+                  updateSlot(i, "hours", Number(e.target.value) || 0)
+                }
+              />
+              <SlotHoursSuffix>h</SlotHoursSuffix>
+            </SlotHoursWrapper>
+            <RemoveButton
+              type="button"
+              aria-label="Remove slot"
+              onClick={() => removeSlot(i)}
+            >
+              <IconX size={12} />
+            </RemoveButton>
+          </SlotRow>
+        ))}
+      </div>
 
       <AddSlotButton type="button" onClick={addSlot}>
-        + Add slot
+        <IconPlus size={15} />
+        Add activity
       </AddSlotButton>
 
       <TotalLine data-testid="routine-total">
-        {total}h scheduled across the day
+        {+total.toFixed(1)}h scheduled across the day
       </TotalLine>
 
       <StepFooter>
