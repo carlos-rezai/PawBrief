@@ -20,7 +20,7 @@ This project has two purposes:
 1. **Wizard** — step-by-step questions about your cat's routine (feeding, medications, habits, emergency contacts)
 2. **Preview** — live care guide preview updates as you answer
 3. **PDF** — download a clean, printable PDF generated entirely in the browser
-4. **Persistence** — your cat's profile is saved to localStorage so you can return and update it any time
+4. **Persistence** — your cat's profile is saved to IndexedDB so you can return and update it any time
    No data ever leaves your device.
 
 ---
@@ -32,7 +32,7 @@ This project has two purposes:
 | Frontend | React + TypeScript + Vite       | Production-standard, full TypeScript coverage        |
 | UI       | styled-components + PawBrief DS | Custom design system, precision over convenience     |
 | PDF      | @react-pdf/renderer             | Client-side PDF generation — no server required      |
-| Storage  | localStorage                    | Zero-friction persistence, fully private, no backend |
+| Storage  | IndexedDB (idb)                 | Zero-friction persistence, fully private, no backend |
 | Testing  | Vitest + Testing Library        | Fast, Vite-native, great DX                          |
 | Deploy   | Vercel                          | Instant deploys, no infrastructure to manage         |
 
@@ -163,10 +163,10 @@ Types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`
 | ------------------------- | ----------- |
 | Cat profile wizard        | ✅ Complete |
 | Design handoff            | ✅ Complete |
-| PDF care guide generation | 🔜 Planned  |
-| SVG routine pie chart     | 🔜 Planned  |
-| localStorage persistence  | 🔜 Planned  |
-| Care guide preview        | 🔜 Planned  |
+| PDF care guide generation | ✅ Complete |
+| SVG routine pie chart     | ✅ Complete |
+| IndexedDB persistence     | ✅ Complete |
+| Care guide preview        | ✅ Complete |
 
 ---
 
