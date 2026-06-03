@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Button from "../../primitives/Button/Button";
 import Input from "../../primitives/Input/Input";
+import Tooltip from "../../primitives/Tooltip/Tooltip";
+import { IconX } from "../../primitives/icons";
 import {
   Chip,
   ChipRemove,
@@ -46,12 +48,14 @@ export default function Chips({ values, onChange }: ChipsProps) {
           {values.map((v, i) => (
             <Chip key={i}>
               {v}
-              <ChipRemove
-                aria-label={`Remove ${v}`}
-                onClick={() => onChange(values.filter((_, j) => j !== i))}
-              >
-                ×
-              </ChipRemove>
+              <Tooltip content="Remove" side="bottom">
+                <ChipRemove
+                  aria-label={`Remove ${v}`}
+                  onClick={() => onChange(values.filter((_, j) => j !== i))}
+                >
+                  <IconX size={11} />
+                </ChipRemove>
+              </Tooltip>
             </Chip>
           ))}
         </ChipsList>

@@ -57,8 +57,8 @@ describe("theme", () => {
 });
 
 describe("routinePalette", () => {
-  it("has exactly 6 colors", () => {
-    expect(routinePalette).toHaveLength(6);
+  it("has exactly 10 colors", () => {
+    expect(routinePalette).toHaveLength(10);
   });
 
   it("starts with the primary burnt sienna color", () => {

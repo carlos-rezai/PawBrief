@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 import Button from "../../primitives/Button/Button";
+import Tooltip from "../../primitives/Tooltip/Tooltip";
+import { IconX } from "../../primitives/icons";
 import {
   EntryCard,
   EntryHeader,
@@ -27,12 +29,14 @@ export default function Repeatable<T>({
         <EntryCard key={i}>
           <EntryHeader>
             <EntryLabel>Item {i + 1}</EntryLabel>
-            <RemoveButton
-              aria-label={`Remove entry ${i + 1}`}
-              onClick={() => onRemove(i)}
-            >
-              ×
-            </RemoveButton>
+            <Tooltip content="Delete">
+              <RemoveButton
+                aria-label={`Remove entry ${i + 1}`}
+                onClick={() => onRemove(i)}
+              >
+                <IconX size={12} />
+              </RemoveButton>
+            </Tooltip>
           </EntryHeader>
           {renderEntry(entry, i)}
         </EntryCard>

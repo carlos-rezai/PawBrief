@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ActivitySlot, RoutineData } from "../../../types/profile";
-import { Button } from "../../../primitives";
+import { Button, Tooltip } from "../../../primitives";
 import { IconCopy, IconGrip, IconPlus, IconX } from "../../../primitives/icons";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import RoutineChart from "../../../components/RoutineChart/RoutineChart";
@@ -155,16 +155,18 @@ export default function RoutineStep({
               handleDrop(i);
             }}
           >
-            <DragHandle
-              draggable
-              onDragStart={(e) => {
-                setDragIndex(i);
-                e.dataTransfer.effectAllowed = "move";
-              }}
-              onDragEnd={handleDragEnd}
-            >
-              <IconGrip size={12} />
-            </DragHandle>
+            <Tooltip content="Drag to reorder">
+              <DragHandle
+                draggable
+                onDragStart={(e) => {
+                  setDragIndex(i);
+                  e.dataTransfer.effectAllowed = "move";
+                }}
+                onDragEnd={handleDragEnd}
+              >
+                <IconGrip size={12} />
+              </DragHandle>
+            </Tooltip>
             <ColorPicker
               palette={routinePalette}
               value={slot.colorIndex}
@@ -196,20 +198,24 @@ export default function RoutineStep({
               />
               <SlotHoursSuffix>h</SlotHoursSuffix>
             </SlotHoursWrapper>
-            <RemoveButton
-              type="button"
-              aria-label="Duplicate slot"
-              onClick={() => duplicateSlot(i)}
-            >
-              <IconCopy size={12} />
-            </RemoveButton>
-            <RemoveButton
-              type="button"
-              aria-label="Remove slot"
-              onClick={() => removeSlot(i)}
-            >
-              <IconX size={12} />
-            </RemoveButton>
+            <Tooltip content="Duplicate">
+              <RemoveButton
+                type="button"
+                aria-label="Duplicate slot"
+                onClick={() => duplicateSlot(i)}
+              >
+                <IconCopy size={12} />
+              </RemoveButton>
+            </Tooltip>
+            <Tooltip content="Delete">
+              <RemoveButton
+                type="button"
+                aria-label="Remove slot"
+                onClick={() => removeSlot(i)}
+              >
+                <IconX size={12} />
+              </RemoveButton>
+            </Tooltip>
           </SlotRow>
         ))}
       </div>

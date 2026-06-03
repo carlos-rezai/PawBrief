@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Tooltip from "../../primitives/Tooltip/Tooltip";
 import { Popover, SwatchButton, SwatchWrapper } from "./ColorPicker.styles";
 
 interface ColorPickerProps {
@@ -28,13 +29,14 @@ export default function ColorPicker({
 
   return (
     <SwatchWrapper ref={ref}>
-      <SwatchButton
-        type="button"
-        $color={palette[value % palette.length]}
-        onClick={() => setOpen((v) => !v)}
-        aria-label="Pick colour"
-        title="Pick colour"
-      />
+      <Tooltip content="Pick colour">
+        <SwatchButton
+          type="button"
+          $color={palette[value % palette.length]}
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Pick colour"
+        />
+      </Tooltip>
       {open && (
         <Popover role="listbox" aria-label="Colour palette">
           {palette.map((color, i) => (

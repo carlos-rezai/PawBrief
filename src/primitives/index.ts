@@ -6,3 +6,4 @@ export { default as Modal } from "./Modal/Modal";
 export { default as PhotoUpload } from "./PhotoUpload/PhotoUpload";
 export { default as Select } from "./Select/Select";
 export { default as Textarea } from "./Textarea/Textarea";
+export { default as Tooltip } from "./Tooltip/Tooltip";
