@@ -6,7 +6,7 @@ import {
   PreviewPage,
   WizardPage,
 } from "./pages";
-import { ToastProvider } from "./components/Toast/Toast";
+import { ToastProvider } from "./components";
 import { GlobalStyles } from "./styles/GlobalStyles";
 
 export default function App() {

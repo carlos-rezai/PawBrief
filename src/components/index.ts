@@ -8,4 +8,4 @@ export { default as Repeatable } from "./Repeatable/Repeatable";
 export { default as RoutineChart } from "./RoutineChart/RoutineChart";
 export { default as Stepper } from "./Stepper/Stepper";
 export { default as WordmarkLink } from "./WordmarkLink/WordmarkLink";
-export { useToast } from "./Toast/Toast";
+export { ToastProvider, useToast } from "./Toast/Toast";

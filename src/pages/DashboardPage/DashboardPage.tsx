@@ -3,15 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { useProfiles, useProfileAvatarUrls } from "../../features/profile";
 import { Button } from "../../primitives";
 import Mark from "../../primitives/Mark/Mark";
-import ConfirmModal from "../../components/ConfirmModal/ConfirmModal";
-import Header from "../../components/Header/Header";
-import { useToast } from "../../components/Toast/Toast";
+import {
+  ConfirmModal,
+  Header,
+  PlusCard,
+  ProfileCard,
+  useToast,
+} from "../../components";
 import type { CatProfile } from "../../types/profile";
 import { getNextStep } from "../../utils/getNextStep";
 import { STEP_ORDER } from "../../utils/wizardSteps";
 import { IconMerge } from "../../primitives/icons";
-import ProfileCard from "../../components/ProfileCard/ProfileCard";
-import PlusCard from "../../components/PlusCard/PlusCard";
 import {
   CardGrid,
   DashContent,

@@ -7,7 +7,7 @@ import { ThemeProvider } from "styled-components";
 import { beforeEach, describe, expect, it } from "vitest";
 import { theme } from "../../tokens";
 import { saveProfile } from "../../features/profile";
-import { ToastProvider } from "../../components/Toast/Toast";
+import { ToastProvider } from "../../components";
 import type { WizardStep, FeedingData } from "../../types/profile";
 import WizardPage from "./WizardPage";
 

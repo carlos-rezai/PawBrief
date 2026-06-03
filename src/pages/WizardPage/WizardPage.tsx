@@ -9,11 +9,8 @@ import {
   NotesStep,
   RoutineStep,
 } from "../../features/wizard";
-import Stepper from "../../components/Stepper/Stepper";
-import Modal from "../../primitives/Modal/Modal";
-import Button from "../../primitives/Button/Button";
-import Header from "../../components/Header/Header";
-import { useToast } from "../../components/Toast/Toast";
+import { Header, Stepper, useToast } from "../../components";
+import { Button, Modal } from "../../primitives";
 import type { StepData, WizardStep } from "../../types/profile";
 import {
   STEP_ORDER,

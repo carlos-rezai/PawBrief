@@ -6,7 +6,7 @@ import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ThemeProvider } from "styled-components";
 import { saveProfile } from "../../features/profile";
-import { ToastProvider } from "../../components/Toast/Toast";
+import { ToastProvider } from "../../components";
 import { theme } from "../../tokens";
 import DashboardPage from "./DashboardPage";
 
