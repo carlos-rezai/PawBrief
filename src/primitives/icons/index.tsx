@@ -154,6 +154,21 @@ export function IconCamera({ size = 22 }: IconProps) {
   );
 }
 
+export function IconCopy({ size = 16 }: IconProps) {
+  return (
+    <svg
+      {...base}
+      width={size}
+      height={size}
+      viewBox="0 0 16 16"
+      strokeWidth="1.6"
+    >
+      <rect x="5.5" y="1.5" width="9" height="10.5" rx="1.5" />
+      <rect x="1.5" y="4" width="9" height="10.5" rx="1.5" />
+    </svg>
+  );
+}
+
 export function IconGrip({ size = 14 }: IconProps) {
   return (
     <svg

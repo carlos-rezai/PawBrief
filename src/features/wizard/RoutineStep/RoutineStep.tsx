@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ActivitySlot, RoutineData } from "../../../types/profile";
 import { Button } from "../../../primitives";
-import { IconGrip, IconPlus, IconX } from "../../../primitives/icons";
+import { IconCopy, IconGrip, IconPlus, IconX } from "../../../primitives/icons";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import RoutineChart from "../../../components/RoutineChart/RoutineChart";
 import { routinePalette } from "../../../tokens";
@@ -79,6 +79,20 @@ export default function RoutineStep({
     setSlots((prev) => prev.filter((_, i) => i !== index));
   }
 
+  function duplicateSlot(index: number) {
+    setSlots((prev) => {
+      const src = prev[index];
+      const next = [...prev];
+      next.splice(index + 1, 0, {
+        label: src.label,
+        colorIndex: src.colorIndex,
+        start: "",
+        hours: 0,
+      });
+      return next;
+    });
+  }
+
   function handleDragEnd() {
     setDragIndex(null);
     setOverIndex(null);
@@ -117,6 +131,7 @@ export default function RoutineStep({
         <span style={{ flex: 1 }}>Activity</span>
         <span style={{ width: 104, flexShrink: 0 }}>Starts at</span>
         <span style={{ width: 62, flexShrink: 0 }}>Duration</span>
+        <span style={{ width: 28, flexShrink: 0 }} />
         <span style={{ width: 28, flexShrink: 0 }} />
       </SlotHeaders>
 
@@ -181,6 +196,13 @@ export default function RoutineStep({
               />
               <SlotHoursSuffix>h</SlotHoursSuffix>
             </SlotHoursWrapper>
+            <RemoveButton
+              type="button"
+              aria-label="Duplicate slot"
+              onClick={() => duplicateSlot(i)}
+            >
+              <IconCopy size={12} />
+            </RemoveButton>
             <RemoveButton
               type="button"
               aria-label="Remove slot"
