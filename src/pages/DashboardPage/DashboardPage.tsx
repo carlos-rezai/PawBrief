@@ -9,7 +9,8 @@ import { useToast } from "../../components/Toast/Toast";
 import type { CatProfile } from "../../types/profile";
 import { getNextStep } from "../../utils/getNextStep";
 import { STEP_ORDER } from "../../utils/wizardSteps";
-import { IconMerge } from "../../primitives/icons";
+import { IconMerge, IconX } from "../../primitives/icons";
+import { Tooltip } from "../../primitives";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
 import PlusCard from "../../components/PlusCard/PlusCard";
 import {
@@ -23,7 +24,6 @@ import {
   EmptyStateTitle,
   EmptyStateWrapper,
   MergeBar,
-  MergeBarInner,
   MergeBarLeft,
   MergeCount,
   MergeHint,
@@ -156,26 +156,36 @@ export default function DashboardPage() {
 
       {mergeMode && (
         <MergeBar>
-          <MergeBarInner>
-            <MergeBarLeft>
-              <MergeCount>{selectedIds.length} of 2 selected</MergeCount>
-              <MergeHint>
-                {selectedIds.length === 2 ? "Ready" : "Pick one more"}
-              </MergeHint>
-            </MergeBarLeft>
+          <MergeBarLeft>
+            <MergeCount>{selectedIds.length} of 2 selected</MergeCount>
+            <MergeHint>
+              {selectedIds.length === 2 ? "Ready" : "Pick one more"}
+            </MergeHint>
+          </MergeBarLeft>
+          <Button
+            kind={selectedIds.length === 2 ? "primary" : "disabled"}
+            onClick={() => {
+              if (selectedIds.length === 2) {
+                navigate(`/preview/merge/${selectedIds[0]}/${selectedIds[1]}`);
+              }
+            }}
+          >
+            Create merged guide
+          </Button>
+          <Tooltip content="Cancel">
             <Button
-              kind={selectedIds.length === 2 ? "primary" : "disabled"}
+              kind="secondary"
+              size="sm"
+              iconOnly
+              aria-label="Cancel merge"
               onClick={() => {
-                if (selectedIds.length === 2) {
-                  navigate(
-                    `/preview/merge/${selectedIds[0]}/${selectedIds[1]}`
-                  );
-                }
+                setMergeMode(false);
+                setSelectedIds([]);
               }}
             >
-              Create merged guide
+              <IconX size={13} />
             </Button>
-          </MergeBarInner>
+          </Tooltip>
         </MergeBar>
       )}
 

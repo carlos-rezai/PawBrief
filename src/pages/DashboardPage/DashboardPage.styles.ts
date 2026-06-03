@@ -73,23 +73,25 @@ export const EmptyStateDesc = styled.p`
 
 export const MergeBar = styled.div`
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 56px);
+  max-width: 1024px;
   z-index: 30;
-  background: ${({ theme }) => theme.colors.surface};
-  border-top: 1px solid ${({ theme }) => theme.colors.border};
-  box-shadow: 0 -8px 28px rgba(44, 36, 29, 0.08);
-`;
-
-export const MergeBarInner = styled.div`
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 16px 28px;
+  background: ${({ theme }) => theme.colors.bg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${({ theme }) => theme.radii.input}px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+
+  @media (max-width: 640px) {
+    width: calc(100% - 32px);
+    bottom: 16px;
+  }
 `;
 
 export const MergeBarLeft = styled.div`
@@ -116,5 +118,6 @@ DashHeaderSubtitle.defaultProps = { theme: defaultTheme };
 EmptyStateTitle.defaultProps = { theme: defaultTheme };
 EmptyStateDesc.defaultProps = { theme: defaultTheme };
 MergeBar.defaultProps = { theme: defaultTheme };
+MergeBarLeft.defaultProps = { theme: defaultTheme };
 MergeCount.defaultProps = { theme: defaultTheme };
 MergeHint.defaultProps = { theme: defaultTheme };
