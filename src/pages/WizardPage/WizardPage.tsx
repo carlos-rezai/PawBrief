@@ -21,6 +21,7 @@ import {
   STEP_SUBTITLES,
 } from "../../utils/wizardSteps";
 import { IconArrowLeft, IconArrowRight } from "../../primitives/icons";
+import Mark from "../../primitives/Mark/Mark";
 import {
   WizMain,
   WizStepEyebrow,
@@ -28,6 +29,9 @@ import {
   WizStepCardHeader,
   WizStepCardTitle,
   WizStepCardSubtitle,
+  SuccessContent,
+  SuccessTitle,
+  SuccessBody,
 } from "./WizardPage.styles";
 
 export default function WizardPage() {
@@ -174,15 +178,25 @@ export default function WizardPage() {
             navigate("/");
           }}
         >
-          <p>Your guide is ready!</p>
-          <Button
-            onClick={() => {
-              setShowSuccess(false);
-              navigate("/");
-            }}
-          >
-            Done
-          </Button>
+          <SuccessContent>
+            <Mark size={52} />
+            <SuccessTitle>Your guide is ready!</SuccessTitle>
+            <SuccessBody>
+              {profile?.basics?.name
+                ? `${profile.basics.name}'s care guide has been saved.`
+                : "Your care guide has been saved."}
+            </SuccessBody>
+            <Button
+              kind="primary"
+              style={{ marginTop: 28, width: "100%" }}
+              onClick={() => {
+                setShowSuccess(false);
+                navigate("/");
+              }}
+            >
+              Done
+            </Button>
+          </SuccessContent>
         </Modal>
       )}
     </>

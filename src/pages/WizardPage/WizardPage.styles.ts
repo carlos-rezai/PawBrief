@@ -50,3 +50,25 @@ export const WizStepCardSubtitle = styled.p`
   color: ${({ theme }) => theme.colors.inkSoft};
   margin: 4px 0 0;
 `;
+
+export const SuccessContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
+export const SuccessTitle = styled.h2`
+  font-family: ${({ theme }) => theme.typography.family};
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  color: ${({ theme }) => theme.colors.ink};
+  margin: 18px 0 0;
+`;
+
+export const SuccessBody = styled.p`
+  font-size: 14.5px;
+  color: ${({ theme }) => theme.colors.inkSoft};
+  margin: 6px 0 0;
+`;
