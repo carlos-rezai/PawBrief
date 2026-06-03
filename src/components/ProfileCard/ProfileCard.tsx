@@ -85,11 +85,11 @@ export default function ProfileCard({
                 .join(" · ") || " "
             : " "}
         </CardBreedAge>
-        {!isComplete && (
-          <CardMeta>
-            Draft · {profile.completedSteps.length} of 6 steps
-          </CardMeta>
-        )}
+        <CardMeta>
+          {isComplete
+            ? "Ready to download"
+            : `Draft · ${profile.completedSteps.length} of 6 steps`}
+        </CardMeta>
         {!mergeMode && (
           <CardActions>
             <Button kind="secondary" size="sm" onClick={onEdit}>
