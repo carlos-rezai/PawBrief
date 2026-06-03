@@ -31,13 +31,13 @@ describe("NotesStep special notes", () => {
     expect(screen.queryAllByTestId("special-note")).toHaveLength(0);
   });
 
-  it("clicking Add note appends a row with Title, Body, and Photo fields", async () => {
+  it("clicking Add note appends a row with Title, Description, and Photo fields", async () => {
     const user = userEvent.setup();
     renderNotesStep();
     await user.click(screen.getByRole("button", { name: /add note/i }));
     const entry = screen.getByTestId("special-note");
     expect(within(entry).getByLabelText(/title/i)).toBeInTheDocument();
-    expect(within(entry).getByLabelText(/body/i)).toBeInTheDocument();
+    expect(within(entry).getByLabelText(/description/i)).toBeInTheDocument();
     expect(within(entry).getByLabelText(/photo/i)).toBeInTheDocument();
   });
 

@@ -86,7 +86,7 @@ export default function NotesStep({
                   }
                 />
               </Field>
-              <Field label="Body">
+              <Field label="Description">
                 <Textarea
                   value={note.body}
                   placeholder="What should the sitter know?"
