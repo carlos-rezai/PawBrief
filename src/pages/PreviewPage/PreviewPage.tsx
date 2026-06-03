@@ -5,14 +5,8 @@ import { useProfile } from "../../features/profile";
 import { usePhotoBlobUrls } from "../../features/preview/usePhotoBlobUrls";
 import SinglePDF from "../../features/pdf/SinglePDF";
 import { Button } from "../../primitives";
-import Header from "../../components/Header/Header";
-import {
-  PreviewContent,
-  PreviewHeader,
-  PreviewTitle,
-  PreviewActions,
-  PdfViewerContainer,
-} from "./PreviewPage.styles";
+import PreviewLayout from "../../layouts/PreviewLayout/PreviewLayout";
+import { PdfViewerContainer } from "../../layouts/PreviewLayout/PreviewLayout.styles";
 
 export default function PreviewPage() {
   const { id } = useParams<{ id: string }>();
@@ -33,42 +27,38 @@ export default function PreviewPage() {
   const catName = profile.basics?.name;
 
   return (
-    <>
-      <Header />
-      <PreviewContent>
-        <PreviewHeader>
-          <PreviewTitle>
-            {catName ? `${catName}'s care guide` : "Care guide"}
-          </PreviewTitle>
-          <PreviewActions>
-            <Button
-              kind="secondary"
-              onClick={() =>
-                navigate(`/wizard/${id}/step/basics?returnTo=preview`)
-              }
-            >
-              Edit Profile
-            </Button>
-            <PDFDownloadLink
-              document={
-                <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
-              }
-              fileName={fileName}
-            >
-              {({ loading: pdfLoading }) => (
-                <Button kind="primary" disabled={pdfLoading}>
-                  Download PDF
-                </Button>
-              )}
-            </PDFDownloadLink>
-          </PreviewActions>
-        </PreviewHeader>
-        <PdfViewerContainer>
-          <PDFViewer width="100%" height="100%">
-            <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
-          </PDFViewer>
-        </PdfViewerContainer>
-      </PreviewContent>
-    </>
+    <PreviewLayout
+      title={catName ? `${catName}'s care guide` : "Care guide"}
+      actions={
+        <>
+          <Button
+            kind="secondary"
+            onClick={() =>
+              navigate(`/wizard/${id}/step/basics?returnTo=preview`)
+            }
+          >
+            Edit Profile
+          </Button>
+          <PDFDownloadLink
+            document={
+              <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
+            }
+            fileName={fileName}
+          >
+            {({ loading: pdfLoading }) => (
+              <Button kind="primary" disabled={pdfLoading}>
+                Download PDF
+              </Button>
+            )}
+          </PDFDownloadLink>
+        </>
+      }
+    >
+      <PdfViewerContainer>
+        <PDFViewer width="100%" height="100%">
+          <SinglePDF profile={profile} photoBlobUrls={photoBlobUrls} />
+        </PDFViewer>
+      </PdfViewerContainer>
+    </PreviewLayout>
   );
 }
