@@ -77,7 +77,7 @@ export default function ProfileCard({
       </PhotoZone>
 
       <CardBody>
-        <CardName>{basics?.name ?? "Unnamed"}</CardName>
+        <CardName>{basics?.name || "—"}</CardName>
         <CardBreedAge>
           {basics
             ? [basics.breed, formatAge(basics.ageValue, basics.ageUnit)]
