@@ -78,13 +78,13 @@ export default function ProfileCard({
 
       <CardBody>
         <CardName>{basics?.name ?? "Unnamed"}</CardName>
-        {basics && (
-          <CardBreedAge>
-            {[basics.breed, formatAge(basics.ageValue, basics.ageUnit)]
-              .filter(Boolean)
-              .join(" · ")}
-          </CardBreedAge>
-        )}
+        <CardBreedAge>
+          {basics
+            ? [basics.breed, formatAge(basics.ageValue, basics.ageUnit)]
+                .filter(Boolean)
+                .join(" · ") || " "
+            : " "}
+        </CardBreedAge>
         <CardMeta>
           {isComplete
             ? "Ready to print"
