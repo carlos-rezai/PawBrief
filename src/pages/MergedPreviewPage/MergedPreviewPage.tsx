@@ -4,6 +4,7 @@ import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { useProfile } from "../../features/profile";
 import MergedPDF from "../../features/pdf/MergedPDF";
 import { Button } from "../../primitives";
+import Header from "../../components/Header/Header";
 import { PdfViewerContainer } from "./MergedPreviewPage.styles";
 
 export default function MergedPreviewPage() {
@@ -25,34 +26,37 @@ export default function MergedPreviewPage() {
   const mergeReturnTo = `merge/${id1}/${id2}`;
 
   return (
-    <main>
-      <PDFDownloadLink
-        document={<MergedPDF profileA={profileA} profileB={profileB} />}
-        fileName={fileName}
-      >
-        {({ loading: pdfLoading }) => (
-          <Button disabled={pdfLoading}>Download PDF</Button>
-        )}
-      </PDFDownloadLink>
-      <Button
-        onClick={() =>
-          navigate(`/wizard/${id1}/step/basics?returnTo=${mergeReturnTo}`)
-        }
-      >
-        Edit {profileA.basics?.name ?? "Cat A"}
-      </Button>
-      <Button
-        onClick={() =>
-          navigate(`/wizard/${id2}/step/basics?returnTo=${mergeReturnTo}`)
-        }
-      >
-        Edit {profileB.basics?.name ?? "Cat B"}
-      </Button>
-      <PdfViewerContainer>
-        <PDFViewer width="100%" height="100%">
-          <MergedPDF profileA={profileA} profileB={profileB} />
-        </PDFViewer>
-      </PdfViewerContainer>
-    </main>
+    <>
+      <Header />
+      <main>
+        <PDFDownloadLink
+          document={<MergedPDF profileA={profileA} profileB={profileB} />}
+          fileName={fileName}
+        >
+          {({ loading: pdfLoading }) => (
+            <Button disabled={pdfLoading}>Download PDF</Button>
+          )}
+        </PDFDownloadLink>
+        <Button
+          onClick={() =>
+            navigate(`/wizard/${id1}/step/basics?returnTo=${mergeReturnTo}`)
+          }
+        >
+          Edit {profileA.basics?.name ?? "Cat A"}
+        </Button>
+        <Button
+          onClick={() =>
+            navigate(`/wizard/${id2}/step/basics?returnTo=${mergeReturnTo}`)
+          }
+        >
+          Edit {profileB.basics?.name ?? "Cat B"}
+        </Button>
+        <PdfViewerContainer>
+          <PDFViewer width="100%" height="100%">
+            <MergedPDF profileA={profileA} profileB={profileB} />
+          </PDFViewer>
+        </PdfViewerContainer>
+      </main>
+    </>
   );
 }
