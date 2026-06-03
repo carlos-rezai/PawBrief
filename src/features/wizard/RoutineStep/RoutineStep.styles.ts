@@ -34,16 +34,45 @@ export const SlotHeaders = styled.div`
   }
 `;
 
-export const SlotRow = styled.div`
+export const DragHandle = styled.div`
+  width: 14px;
+  height: 28px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  color: ${({ theme }) => theme.colors.muted};
+  transition: color 0.1s;
+
+  &:hover {
+    color: ${({ theme }) => theme.colors.inkSoft};
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+`;
+
+export const SlotRow = styled.div<{
+  $isDragging?: boolean;
+  $isDragOver?: boolean;
+}>`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   row-gap: 8px;
   background: ${({ theme }) => theme.colors.surfaceAlt};
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid
+    ${({ $isDragOver, theme }) =>
+      $isDragOver ? theme.colors.primary : theme.colors.border};
   border-radius: ${({ theme }) => theme.radii.input}px;
   padding: 8px 10px;
+  opacity: ${({ $isDragging }) => ($isDragging ? 0.4 : 1)};
+  transition:
+    border-color 0.1s,
+    opacity 0.1s;
 `;
 
 export const SlotLabelInput = styled.input`
@@ -154,6 +183,7 @@ export const TotalLine = styled.p`
 
 ChartCaption.defaultProps = { theme: defaultTheme };
 SlotHeaders.defaultProps = { theme: defaultTheme };
+DragHandle.defaultProps = { theme: defaultTheme };
 SlotRow.defaultProps = { theme: defaultTheme };
 SlotLabelInput.defaultProps = { theme: defaultTheme };
 SlotTimeInput.defaultProps = { theme: defaultTheme };

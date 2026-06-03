@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { ActivitySlot, RoutineData } from "../../../types/profile";
 import { Button } from "../../../primitives";
-import { IconPlus, IconX } from "../../../primitives/icons";
+import { IconGrip, IconPlus, IconX } from "../../../primitives/icons";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import RoutineChart from "../../../components/RoutineChart/RoutineChart";
 import { routinePalette } from "../../../tokens";
@@ -11,6 +11,7 @@ import {
   AddSlotButton,
   ChartBlock,
   ChartCaption,
+  DragHandle,
   SlotHeaders,
   SlotHoursInput,
   SlotHoursSuffix,
@@ -47,6 +48,8 @@ export default function RoutineStep({
   const [slots, setSlots] = useState<ActivitySlot[]>(
     initialData?.slots ?? DEFAULT_SLOTS
   );
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [overIndex, setOverIndex] = useState<number | null>(null);
 
   const total = slots.reduce((sum, slot) => sum + (slot.hours || 0), 0);
 
@@ -76,6 +79,23 @@ export default function RoutineStep({
     setSlots((prev) => prev.filter((_, i) => i !== index));
   }
 
+  function handleDragEnd() {
+    setDragIndex(null);
+    setOverIndex(null);
+  }
+
+  function handleDrop(targetIndex: number) {
+    if (dragIndex === null || dragIndex === targetIndex) return;
+    setSlots((prev) => {
+      const next = [...prev];
+      const [moved] = next.splice(dragIndex, 1);
+      next.splice(targetIndex, 0, moved);
+      return next;
+    });
+    setDragIndex(null);
+    setOverIndex(null);
+  }
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onSave?.({ slots });
@@ -93,6 +113,7 @@ export default function RoutineStep({
 
       <SlotHeaders>
         <span style={{ width: 14, flexShrink: 0 }} />
+        <span style={{ width: 14, flexShrink: 0 }} />
         <span style={{ flex: 1 }}>Activity</span>
         <span style={{ width: 104, flexShrink: 0 }}>Starts at</span>
         <span style={{ width: 62, flexShrink: 0 }}>Duration</span>
@@ -101,7 +122,34 @@ export default function RoutineStep({
 
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {slots.map((slot, i) => (
-          <SlotRow key={i}>
+          <SlotRow
+            key={i}
+            $isDragging={dragIndex === i}
+            $isDragOver={overIndex === i && dragIndex !== i}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setOverIndex(i);
+            }}
+            onDragLeave={(e) => {
+              if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                setOverIndex(null);
+              }
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              handleDrop(i);
+            }}
+          >
+            <DragHandle
+              draggable
+              onDragStart={(e) => {
+                setDragIndex(i);
+                e.dataTransfer.effectAllowed = "move";
+              }}
+              onDragEnd={handleDragEnd}
+            >
+              <IconGrip size={12} />
+            </DragHandle>
             <ColorPicker
               palette={routinePalette}
               value={slot.colorIndex}

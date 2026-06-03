@@ -43,7 +43,7 @@ export const Popover = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.base};
   padding: 6px;
   display: grid;
-  grid-template-columns: repeat(3, 20px);
+  grid-template-columns: repeat(2, 20px);
   gap: 5px;
   z-index: 100;
 `;

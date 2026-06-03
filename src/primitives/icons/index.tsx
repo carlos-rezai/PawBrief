@@ -153,3 +153,23 @@ export function IconCamera({ size = 22 }: IconProps) {
     </svg>
   );
 }
+
+export function IconGrip({ size = 14 }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 14 14"
+      fill="currentColor"
+      aria-hidden
+      style={{ display: "block", pointerEvents: "none" }}
+    >
+      <circle cx="4.5" cy="3" r="1.2" />
+      <circle cx="9.5" cy="3" r="1.2" />
+      <circle cx="4.5" cy="7" r="1.2" />
+      <circle cx="9.5" cy="7" r="1.2" />
+      <circle cx="4.5" cy="11" r="1.2" />
+      <circle cx="9.5" cy="11" r="1.2" />
+    </svg>
+  );
+}
