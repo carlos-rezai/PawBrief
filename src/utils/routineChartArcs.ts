@@ -1,4 +1,6 @@
 export function arcPath(start: string, hours: number, size: number): string {
+  if (hours === 0) return "";
+
   const cx = size / 2;
   const cy = size / 2;
   const r = size * 0.38;
