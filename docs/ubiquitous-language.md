@@ -74,14 +74,17 @@
 
 ## Care Guide (PDF)
 
-| Term                  | Definition                                                                                               | Aliases to avoid             |
-| --------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| **Care Guide**        | The generated PDF document the owner shares with the pet-sitter                                          | PDF, document, report, guide |
-| **Single Care Guide** | A care guide generated from one profile                                                                  | Solo PDF, individual guide   |
-| **Merged Care Guide** | A side-by-side care guide generated from exactly two profiles                                            | Combined PDF, dual guide     |
-| **Preview**           | The in-browser rendering of the care guide before download, using PDFViewer                              | Draft view, PDF view         |
-| **PDF Header**        | The cover section on page 1 of the care guide, containing PawBrief branding, cat name, and profile photo | Cover, title page            |
-| **PDF Footer**        | The per-page footer on the care guide containing "Made with PawBrief" and page number                    | Page footer, branding footer |
+| Term                  | Definition                                                                                                                                                                 | Aliases to avoid                          |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| **Care Guide**        | The generated PDF document the owner shares with the pet-sitter                                                                                                            | PDF, document, report, guide              |
+| **Single Care Guide** | A care guide generated from one profile                                                                                                                                    | Solo PDF, individual guide                |
+| **Merged Care Guide** | A side-by-side care guide generated from exactly two profiles (updated — design eyebrow reads "Household Care Guide")                                                      | Combined PDF, dual guide, Household Guide |
+| **Preview**           | The in-browser rendering of the care guide before download, using PDFViewer                                                                                                | Draft view, PDF view                      |
+| **Cover Band**        | The sienna-background header strip at the top of any Care Guide, containing the circular photo or Mark, cat name, and wordmark (new)                                       | PDF Header, cover, title page, header     |
+| **Emergency Callout** | The primary-bordered box at the top of the Care Guide body containing the vet contact and emergency contacts (new)                                                         | Emergency section, emergency box          |
+| **Serving Entry**     | A single feeding event defined by a time (HH:MM) and a gram amount; rendered as a Tag (`"07:30 · 70g"`) in the Care Guide (new)                                            | Feeding time, serving, meal entry         |
+| **Shared Vet**        | The condition in a Merged Care Guide where both profiles reference the same veterinarian (matched by name and phone); causes the vet block to render once full-width (new) | Common vet, same vet                      |
+| **PDF Footer**        | The per-page footer on the care guide containing "Made with PawBrief" and page number                                                                                      | Page footer, branding footer              |
 
 ## Storage & Security
 
@@ -134,8 +137,11 @@
 - The **Mark** and **Wordmark** are built in SVG code — no raster asset; the **Mark** is the symbol alone, the **Wordmark** combines Mark + text.
 - A **Profile Card** has exactly one **Photo Zone**, one **Status Badge**, and one **Scrim** (when a photo is present).
 - **Merge-select Mode** is only available when two or more **Complete Profiles** exist; **Draft** profiles are visible but unselectable.
+- A **Care Guide** opens with a **Cover Band** followed immediately by an **Emergency Callout**, then numbered sections.
+- A **Serving Entry** combines a time and a gram amount — it is not the same as a **Feeding Time** (time only) from the prototype model.
+- A **Merged Care Guide** detects a **Shared Vet** by matching both `vet.name` and `vet.phone` across the two profiles.
 
-## Example dialogue
+## Example dialogue (updated)
 
 > **Dev:** "When the **Owner** finishes the last step, do we mark the **Profile** complete immediately?"
 > **Domain expert:** "Yes — once all six **Steps** in the **Wizard** have been saved, the **Profile** transitions from **Draft** to **Complete**. The **Dashboard** then shows the **Generate PDF** action on the **Profile Card**."
@@ -145,8 +151,12 @@
 > **Domain expert:** "No — the **Merge** is a one-time PDF generation action. The two **Profiles** remain independent. The **Merged Care Guide** is the only artifact that joins them."
 > **Dev:** "Should we call the routine visualization a pie chart or something else?"
 > **Domain expert:** "**Routine Chart** — it's a 24-hour radial clock, not a pie chart. Each **Arc** starts at the **Activity Slot**'s clock time and spans its duration. Calling it a pie chart implies proportional slices; **Arc** on a **Routine Chart** is the correct mental model."
-> **Dev:** "Should we call it 'consistency' or 'texture' in the UI for the food form field?"
-> **Domain expert:** "**Texture** — it matches what cat owners read on packaging. **Consistency** is an alias to avoid."
+> **Dev:** "What do we call the sienna header at the top of the Care Guide?"
+> **Domain expert:** "**Cover Band** — it's a full-width band, not a page header or title block. It contains the circular photo (or **Mark** fallback), the cat's name, and the **Wordmark**."
+> **Dev:** "In the **Merged Care Guide**, do we show the vet section twice if both cats go to the same vet?"
+> **Domain expert:** "No — that's a **Shared Vet** condition. We detect it by matching name and phone, then render the vet block once full-width. Each column still shows its own emergency contacts."
+> **Dev:** "The prototype had `amountGrams` and separate feeding times. Our model has `ServingEntry` with both. How do we show that?"
+> **Domain expert:** "A **Serving Entry** renders as a Tag: `'07:30 · 70g'`. We don't split time and grams — the **Serving Entry** is the atomic unit, and it may differ across servings."
 
 ## Flagged ambiguities
 
@@ -154,5 +164,7 @@
 - **"Supplement"** could refer to either a **Supplement Entry** (routine nutritional addition in the Feeding step) or a **Medication** (prescribed treatment in the Medical step). These are distinct. Use the full term in all contexts.
 - **"Page"** risks conflation between a route-level page (a React component) and a **Step** (a screen within the Wizard). Use **Step** exclusively for wizard navigation; reserve **Page** for route-level components.
 - **"Pie Chart"** was the prior term for the routine visualization. The correct term is **Routine Chart** — it is a radial clock where each **Activity Slot** is represented as an **Arc**, not a proportional wedge. "Pie chart" is an alias to avoid.
+- **"PDF Header"** was the prior term for the sienna header strip on a Care Guide. The correct term is **Cover Band** — it is a full-bleed band, not a page header element. "PDF Header", "cover", and "title page" are aliases to avoid.
+- **"Feeding Time"** in the prototype referred to a bare HH:MM string. In the codebase the unit is a **Serving Entry** (time + grams together). Never use "feeding time" to describe a **Serving Entry**.
 - **"Logo"** is ambiguous: the **Mark** is the symbol alone (document + paw SVG); the **Wordmark** is the logotype that combines the Mark with the "PawBrief" text. Use the specific term, not "logo."
 - **"Component"** in general programming means any React component. In this codebase it has a specific layer meaning: a composed UI block in `src/components/`. Use **Primitive** for atoms in `src/primitives/` and **Component** only for composed blocks.
