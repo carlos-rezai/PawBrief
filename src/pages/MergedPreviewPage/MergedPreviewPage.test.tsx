@@ -29,6 +29,7 @@ vi.mock("@react-pdf/renderer", () => ({
   Svg: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   Circle: () => null,
   G: ({ children }: { children: React.ReactNode }) => <>{children}</>,
+  Path: () => null,
 }));
 
 beforeEach(() => {
@@ -156,7 +157,7 @@ describe("MergedPreviewPage", () => {
     renderAtRoute("/preview/merge/routine-a/routine-b");
     const viewer = await screen.findByTestId("pdf-viewer");
     expect(viewer.textContent).toContain("Routine");
-    expect(viewer.textContent).toContain("Sleep");
+    expect(viewer.textContent).toContain("00:00");
   });
 
   it("shows Favorites section for both profiles", async () => {
@@ -164,7 +165,7 @@ describe("MergedPreviewPage", () => {
     await saveProfile(makeCompleteProfile("fav-b", "Whiskers"));
     renderAtRoute("/preview/merge/fav-a/fav-b");
     const viewer = await screen.findByTestId("pdf-viewer");
-    expect(viewer.textContent).toContain("Favorites");
+    expect(viewer.textContent).toContain("Favourites");
     expect(viewer.textContent).toContain("Feather wand");
   });
 
@@ -173,7 +174,7 @@ describe("MergedPreviewPage", () => {
     await saveProfile(makeCompleteProfile("notes-b", "Whiskers"));
     renderAtRoute("/preview/merge/notes-a/notes-b");
     const viewer = await screen.findByTestId("pdf-viewer");
-    expect(viewer.textContent).toContain("Notes");
+    expect(viewer.textContent).toContain("Good to Know");
     expect(viewer.textContent).toContain("Feeding tip");
   });
 
