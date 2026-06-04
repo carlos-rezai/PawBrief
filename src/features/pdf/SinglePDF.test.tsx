@@ -1,0 +1,230 @@
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
+import type { CatProfile } from "../../types/profile";
+import { buildMapsUrl } from "../../utils/buildMapsUrl";
+import SinglePDF from "./SinglePDF";
+
+vi.mock("@react-pdf/renderer", () => ({
+  Document: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
+  Page: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
+  View: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
+  Text: ({ children }: { children?: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
+  Image: ({ src }: { src?: string }) => <img src={src ?? ""} alt="photo" />,
+  Link: ({ children, src }: { children?: React.ReactNode; src?: string }) => (
+    <a href={src}>{children}</a>
+  ),
+  Svg: ({ children }: { children?: React.ReactNode }) => <svg>{children}</svg>,
+  Circle: () => null,
+  G: ({ children }: { children?: React.ReactNode }) => <g>{children}</g>,
+  Path: () => null,
+  StyleSheet: { create: (s: unknown) => s },
+  Font: { register: vi.fn() },
+}));
+
+const seedProfile: CatProfile = {
+  id: "seed-id",
+  completedSteps: [
+    "basics",
+    "feeding",
+    "routine",
+    "favorites",
+    "medical",
+    "notes",
+  ],
+  basics: {
+    name: "Mochi",
+    breed: "Scottish Fold",
+    ageValue: 3,
+    ageUnit: "years",
+  },
+  feeding: {
+    foodEntries: [{ brand: "Royal Canin", flavor: "Chicken", texture: "Dry" }],
+    servings: [{ time: "07:30", grams: 70 }],
+    supplementEntries: [{ brand: "Zesty Paws", flavor: "Salmon Oil" }],
+    platingInstructions: "Mix wet and dry food together",
+    dietaryNotes: "",
+  },
+  routine: {
+    slots: [{ label: "Sleep", start: "22:00", hours: 8, colorIndex: 0 }],
+  },
+  favorites: {
+    toyEntries: [{ name: "Feather Wand" }],
+    treatEntries: [{ brand: "Temptations", flavor: "Chicken" }],
+    comfortItems: ["Blue blanket"],
+    favouriteSpots: ["Sunny windowsill"],
+  },
+  medical: {
+    vet: {
+      name: "Dr Smith",
+      clinicName: "Paws Clinic",
+      phone: "555-1234",
+      address: "123 Main St",
+    },
+    emergencyContacts: [
+      { name: "Jane Doe", phone: "555-5678", relationship: "Friend" },
+    ],
+    medications: [
+      {
+        name: "Apoquel",
+        dosage: "5mg",
+        frequency: "Daily",
+        instructions: "With food",
+      },
+    ],
+    allergies: "Fish",
+    medicalConditions: "None",
+  },
+  notes: {
+    specialNotes: [{ title: "Hiding spots", body: "Check under the bed" }],
+  },
+  createdAt: 0,
+  updatedAt: 0,
+};
+
+describe("SinglePDF", () => {
+  describe("Cover Band", () => {
+    it("renders the cat name, breed, and formatted age", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Mochi")).toBeInTheDocument();
+      expect(screen.getByText("Scottish Fold")).toBeInTheDocument();
+      expect(screen.getByText("3 years")).toBeInTheDocument();
+    });
+
+    it("renders no photo when photoId is absent", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.queryByRole("img")).not.toBeInTheDocument();
+    });
+
+    it("renders the cat photo when photoId and blob URL are provided", () => {
+      const withPhoto: CatProfile = {
+        ...seedProfile,
+        basics: { ...seedProfile.basics!, photoId: "photo-abc" },
+      };
+      render(
+        <SinglePDF
+          profile={withPhoto}
+          photoBlobUrls={{ "photo-abc": "blob:http://localhost/1" }}
+        />
+      );
+      expect(screen.getByRole("img")).toHaveAttribute(
+        "src",
+        "blob:http://localhost/1"
+      );
+    });
+  });
+
+  describe("Emergency Callout", () => {
+    it("renders vet name, clinic, and phone as standalone values", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Dr Smith")).toBeInTheDocument();
+      expect(screen.getByText("Paws Clinic")).toBeInTheDocument();
+      expect(screen.getByText("555-1234")).toBeInTheDocument();
+    });
+
+    it("renders a Maps link to the vet address", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      const mapsUrl = buildMapsUrl("123 Main St");
+      expect(screen.getByRole("link")).toHaveAttribute("href", mapsUrl);
+    });
+
+    it("renders each emergency contact with name, phone, and relationship", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Jane Doe")).toBeInTheDocument();
+      expect(screen.getByText("555-5678")).toBeInTheDocument();
+      expect(screen.getByText("Friend")).toBeInTheDocument();
+    });
+  });
+
+  describe("Feeding section", () => {
+    it("renders each serving entry formatted as 'HH:MM · Xg'", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("07:30 · 70g")).toBeInTheDocument();
+    });
+
+    it("renders food entry brand and texture as standalone text", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Royal Canin")).toBeInTheDocument();
+      expect(screen.getByText("Dry")).toBeInTheDocument();
+    });
+
+    it("renders supplement entries", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Zesty Paws")).toBeInTheDocument();
+      expect(screen.getByText("Salmon Oil")).toBeInTheDocument();
+    });
+
+    it("renders plating instructions", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(
+        screen.getByText("Mix wet and dry food together")
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("Routine section", () => {
+    it("renders the RoutineClock with clock-face time labels", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("00:00")).toBeInTheDocument();
+      expect(screen.getByText("06:00")).toBeInTheDocument();
+      expect(screen.getByText("12:00")).toBeInTheDocument();
+      expect(screen.getByText("18:00")).toBeInTheDocument();
+    });
+  });
+
+  describe("Favourites section", () => {
+    it("renders each treat entry formatted as 'Brand · Flavor'", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Temptations · Chicken")).toBeInTheDocument();
+    });
+
+    it("renders toy entries", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Feather Wand")).toBeInTheDocument();
+    });
+
+    it("renders comfort items and favourite spots", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Blue blanket")).toBeInTheDocument();
+      expect(screen.getByText("Sunny windowsill")).toBeInTheDocument();
+    });
+  });
+
+  describe("Health section", () => {
+    it("renders medication name and dosage as standalone text", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Apoquel")).toBeInTheDocument();
+      expect(screen.getByText("5mg")).toBeInTheDocument();
+    });
+
+    it("renders allergies", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Fish")).toBeInTheDocument();
+    });
+  });
+
+  describe("Good to Know section", () => {
+    it("renders under a 'Good to Know' heading with note title and body", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Good to Know")).toBeInTheDocument();
+      expect(screen.getByText("Hiding spots")).toBeInTheDocument();
+      expect(screen.getByText("Check under the bed")).toBeInTheDocument();
+    });
+  });
+
+  describe("Section omission", () => {
+    it("omits feeding content when no feeding data is present", () => {
+      render(<SinglePDF profile={{ ...seedProfile, feeding: undefined }} />);
+      expect(screen.queryByText("Royal Canin")).not.toBeInTheDocument();
+      expect(screen.queryByText("07:30 · 70g")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("Footer", () => {
+    it("renders 'Made with PawBrief' branding", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText(/made with pawbrief/i)).toBeInTheDocument();
+    });
+  });
+});
