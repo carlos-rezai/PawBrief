@@ -37,4 +37,24 @@ describe("arcPath", () => {
     expect(() => arcPath("22:00", 9, 200)).not.toThrow();
     expect(arcPath("22:00", 9, 200)).toMatch(/^M\s/);
   });
+
+  it("midnight slot starts at the 12 o'clock position", () => {
+    const path = arcPath("00:00", 6, 200);
+    const startMatch = path.match(/^M\s+([\d.-]+)\s+([\d.-]+)/);
+    expect(startMatch).not.toBeNull();
+    expect(parseFloat(startMatch![1])).toBeCloseTo(100, 3);
+    expect(parseFloat(startMatch![2])).toBeCloseTo(24, 3);
+  });
+
+  it("noon slot starts at the 6 o'clock position", () => {
+    const path = arcPath("12:00", 6, 200);
+    const startMatch = path.match(/^M\s+([\d.-]+)\s+([\d.-]+)/);
+    expect(startMatch).not.toBeNull();
+    expect(parseFloat(startMatch![1])).toBeCloseTo(100, 3);
+    expect(parseFloat(startMatch![2])).toBeCloseTo(176, 3);
+  });
+
+  it("returns an empty string for a zero-duration slot", () => {
+    expect(arcPath("06:00", 0, 200)).toBe("");
+  });
 });
