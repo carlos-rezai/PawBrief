@@ -1,3 +1,4 @@
+import "./pdfFonts";
 import {
   Document,
   Page,
@@ -6,106 +7,87 @@ import {
   Image,
   Link,
   StyleSheet,
-  Font,
-  Svg,
-  Circle,
-  G,
 } from "@react-pdf/renderer";
 import type { CatProfile } from "../../types/profile";
 import { buildMapsUrl } from "../../utils/buildMapsUrl";
 import { formatAge } from "../../utils/formatAge";
-
-Font.register({
-  family: "Helvetica",
-  src: "https://fonts.gstatic.com/s/helveticaneue/v1/Helvetica.ttf",
-});
+import { GSection } from "./GSection";
+import { MiniCard } from "./MiniCard";
+import { Tag } from "./Tag";
+import { RoutineClock } from "./RoutineClock";
+import { colors, typeScale } from "./pdfTokens";
 
 const styles = StyleSheet.create({
-  page: { padding: 32, fontFamily: "Helvetica", fontSize: 10 },
-  header: { flexDirection: "row", alignItems: "center", marginBottom: 16 },
-  catName: { fontSize: 18, fontWeight: "bold" },
-  section: { marginBottom: 12 },
-  sectionTitle: { fontSize: 12, fontWeight: "bold", marginBottom: 4 },
+  page: {
+    paddingTop: 0,
+    paddingHorizontal: 40,
+    paddingBottom: 48,
+    fontFamily: "Plus Jakarta Sans",
+    fontSize: typeScale.body.fontSize,
+    backgroundColor: colors.bg,
+  },
+  coverBand: {
+    backgroundColor: colors.primary,
+    marginHorizontal: -40,
+    paddingVertical: 28,
+    paddingHorizontal: 40,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  photo: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+  },
+  coverText: {
+    marginLeft: 16,
+  },
+  catName: {
+    fontFamily: "Plus Jakarta Sans",
+    fontSize: typeScale.display.fontSize,
+    fontWeight: typeScale.display.fontWeight as 800,
+    color: colors.surface,
+  },
+  catMeta: {
+    fontFamily: "Plus Jakarta Sans",
+    fontSize: typeScale.body.fontSize,
+    fontWeight: typeScale.body.fontWeight as 400,
+    color: colors.primaryInk,
+  },
+  inlineText: {
+    fontFamily: "Plus Jakarta Sans",
+    fontSize: typeScale.body.fontSize,
+    fontWeight: typeScale.body.fontWeight as 400,
+    color: colors.ink,
+    marginBottom: 3,
+  },
+  row: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginBottom: 8,
+  },
+  noteItem: {
+    borderLeftWidth: 3,
+    borderLeftColor: colors.primary,
+    paddingLeft: 10,
+    marginBottom: 10,
+  },
+  thumbnail: {
+    width: 80,
+    height: 80,
+    marginTop: 4,
+  },
   footer: {
     position: "absolute",
     bottom: 16,
-    left: 32,
-    right: 32,
+    left: 40,
+    right: 40,
     flexDirection: "row",
     justifyContent: "space-between",
-    fontSize: 8,
-    color: "#888",
+    fontSize: typeScale.caption.fontSize,
+    color: colors.muted,
   },
-  photo: { width: "100%", marginBottom: 8 },
 });
-
-const pdfColors = [
-  "#FF6B6B",
-  "#4ECDC4",
-  "#45B7D1",
-  "#96CEB4",
-  "#FFEAA7",
-  "#DDA0DD",
-  "#98D8C8",
-];
-
-interface PieChartProps {
-  slots: { label: string; hours: number }[];
-}
-
-function PieChart({ slots }: PieChartProps) {
-  const total = slots.reduce((s, sl) => s + sl.hours, 0);
-  if (total === 0) return null;
-
-  const size = 100;
-  const cx = size / 2;
-  const cy = size / 2;
-  const r = size / 2 - 4;
-
-  let cumulative = 0;
-  const slices = slots.map((slot, i) => {
-    const fraction = slot.hours / total;
-    const startAngle = cumulative * 2 * Math.PI - Math.PI / 2;
-    cumulative += fraction;
-    const endAngle = cumulative * 2 * Math.PI - Math.PI / 2;
-
-    const x1 = cx + r * Math.cos(startAngle);
-    const y1 = cy + r * Math.sin(startAngle);
-    const x2 = cx + r * Math.cos(endAngle);
-    const y2 = cy + r * Math.sin(endAngle);
-    const largeArc = fraction > 0.5 ? 1 : 0;
-
-    return {
-      key: i,
-      cx,
-      cy,
-      x1,
-      y1,
-      x2,
-      y2,
-      largeArc,
-      color: pdfColors[i % pdfColors.length],
-    };
-  });
-
-  return (
-    <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      <G>
-        {slices.map((s) => (
-          <Circle
-            key={s.key}
-            cx={s.cx}
-            cy={s.cy}
-            r={r}
-            fill={s.color}
-            stroke="white"
-            strokeWidth={1}
-          />
-        ))}
-      </G>
-    </Svg>
-  );
-}
 
 interface SinglePDFProps {
   profile: CatProfile;
@@ -118,120 +100,157 @@ export default function SinglePDF({
 }: SinglePDFProps) {
   const { basics, feeding, routine, favorites, medical, notes } = profile;
 
-  const footer = (
-    <View style={styles.footer} fixed>
-      <Text>Made with PawBrief</Text>
-      <Text
-        render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
-      />
-    </View>
-  );
-
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View style={styles.header}>
-          <Text style={styles.catName}>{basics?.name ?? "Cat Profile"}</Text>
-        </View>
-        {basics?.photoId && photoBlobUrls[basics.photoId] && (
-          <Image style={styles.photo} src={photoBlobUrls[basics.photoId]} />
-        )}
-        {basics && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Basics</Text>
-            <Text>Name: {basics.name}</Text>
-            {basics.breed && <Text>Breed: {basics.breed}</Text>}
-            <Text>Age: {formatAge(basics.ageValue, basics.ageUnit)}</Text>
+        {/* Cover Band */}
+        <View style={styles.coverBand}>
+          {basics?.photoId && photoBlobUrls[basics.photoId] ? (
+            <Image style={styles.photo} src={photoBlobUrls[basics.photoId]} />
+          ) : null}
+          <View style={styles.coverText}>
+            <Text style={styles.catName}>{basics?.name ?? ""}</Text>
+            {basics?.breed && (
+              <Text style={styles.catMeta}>{basics.breed}</Text>
+            )}
+            {basics && (
+              <Text style={styles.catMeta}>
+                {formatAge(basics.ageValue, basics.ageUnit)}
+              </Text>
+            )}
           </View>
-        )}
-        {feeding && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Feeding</Text>
-            {feeding.foodEntries.map((entry, i) => (
-              <Text key={i}>
-                {entry.brand} — {entry.flavor} ({entry.texture})
-              </Text>
+        </View>
+
+        {/* Emergency Callout */}
+        {medical && (
+          <GSection n={1} title="Emergency">
+            <Text style={styles.inlineText}>{medical.vet.name}</Text>
+            <Text style={styles.inlineText}>{medical.vet.clinicName}</Text>
+            <Text style={styles.inlineText}>{medical.vet.phone}</Text>
+            {medical.vet.address && (
+              <Link src={buildMapsUrl(medical.vet.address)}>
+                Get directions
+              </Link>
+            )}
+            {medical.emergencyContacts.map((c, i) => (
+              <View key={i} style={{ marginTop: 8 }}>
+                <Text style={styles.inlineText}>{c.name}</Text>
+                <Text style={styles.inlineText}>{c.phone}</Text>
+                <Text style={styles.inlineText}>{c.relationship}</Text>
+              </View>
             ))}
-            {feeding.servings.map((s, i) => (
-              <Text key={i}>
-                {s.grams}g at {s.time}
-              </Text>
+          </GSection>
+        )}
+
+        {/* Feeding */}
+        {feeding && (
+          <GSection n={2} title="Feeding">
+            <View style={styles.row}>
+              {feeding.servings.map((s, i) => (
+                <Tag key={i} label={`${s.time} · ${s.grams}g`} />
+              ))}
+            </View>
+            {feeding.foodEntries.map((entry, i) => (
+              <View key={i}>
+                <MiniCard title={entry.brand} subtitle={entry.flavor} />
+                <Tag label={entry.texture} />
+              </View>
             ))}
             {feeding.platingInstructions && (
-              <Text>Instructions: {feeding.platingInstructions}</Text>
+              <Text style={styles.inlineText}>
+                {feeding.platingInstructions}
+              </Text>
             )}
             {feeding.platingPhotoId &&
               photoBlobUrls[feeding.platingPhotoId] && (
                 <Image
-                  style={styles.photo}
+                  style={styles.thumbnail}
                   src={photoBlobUrls[feeding.platingPhotoId]}
                 />
               )}
-          </View>
-        )}
-        {routine && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Routine</Text>
-            <PieChart slots={routine.slots} />
-            {routine.slots.map((slot, i) => (
-              <Text key={i}>
-                {slot.label}: {slot.hours}h
-              </Text>
-            ))}
-          </View>
-        )}
-        {favorites && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Favorites</Text>
-            {favorites.toyEntries.map((t, i) => (
-              <Text key={i}>
-                Toy: {t.name}
-                {t.description ? ` — ${t.description}` : ""}
-              </Text>
-            ))}
-            {favorites.treatEntries.map((t, i) => (
-              <Text key={i}>
-                Treat: {t.brand} {t.flavor}
-              </Text>
-            ))}
-          </View>
-        )}
-        {medical && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Medical</Text>
-            <Text>Vet: {medical.vet.name}</Text>
-            <Text>Clinic: {medical.vet.clinicName}</Text>
-            <Text>Phone: {medical.vet.phone}</Text>
-            {medical.vet.address && (
-              <Link src={buildMapsUrl(medical.vet.address)}>
-                Get directions to {medical.vet.clinicName}
-              </Link>
+            {feeding.supplementEntries.length > 0 && (
+              <View style={{ marginTop: 8 }}>
+                {feeding.supplementEntries.map((s, i) => (
+                  <MiniCard key={i} title={s.brand} subtitle={s.flavor} />
+                ))}
+              </View>
             )}
-            {medical.medications.map((m, i) => (
-              <Text key={i}>
-                {m.name} {m.dosage} — {m.frequency}
+          </GSection>
+        )}
+
+        {/* Routine */}
+        {routine && (
+          <GSection n={3} title="Routine">
+            <RoutineClock slots={routine.slots} />
+          </GSection>
+        )}
+
+        {/* Favourites */}
+        {favorites && (
+          <GSection n={4} title="Favourites">
+            {favorites.toyEntries.map((t, i) => (
+              <MiniCard key={i} title={t.name} />
+            ))}
+            <View style={styles.row}>
+              {favorites.treatEntries.map((t, i) => (
+                <Tag key={i} label={`${t.brand} · ${t.flavor}`} />
+              ))}
+            </View>
+            {favorites.comfortItems.map((item, i) => (
+              <Text key={i} style={styles.inlineText}>
+                {item}
               </Text>
             ))}
-          </View>
+            {favorites.favouriteSpots.map((spot, i) => (
+              <Text key={i} style={styles.inlineText}>
+                {spot}
+              </Text>
+            ))}
+          </GSection>
         )}
-        {notes && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Notes</Text>
+
+        {/* Health */}
+        {medical && (
+          <GSection n={5} title="Health">
+            {medical.medications.map((m, i) => (
+              <MiniCard key={i} title={m.name} subtitle={m.dosage} />
+            ))}
+            {medical.allergies && (
+              <Text style={styles.inlineText}>{medical.allergies}</Text>
+            )}
+            {medical.medicalConditions && (
+              <Text style={styles.inlineText}>{medical.medicalConditions}</Text>
+            )}
+          </GSection>
+        )}
+
+        {/* Good to Know */}
+        {notes && notes.specialNotes.length > 0 && (
+          <GSection n={6} title="Good to Know">
             {notes.specialNotes.map((note, i) => (
-              <View key={i}>
-                <Text>{note.title}</Text>
-                <Text>{note.body}</Text>
+              <View key={i} style={styles.noteItem}>
+                <Text style={styles.inlineText}>{note.title}</Text>
+                <Text style={styles.inlineText}>{note.body}</Text>
                 {note.photoId && photoBlobUrls[note.photoId] && (
                   <Image
-                    style={styles.photo}
+                    style={styles.thumbnail}
                     src={photoBlobUrls[note.photoId]}
                   />
                 )}
               </View>
             ))}
-          </View>
+          </GSection>
         )}
-        {footer}
+
+        {/* Footer */}
+        <View style={styles.footer} fixed>
+          <Text>Made with PawBrief</Text>
+          <Text
+            render={({ pageNumber, totalPages }) =>
+              `${pageNumber} / ${totalPages}`
+            }
+          />
+        </View>
       </Page>
     </Document>
   );
