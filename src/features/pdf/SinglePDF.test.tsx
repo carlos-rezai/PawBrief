@@ -198,6 +198,12 @@ describe("SinglePDF", () => {
       expect(screen.getByText("12:00")).toBeInTheDocument();
       expect(screen.getByText("18:00")).toBeInTheDocument();
     });
+
+    it("renders the legend with slot label and formatted time range", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Sleep")).toBeInTheDocument();
+      expect(screen.getByText("22:00–06:00")).toBeInTheDocument();
+    });
   });
 
   describe("Favourites section", () => {

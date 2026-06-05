@@ -7,7 +7,7 @@ import {
   Image,
   StyleSheet,
 } from "@react-pdf/renderer";
-import type { CatProfile } from "../../types/profile";
+import type { CatProfile, ActivitySlot } from "../../types/profile";
 import { formatAge } from "../../utils/formatAge";
 import { isSharedVet } from "../../utils/isSharedVet";
 import { GSection } from "./GSection";
@@ -16,7 +16,8 @@ import { MiniCard } from "./MiniCard";
 import { Tag } from "./Tag";
 import { RoutineClock } from "./RoutineClock";
 import { PawBriefMark } from "./PawBriefMark";
-import { colors, typeScale } from "./pdfTokens";
+import { colors, typeScale, palette as routinePalette } from "./pdfTokens";
+import { formatRange } from "../../utils/formatRange";
 
 const CLOCK_SIZE = 156;
 const THUMB_SIZE = 60;
@@ -296,6 +297,59 @@ function FavouritesCol({ profile }: { profile: CatProfile }) {
   );
 }
 
+function RoutineCol({ slots }: { slots: ActivitySlot[] }) {
+  const sorted = [...slots].sort((a, b) => a.start.localeCompare(b.start));
+  return (
+    <>
+      <RoutineClock slots={slots} size={CLOCK_SIZE} />
+      <View style={{ marginTop: 8 }}>
+        {sorted.map((slot, i) => (
+          <View
+            key={i}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 5,
+              gap: 5,
+            }}
+          >
+            <View
+              style={{
+                width: 10,
+                height: 10,
+                borderRadius: 2,
+                backgroundColor:
+                  routinePalette[slot.colorIndex % routinePalette.length],
+              }}
+            />
+            <View>
+              <Text
+                style={{
+                  fontFamily: "Plus Jakarta Sans",
+                  fontSize: typeScale.small.fontSize,
+                  fontWeight: 700,
+                  color: colors.ink,
+                }}
+              >
+                {slot.label}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "Plus Jakarta Sans",
+                  fontSize: typeScale.caption.fontSize,
+                  color: colors.muted,
+                }}
+              >
+                {formatRange(slot.start, slot.hours)}
+              </Text>
+            </View>
+          </View>
+        ))}
+      </View>
+    </>
+  );
+}
+
 function HealthCol({ profile }: { profile: CatProfile }) {
   const { medical } = profile;
   if (!medical) return <NotAdded />;
@@ -399,20 +453,14 @@ export default function MergedPDF({
           <CmpRow
             left={
               profileA.routine ? (
-                <RoutineClock
-                  slots={profileA.routine.slots}
-                  size={CLOCK_SIZE}
-                />
+                <RoutineCol slots={profileA.routine.slots} />
               ) : (
                 <NotAdded />
               )
             }
             right={
               profileB.routine ? (
-                <RoutineClock
-                  slots={profileB.routine.slots}
-                  size={CLOCK_SIZE}
-                />
+                <RoutineCol slots={profileB.routine.slots} />
               ) : (
                 <NotAdded />
               )

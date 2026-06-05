@@ -276,6 +276,14 @@ describe("MergedPDF", () => {
       expect(screen.getAllByText("00:00")).toHaveLength(2);
       expect(screen.getAllByText("12:00")).toHaveLength(2);
     });
+
+    it("renders slot legends with label and formatted time range for each cat", () => {
+      render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
+      expect(screen.getByText("Sleep")).toBeInTheDocument();
+      expect(screen.getByText("22:00–06:00")).toBeInTheDocument();
+      expect(screen.getByText("Play")).toBeInTheDocument();
+      expect(screen.getByText("10:00–12:00")).toBeInTheDocument();
+    });
   });
 
   describe("Favourites section", () => {

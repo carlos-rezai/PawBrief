@@ -15,7 +15,8 @@ import { MiniCard } from "./MiniCard";
 import { Tag } from "./Tag";
 import { RoutineClock } from "./RoutineClock";
 import { PawBriefMark } from "./PawBriefMark";
-import { colors, typeScale } from "./pdfTokens";
+import { colors, typeScale, palette as routinePalette } from "./pdfTokens";
+import { formatRange } from "../../utils/formatRange";
 
 const styles = StyleSheet.create({
   page: {
@@ -250,7 +251,117 @@ export default function SinglePDF({
         {/* Routine */}
         {routine && (
           <GSection n={2} title="Routine">
-            <RoutineClock slots={routine.slots} />
+            <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
+              <View style={{ width: 188 }}>
+                <RoutineClock slots={routine.slots} size={188} />
+              </View>
+              <View style={{ flex: 1, marginLeft: 16 }}>
+                {(() => {
+                  const sorted = [...routine.slots].sort((a, b) =>
+                    a.start.localeCompare(b.start)
+                  );
+                  const mid = Math.ceil(sorted.length / 2);
+                  const left = sorted.slice(0, mid);
+                  const right = sorted.slice(mid);
+                  return (
+                    <View style={{ flexDirection: "row", gap: 8 }}>
+                      <View style={{ flex: 1 }}>
+                        {left.map((slot, i) => (
+                          <View
+                            key={i}
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              marginBottom: 6,
+                              gap: 6,
+                            }}
+                          >
+                            <View
+                              style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 2,
+                                backgroundColor:
+                                  routinePalette[
+                                    slot.colorIndex % routinePalette.length
+                                  ],
+                              }}
+                            />
+                            <View>
+                              <Text
+                                style={{
+                                  fontFamily: "Plus Jakarta Sans",
+                                  fontSize: typeScale.small.fontSize,
+                                  fontWeight: 700,
+                                  color: colors.ink,
+                                }}
+                              >
+                                {slot.label}
+                              </Text>
+                              <Text
+                                style={{
+                                  fontFamily: "Plus Jakarta Sans",
+                                  fontSize: typeScale.caption.fontSize,
+                                  color: colors.muted,
+                                }}
+                              >
+                                {formatRange(slot.start, slot.hours)}
+                              </Text>
+                            </View>
+                          </View>
+                        ))}
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        {right.map((slot, i) => (
+                          <View
+                            key={i}
+                            style={{
+                              flexDirection: "row",
+                              alignItems: "center",
+                              marginBottom: 6,
+                              gap: 6,
+                            }}
+                          >
+                            <View
+                              style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 2,
+                                backgroundColor:
+                                  routinePalette[
+                                    slot.colorIndex % routinePalette.length
+                                  ],
+                              }}
+                            />
+                            <View>
+                              <Text
+                                style={{
+                                  fontFamily: "Plus Jakarta Sans",
+                                  fontSize: typeScale.small.fontSize,
+                                  fontWeight: 700,
+                                  color: colors.ink,
+                                }}
+                              >
+                                {slot.label}
+                              </Text>
+                              <Text
+                                style={{
+                                  fontFamily: "Plus Jakarta Sans",
+                                  fontSize: typeScale.caption.fontSize,
+                                  color: colors.muted,
+                                }}
+                              >
+                                {formatRange(slot.start, slot.hours)}
+                              </Text>
+                            </View>
+                          </View>
+                        ))}
+                      </View>
+                    </View>
+                  );
+                })()}
+              </View>
+            </View>
           </GSection>
         )}
 
