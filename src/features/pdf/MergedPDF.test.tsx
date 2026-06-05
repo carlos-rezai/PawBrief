@@ -237,10 +237,10 @@ describe("MergedPDF", () => {
       expect(screen.getByText("08:00 · 60g")).toBeInTheDocument();
     });
 
-    it("renders food entries for each cat", () => {
+    it("renders food entries as 'Brand · Flavor' for each cat", () => {
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
-      expect(screen.getByText("Royal Canin")).toBeInTheDocument();
-      expect(screen.getByText("Iams")).toBeInTheDocument();
+      expect(screen.getByText("Royal Canin · Chicken")).toBeInTheDocument();
+      expect(screen.getByText("Iams · Tuna")).toBeInTheDocument();
     });
 
     it("shows 'Not added' in a column when that cat has no feeding data", () => {
@@ -250,7 +250,7 @@ describe("MergedPDF", () => {
       };
       render(<MergedPDF profileA={profileA} profileB={noFeedingProfileB} />);
       expect(screen.getByText("Not added")).toBeInTheDocument();
-      expect(screen.getByText("Royal Canin")).toBeInTheDocument();
+      expect(screen.getByText("Royal Canin · Chicken")).toBeInTheDocument();
     });
   });
 

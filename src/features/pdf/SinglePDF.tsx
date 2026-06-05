@@ -151,10 +151,11 @@ export default function SinglePDF({
               ))}
             </View>
             {feeding.foodEntries.map((entry, i) => (
-              <View key={i}>
-                <MiniCard title={entry.brand} subtitle={entry.flavor} />
-                <Tag label={entry.texture} />
-              </View>
+              <MiniCard
+                key={i}
+                title={[entry.brand, entry.flavor].filter(Boolean).join(" · ")}
+                subtitle={entry.texture}
+              />
             ))}
             {feeding.platingInstructions && (
               <Text style={styles.inlineText}>
@@ -189,7 +190,7 @@ export default function SinglePDF({
         {favorites && (
           <GSection n={4} title="Favourites">
             {favorites.toyEntries.map((t, i) => (
-              <MiniCard key={i} title={t.name} />
+              <MiniCard key={i} title={t.name} subtitle={t.description} />
             ))}
             <View style={styles.row}>
               {favorites.treatEntries.map((t, i) => (

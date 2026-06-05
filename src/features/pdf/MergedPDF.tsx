@@ -199,10 +199,11 @@ function FeedingCol({
         ))}
       </View>
       {feeding.foodEntries.map((entry, i) => (
-        <View key={i}>
-          <MiniCard title={entry.brand} subtitle={entry.flavor} />
-          <Tag label={entry.texture} />
-        </View>
+        <MiniCard
+          key={i}
+          title={[entry.brand, entry.flavor].filter(Boolean).join(" · ")}
+          subtitle={entry.texture}
+        />
       ))}
       {feeding.platingInstructions && (
         <Text style={styles.inlineText}>{feeding.platingInstructions}</Text>
@@ -230,7 +231,7 @@ function FavouritesCol({ profile }: { profile: CatProfile }) {
   return (
     <>
       {favorites.toyEntries.map((t, i) => (
-        <MiniCard key={i} title={t.name} />
+        <MiniCard key={i} title={t.name} subtitle={t.description} />
       ))}
       <View style={styles.row}>
         {favorites.treatEntries.map((t, i) => (

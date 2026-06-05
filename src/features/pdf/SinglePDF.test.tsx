@@ -143,9 +143,9 @@ describe("SinglePDF", () => {
       expect(screen.getByText("07:30 · 70g")).toBeInTheDocument();
     });
 
-    it("renders food entry brand and texture as standalone text", () => {
+    it("renders food entry as 'Brand · Flavor' title with texture as subtitle", () => {
       render(<SinglePDF profile={seedProfile} />);
-      expect(screen.getByText("Royal Canin")).toBeInTheDocument();
+      expect(screen.getByText("Royal Canin · Chicken")).toBeInTheDocument();
       expect(screen.getByText("Dry")).toBeInTheDocument();
     });
 
