@@ -275,24 +275,44 @@ function FavouritesCol({ profile }: { profile: CatProfile }) {
   if (!favorites) return <NotAdded />;
   return (
     <>
-      {favorites.toyEntries.map((t, i) => (
-        <MiniCard key={i} title={t.name} subtitle={t.description} />
-      ))}
-      <View style={styles.row}>
-        {favorites.treatEntries.map((t, i) => (
-          <Tag key={i} label={`${t.brand} · ${t.flavor}`} />
-        ))}
-      </View>
-      {favorites.comfortItems.map((item, i) => (
-        <Text key={i} style={styles.inlineText}>
-          {item}
-        </Text>
-      ))}
-      {favorites.favouriteSpots.map((spot, i) => (
-        <Text key={i} style={styles.inlineText}>
-          {spot}
-        </Text>
-      ))}
+      {favorites.toyEntries.length > 0 && (
+        <>
+          <Text style={styles.eyebrow}>TOYS</Text>
+          {favorites.toyEntries.map((t, i) => (
+            <MiniCard key={i} title={t.name} subtitle={t.description} />
+          ))}
+        </>
+      )}
+      {favorites.treatEntries.length > 0 && (
+        <>
+          <Text style={styles.eyebrow}>TREATS</Text>
+          <View style={styles.row}>
+            {favorites.treatEntries.map((t, i) => (
+              <Tag key={i} label={`${t.brand} · ${t.flavor}`} />
+            ))}
+          </View>
+        </>
+      )}
+      {favorites.comfortItems.length > 0 && (
+        <>
+          <Text style={styles.eyebrow}>COMFORT ITEMS</Text>
+          <View style={styles.row}>
+            {favorites.comfortItems.map((item, i) => (
+              <Tag key={i} label={item} variant="accent" />
+            ))}
+          </View>
+        </>
+      )}
+      {favorites.favouriteSpots.length > 0 && (
+        <>
+          <Text style={styles.eyebrow}>FAVOURITE SPOTS</Text>
+          <View style={styles.row}>
+            {favorites.favouriteSpots.map((spot, i) => (
+              <Tag key={i} label={spot} variant="accent" />
+            ))}
+          </View>
+        </>
+      )}
     </>
   );
 }

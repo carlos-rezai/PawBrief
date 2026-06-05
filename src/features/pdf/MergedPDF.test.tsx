@@ -287,13 +287,18 @@ describe("MergedPDF", () => {
   });
 
   describe("Favourites section", () => {
-    it("renders toys, treats, comfort items, and favourite spots from each cat", () => {
+    it("renders TOYS eyebrow and toy entries from each cat", () => {
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
+      expect(screen.getAllByText("TOYS")).toHaveLength(2);
       expect(screen.getByText("Feather Wand")).toBeInTheDocument();
+      expect(screen.getByText("Laser Pointer")).toBeInTheDocument();
+    });
+
+    it("renders treats, comfort items as accent Tags, and favourite spots for each cat", () => {
+      render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
       expect(screen.getByText("Temptations · Chicken")).toBeInTheDocument();
       expect(screen.getByText("Blue blanket")).toBeInTheDocument();
       expect(screen.getByText("Sunny windowsill")).toBeInTheDocument();
-      expect(screen.getByText("Laser Pointer")).toBeInTheDocument();
       expect(screen.getByText("Wellness · Tuna")).toBeInTheDocument();
       expect(screen.getByText("Soft pillow")).toBeInTheDocument();
       expect(screen.getByText("Cat tree top")).toBeInTheDocument();

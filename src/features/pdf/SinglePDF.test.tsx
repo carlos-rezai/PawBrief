@@ -207,19 +207,27 @@ describe("SinglePDF", () => {
   });
 
   describe("Favourites section", () => {
-    it("renders each treat entry formatted as 'Brand · Flavor'", () => {
+    it("renders TOYS eyebrow and toy entries", () => {
       render(<SinglePDF profile={seedProfile} />);
-      expect(screen.getByText("Temptations · Chicken")).toBeInTheDocument();
-    });
-
-    it("renders toy entries", () => {
-      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("TOYS")).toBeInTheDocument();
       expect(screen.getByText("Feather Wand")).toBeInTheDocument();
     });
 
-    it("renders comfort items and favourite spots", () => {
+    it("renders TREATS eyebrow and each treat entry formatted as 'Brand · Flavor'", () => {
       render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("TREATS")).toBeInTheDocument();
+      expect(screen.getByText("Temptations · Chicken")).toBeInTheDocument();
+    });
+
+    it("renders COMFORT ITEMS eyebrow and comfort items as accent Tags", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("COMFORT ITEMS")).toBeInTheDocument();
       expect(screen.getByText("Blue blanket")).toBeInTheDocument();
+    });
+
+    it("renders FAVOURITE SPOTS eyebrow and favourite spots as accent Tags", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("FAVOURITE SPOTS")).toBeInTheDocument();
       expect(screen.getByText("Sunny windowsill")).toBeInTheDocument();
     });
   });
