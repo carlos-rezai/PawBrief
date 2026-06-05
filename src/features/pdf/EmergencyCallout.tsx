@@ -127,15 +127,26 @@ function ContactsBlock({ contacts }: { contacts: EmergencyContact[] }) {
   );
 }
 
-const colDivider = {
-  width: 1,
-  backgroundColor: colors.border,
-  marginHorizontal: 9,
-};
+function SharedVetNote() {
+  return (
+    <Text
+      style={{
+        fontFamily: "Plus Jakarta Sans",
+        fontSize: typeScale.caption.fontSize,
+        fontWeight: 400,
+        color: colors.muted,
+        marginTop: 4,
+      }}
+    >
+      Shared vet for both cats
+    </Text>
+  );
+}
 
 export function EmergencyCallout(props: EmergencyCalloutProps) {
   return (
     <View
+      wrap={false}
       style={{
         borderWidth: 1.5,
         borderColor: colors.primary,
@@ -149,7 +160,7 @@ export function EmergencyCallout(props: EmergencyCalloutProps) {
         style={{
           backgroundColor: colors.primarySoft,
           paddingVertical: 5,
-          paddingHorizontal: 11,
+          paddingHorizontal: 12,
         }}
       >
         <Text
@@ -165,66 +176,76 @@ export function EmergencyCallout(props: EmergencyCalloutProps) {
         </Text>
       </View>
 
-      {/* Body */}
-      <View style={{ padding: 11 }}>
-        {props.mode === "single" ? (
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ flex: 1 }}>
-              <Eyebrow label="Veterinarian" />
-              <VetBlock vet={props.vet} />
-            </View>
-            {props.emergencyContacts.length > 0 ? (
-              <>
-                <View style={colDivider} />
-                <View style={{ flex: 1 }}>
-                  <Eyebrow label="Contacts" />
-                  <ContactsBlock contacts={props.emergencyContacts} />
-                </View>
-              </>
-            ) : null}
+      {props.mode === "single" ? (
+        <View style={{ flexDirection: "row", padding: 11 }}>
+          <View style={{ flex: 1, paddingRight: 12 }}>
+            <Eyebrow label="Veterinarian" />
+            <VetBlock vet={props.vet} />
           </View>
-        ) : (
-          <>
-            {props.sharedVet && props.vetA ? (
-              <View style={{ marginBottom: 12 }}>
-                <Text
-                  style={{
-                    fontFamily: "Plus Jakarta Sans",
-                    fontSize: typeScale.small.fontSize,
-                    fontWeight: 700,
-                    color: colors.primary,
-                    marginBottom: 4,
-                  }}
-                >
-                  Shared vet for both cats
-                </Text>
-                <VetBlock vet={props.vetA} />
-              </View>
-            ) : null}
-            <View style={{ flexDirection: "row" }}>
-              <View style={{ flex: 1 }}>
-                <Eyebrow label="Contacts" />
-                {!props.sharedVet && props.vetA ? (
-                  <View style={{ marginBottom: 8 }}>
-                    <VetBlock vet={props.vetA} />
-                  </View>
-                ) : null}
-                <ContactsBlock contacts={props.emergencyContactsA} />
-              </View>
-              <View style={colDivider} />
-              <View style={{ flex: 1 }}>
-                <Eyebrow label="Contacts" />
-                {!props.sharedVet && props.vetB ? (
-                  <View style={{ marginBottom: 8 }}>
-                    <VetBlock vet={props.vetB} />
-                  </View>
-                ) : null}
-                <ContactsBlock contacts={props.emergencyContactsB} />
-              </View>
+          {props.emergencyContacts.length > 0 ? (
+            <View
+              style={{
+                flex: 1,
+                paddingLeft: 12,
+                borderLeftWidth: 1,
+                borderLeftColor: colors.border,
+              }}
+            >
+              <Eyebrow label="Contacts" />
+              <ContactsBlock contacts={props.emergencyContacts} />
             </View>
-          </>
-        )}
-      </View>
+          ) : null}
+        </View>
+      ) : (
+        <View>
+          {/* Shared vet runs full-width above the two contact columns */}
+          {props.sharedVet && props.vetA ? (
+            <View
+              style={{
+                paddingHorizontal: 12,
+                paddingTop: 11,
+                paddingBottom: 10,
+                borderBottomWidth: 1,
+                borderBottomColor: colors.border,
+              }}
+            >
+              <Eyebrow label="Veterinarian" />
+              <VetBlock vet={props.vetA} />
+              <SharedVetNote />
+            </View>
+          ) : null}
+
+          <View style={{ flexDirection: "row", padding: 11 }}>
+            <View
+              style={{
+                flex: 1,
+                paddingRight: 12,
+                borderRightWidth: 1,
+                borderRightColor: colors.border,
+              }}
+            >
+              {!props.sharedVet && props.vetA ? (
+                <View style={{ marginBottom: 8 }}>
+                  <Eyebrow label="Veterinarian" />
+                  <VetBlock vet={props.vetA} />
+                </View>
+              ) : null}
+              <Eyebrow label="Contacts" />
+              <ContactsBlock contacts={props.emergencyContactsA} />
+            </View>
+            <View style={{ flex: 1, paddingLeft: 12 }}>
+              {!props.sharedVet && props.vetB ? (
+                <View style={{ marginBottom: 8 }}>
+                  <Eyebrow label="Veterinarian" />
+                  <VetBlock vet={props.vetB} />
+                </View>
+              ) : null}
+              <Eyebrow label="Contacts" />
+              <ContactsBlock contacts={props.emergencyContactsB} />
+            </View>
+          </View>
+        </View>
+      )}
     </View>
   );
 }

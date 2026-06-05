@@ -10,7 +10,7 @@ interface GSectionProps {
 
 export function GSection({ n, title, children }: GSectionProps) {
   return (
-    <View style={{ marginTop: 18 }}>
+    <View wrap={false} style={{ marginTop: 18 }}>
       <View
         style={{
           flexDirection: "row",

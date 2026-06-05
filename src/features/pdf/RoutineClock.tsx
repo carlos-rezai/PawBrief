@@ -48,9 +48,9 @@ export function RoutineClock({ slots, size = 140 }: RoutineClockProps) {
   };
 
   const segments = slots
-    .filter((s) => s.hours > 0 && s.start != null)
+    .filter((s) => Number(s.hours) > 0 && s.start != null)
     .map((s) => ({
-      d: arc(parseTime(s.start), parseTime(s.start) + s.hours),
+      d: arc(parseTime(s.start), parseTime(s.start) + Number(s.hours)),
       color: palette[s.colorIndex % palette.length],
     }));
 

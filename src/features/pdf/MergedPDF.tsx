@@ -35,26 +35,40 @@ const styles = StyleSheet.create({
   coverBand: {
     backgroundColor: colors.primary,
     marginHorizontal: -24,
-    paddingVertical: 15,
+    paddingTop: 15,
+    paddingBottom: 16,
     paddingHorizontal: 24,
+  },
+  coverTopRow: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    marginBottom: 12,
   },
   coverEyebrow: {
     color: colors.primaryInk,
-    fontSize: typeScale.small.fontSize,
-    fontWeight: typeScale.small.fontWeight as 400,
-    marginBottom: 4,
+    fontSize: 8.25,
+    fontWeight: 700,
+    letterSpacing: 0.9,
+    textTransform: "uppercase",
   },
-  coverCats: {
+  coverCatsRow: {
     flexDirection: "row",
-    gap: 24,
+    alignItems: "stretch",
   },
-  catCard: {
+  catHead: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: 10,
+  },
+  catHeadLeft: {
+    paddingRight: 15,
+  },
+  catHeadRight: {
+    paddingLeft: 15,
+    borderLeftWidth: 1,
+    borderLeftColor: "rgba(255,255,255,0.3)",
   },
   avatarCircle: {
     width: COVER_PHOTO_SIZE,
@@ -164,22 +178,29 @@ interface MergedPDFProps {
 function CatCoverCard({
   profile,
   photoBlobUrls,
+  position,
 }: {
   profile: CatProfile;
   photoBlobUrls: Record<string, string>;
+  position: "left" | "right";
 }) {
   const { basics } = profile;
   const photoUrl = basics?.photoId ? photoBlobUrls[basics.photoId] : undefined;
   return (
-    <View style={styles.catCard}>
+    <View
+      style={[
+        styles.catHead,
+        position === "right" ? styles.catHeadRight : styles.catHeadLeft,
+      ]}
+    >
       <View style={styles.avatarCircle}>
         {photoUrl ? (
           <Image style={styles.coverPhoto} src={photoUrl} />
         ) : (
-          <PawBriefMark size={30} />
+          <PawBriefMark size={22} />
         )}
       </View>
-      <View>
+      <View style={{ flex: 1, minWidth: 0 }}>
         <Text style={styles.catName}>{basics?.name ?? ""}</Text>
         {basics && (
           <Text style={styles.catMeta}>
@@ -224,15 +245,37 @@ function FeedingCol({
   if (!feeding) return <NotAdded />;
   return (
     <>
-      {feeding.foodEntries.map((entry, i) => (
-        <MiniCard
-          key={i}
-          title={[entry.brand, entry.flavor].filter(Boolean).join(" · ")}
-          subtitle={entry.texture}
-        />
-      ))}
+      <View style={{ gap: 5 }}>
+        {feeding.foodEntries.map((entry, i) => (
+          <MiniCard
+            key={i}
+            title={[entry.brand, entry.flavor].filter(Boolean).join(" · ")}
+            subtitle={entry.texture}
+          />
+        ))}
+      </View>
+      {feeding.servings.length > 0 && (
+        <View style={{ marginTop: 8 }}>
+          <Text style={styles.eyebrow}>SERVINGS</Text>
+          <View style={styles.row}>
+            {feeding.servings.map((s, i) => (
+              <Tag key={i} label={`${s.time} · ${s.grams}g`} />
+            ))}
+          </View>
+        </View>
+      )}
+      {feeding.supplementEntries.length > 0 && (
+        <View style={{ marginTop: 8 }}>
+          <Text style={styles.eyebrow}>SUPPLEMENTS</Text>
+          {feeding.supplementEntries.map((s, i) => (
+            <Text key={i} style={styles.inlineText}>
+              {[s.brand, s.flavor].filter(Boolean).join(" · ")}
+            </Text>
+          ))}
+        </View>
+      )}
       {feeding.platingInstructions && (
-        <Text style={styles.inlineText}>
+        <Text style={{ ...styles.inlineText, marginTop: 8 }}>
           <Text style={{ fontWeight: 700, color: colors.ink }}>
             How to serve:{" "}
           </Text>
@@ -244,24 +287,6 @@ function FeedingCol({
           style={styles.thumbnail}
           src={photoBlobUrls[feeding.platingPhotoId]}
         />
-      )}
-      <View style={{ marginTop: 8 }}>
-        <Text style={styles.eyebrow}>SERVINGS</Text>
-        <View style={styles.row}>
-          {feeding.servings.map((s, i) => (
-            <Tag key={i} label={`${s.time} · ${s.grams}g`} />
-          ))}
-        </View>
-      </View>
-      {feeding.supplementEntries.length > 0 && (
-        <View style={{ marginTop: 8 }}>
-          <Text style={styles.eyebrow}>SUPPLEMENTS</Text>
-          {feeding.supplementEntries.map((s, i) => (
-            <Text key={i} style={styles.inlineText}>
-              {[s.brand, s.flavor].filter(Boolean).join(" · ")}
-            </Text>
-          ))}
-        </View>
       )}
       {feeding.dietaryNotes && (
         <Text style={{ ...styles.inlineText, marginTop: 8 }}>
@@ -476,18 +501,26 @@ export default function MergedPDF({
       <Page size="A4" style={styles.page}>
         {/* Cover Band */}
         <View style={styles.coverBand}>
-          <View>
+          <View style={styles.coverTopRow}>
             <Text style={styles.coverEyebrow}>Household Care Guide</Text>
-            <View style={styles.coverCats}>
-              <CatCoverCard profile={profileA} photoBlobUrls={photoBlobUrls} />
-              <CatCoverCard profile={profileB} photoBlobUrls={photoBlobUrls} />
+            <View style={styles.wordmark}>
+              <PawBriefMark size={17} reverse />
+              <Text style={styles.wordmarkText}>
+                Paw<Text style={{ color: colors.primarySoft }}>Brief</Text>
+              </Text>
             </View>
           </View>
-          <View style={styles.wordmark}>
-            <PawBriefMark size={17} reverse />
-            <Text style={styles.wordmarkText}>
-              Paw<Text style={{ color: colors.primarySoft }}>Brief</Text>
-            </Text>
+          <View style={styles.coverCatsRow}>
+            <CatCoverCard
+              profile={profileA}
+              photoBlobUrls={photoBlobUrls}
+              position="left"
+            />
+            <CatCoverCard
+              profile={profileB}
+              photoBlobUrls={photoBlobUrls}
+              position="right"
+            />
           </View>
         </View>
 
