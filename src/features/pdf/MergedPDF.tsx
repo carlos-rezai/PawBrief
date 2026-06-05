@@ -457,12 +457,14 @@ export default function MergedPDF({
 
         {/* Footer */}
         <View style={styles.footer} fixed>
-          <Text>Made with PawBrief</Text>
-          <Text
-            render={({ pageNumber, totalPages }) =>
-              `${pageNumber} / ${totalPages}`
-            }
-          />
+          <Text>{`Made with PawBrief · caring for ${profileA.basics?.name ?? ""} & ${profileB.basics?.name ?? ""}`}</Text>
+          <Text>
+            {new Date().toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </Text>
         </View>
       </Page>
     </Document>

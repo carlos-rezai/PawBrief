@@ -222,9 +222,13 @@ describe("SinglePDF", () => {
   });
 
   describe("Footer", () => {
-    it("renders 'Made with PawBrief' branding", () => {
+    it("renders contextual copy naming the cat", () => {
       render(<SinglePDF profile={seedProfile} />);
-      expect(screen.getByText(/made with pawbrief/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          /made with pawbrief · keep this handy while caring for mochi/i
+        )
+      ).toBeInTheDocument();
     });
   });
 });

@@ -328,9 +328,11 @@ describe("MergedPDF", () => {
   });
 
   describe("Footer", () => {
-    it("renders 'Made with PawBrief' branding", () => {
+    it("renders contextual copy naming both cats", () => {
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
-      expect(screen.getByText(/made with pawbrief/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/made with pawbrief · caring for mochi & luna/i)
+      ).toBeInTheDocument();
     });
   });
 });
