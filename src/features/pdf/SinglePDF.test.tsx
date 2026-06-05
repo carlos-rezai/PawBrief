@@ -155,23 +155,38 @@ describe("SinglePDF", () => {
       expect(screen.getByText("07:30 · 70g")).toBeInTheDocument();
     });
 
+    it("renders SERVINGS eyebrow label", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("SERVINGS")).toBeInTheDocument();
+    });
+
     it("renders food entry as 'Brand · Flavor' title with texture as subtitle", () => {
       render(<SinglePDF profile={seedProfile} />);
       expect(screen.getByText("Royal Canin · Chicken")).toBeInTheDocument();
       expect(screen.getByText("Dry")).toBeInTheDocument();
     });
 
-    it("renders supplement entries", () => {
+    it("renders SUPPLEMENTS eyebrow and supplement entries", () => {
       render(<SinglePDF profile={seedProfile} />);
-      expect(screen.getByText("Zesty Paws")).toBeInTheDocument();
-      expect(screen.getByText("Salmon Oil")).toBeInTheDocument();
+      expect(screen.getByText("SUPPLEMENTS")).toBeInTheDocument();
+      expect(screen.getByText("Zesty Paws · Salmon Oil")).toBeInTheDocument();
     });
 
-    it("renders plating instructions", () => {
+    it("renders plating instructions with How to serve prefix", () => {
       render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("How to serve:")).toBeInTheDocument();
       expect(
         screen.getByText("Mix wet and dry food together")
       ).toBeInTheDocument();
+    });
+
+    it("renders dietary notes with warning prefix when present", () => {
+      const withDietaryNotes: CatProfile = {
+        ...seedProfile,
+        feeding: { ...seedProfile.feeding!, dietaryNotes: "No fish" },
+      };
+      render(<SinglePDF profile={withDietaryNotes} />);
+      expect(screen.getByText("No fish")).toBeInTheDocument();
     });
   });
 

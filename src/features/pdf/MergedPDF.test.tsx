@@ -248,6 +248,11 @@ describe("MergedPDF", () => {
       expect(screen.getByText("08:00 · 60g")).toBeInTheDocument();
     });
 
+    it("renders SERVINGS eyebrow labels", () => {
+      render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
+      expect(screen.getAllByText("SERVINGS")).toHaveLength(2);
+    });
+
     it("renders food entries as 'Brand · Flavor' for each cat", () => {
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
       expect(screen.getByText("Royal Canin · Chicken")).toBeInTheDocument();

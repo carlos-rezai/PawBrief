@@ -103,6 +103,14 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: colors.border,
   },
+  eyebrow: {
+    fontFamily: "Plus Jakarta Sans",
+    fontSize: typeScale.caption.fontSize,
+    fontWeight: 700,
+    color: colors.muted,
+    letterSpacing: 0.8,
+    marginBottom: 4,
+  },
   inlineText: {
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
@@ -212,11 +220,6 @@ function FeedingCol({
   if (!feeding) return <NotAdded />;
   return (
     <>
-      <View style={styles.row}>
-        {feeding.servings.map((s, i) => (
-          <Tag key={i} label={`${s.time} · ${s.grams}g`} />
-        ))}
-      </View>
       {feeding.foodEntries.map((entry, i) => (
         <MiniCard
           key={i}
@@ -225,7 +228,12 @@ function FeedingCol({
         />
       ))}
       {feeding.platingInstructions && (
-        <Text style={styles.inlineText}>{feeding.platingInstructions}</Text>
+        <Text style={styles.inlineText}>
+          <Text style={{ fontWeight: 700, color: colors.ink }}>
+            How to serve:{" "}
+          </Text>
+          {feeding.platingInstructions}
+        </Text>
       )}
       {feeding.platingPhotoId && photoBlobUrls[feeding.platingPhotoId] && (
         <Image
@@ -233,12 +241,29 @@ function FeedingCol({
           src={photoBlobUrls[feeding.platingPhotoId]}
         />
       )}
-      {feeding.supplementEntries.length > 0 && (
-        <View style={{ marginTop: 8 }}>
-          {feeding.supplementEntries.map((s, i) => (
-            <MiniCard key={i} title={s.brand} subtitle={s.flavor} />
+      <View style={{ marginTop: 8 }}>
+        <Text style={styles.eyebrow}>SERVINGS</Text>
+        <View style={styles.row}>
+          {feeding.servings.map((s, i) => (
+            <Tag key={i} label={`${s.time} · ${s.grams}g`} />
           ))}
         </View>
+      </View>
+      {feeding.supplementEntries.length > 0 && (
+        <View style={{ marginTop: 8 }}>
+          <Text style={styles.eyebrow}>SUPPLEMENTS</Text>
+          {feeding.supplementEntries.map((s, i) => (
+            <Text key={i} style={styles.inlineText}>
+              {[s.brand, s.flavor].filter(Boolean).join(" · ")}
+            </Text>
+          ))}
+        </View>
+      )}
+      {feeding.dietaryNotes && (
+        <Text style={{ ...styles.inlineText, marginTop: 8 }}>
+          <Text style={{ color: colors.accent, fontWeight: 700 }}>⚠ </Text>
+          {feeding.dietaryNotes}
+        </Text>
       )}
     </>
   );
