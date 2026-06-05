@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   noteItem: {
     borderLeftWidth: 3,
-    borderLeftColor: colors.primary,
+    borderLeftColor: colors.accent,
     paddingLeft: 10,
     marginBottom: 10,
   },
