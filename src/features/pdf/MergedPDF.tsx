@@ -366,7 +366,9 @@ function RoutineCol({ slots }: { slots: ActivitySlot[] }) {
     .sort((a, b) => a.start.localeCompare(b.start));
   return (
     <>
-      <RoutineClock slots={slots} size={CLOCK_SIZE} />
+      <View style={{ alignItems: "center" }}>
+        <RoutineClock slots={slots} size={CLOCK_SIZE} />
+      </View>
       <View style={{ marginTop: 8 }}>
         {sorted.map((slot, i) => (
           <View

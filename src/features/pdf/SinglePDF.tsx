@@ -271,8 +271,10 @@ export default function SinglePDF({
         {routine && (
           <GSection n={2} title="A typical day">
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <RoutineClock slots={routine.slots} size={140} />
-              <View style={{ flex: 1, marginLeft: 14 }}>
+              <View style={{ flex: 1, alignItems: "center" }}>
+                <RoutineClock slots={routine.slots} size={140} />
+              </View>
+              <View style={{ flex: 1 }}>
                 {(() => {
                   const sorted = [...routine.slots]
                     .filter((s) => s.start != null)
