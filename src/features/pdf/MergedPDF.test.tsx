@@ -201,6 +201,11 @@ describe("MergedPDF", () => {
   });
 
   describe("Emergency Callout — shared vet", () => {
+    it("renders the IN AN EMERGENCY header", () => {
+      render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
+      expect(screen.getByText("IN AN EMERGENCY")).toBeInTheDocument();
+    });
+
     it("renders the shared vet block with 'Shared vet for both cats' label", () => {
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
       expect(screen.getByText("Shared vet for both cats")).toBeInTheDocument();

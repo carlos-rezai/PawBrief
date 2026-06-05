@@ -116,7 +116,12 @@ describe("SinglePDF", () => {
   });
 
   describe("Emergency Callout", () => {
-    it("renders vet name, clinic, and phone as standalone values", () => {
+    it("renders the IN AN EMERGENCY header", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("IN AN EMERGENCY")).toBeInTheDocument();
+    });
+
+    it("renders vet name, clinic, and phone", () => {
       render(<SinglePDF profile={seedProfile} />);
       expect(screen.getByText("Dr Smith")).toBeInTheDocument();
       expect(screen.getByText("Paws Clinic")).toBeInTheDocument();

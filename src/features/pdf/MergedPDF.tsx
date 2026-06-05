@@ -5,14 +5,13 @@ import {
   View,
   Text,
   Image,
-  Link,
   StyleSheet,
 } from "@react-pdf/renderer";
 import type { CatProfile } from "../../types/profile";
-import { buildMapsUrl } from "../../utils/buildMapsUrl";
 import { formatAge } from "../../utils/formatAge";
 import { isSharedVet } from "../../utils/isSharedVet";
 import { GSection } from "./GSection";
+import { EmergencyCallout } from "./EmergencyCallout";
 import { MiniCard } from "./MiniCard";
 import { Tag } from "./Tag";
 import { RoutineClock } from "./RoutineClock";
@@ -95,13 +94,6 @@ const styles = StyleSheet.create({
     fontSize: typeScale.body.fontSize,
     fontStyle: "italic",
     color: colors.muted,
-  },
-  sharedVetLabel: {
-    fontFamily: "Plus Jakarta Sans",
-    fontSize: typeScale.small.fontSize,
-    fontWeight: 700,
-    color: colors.primary,
-    marginBottom: 4,
   },
   row: {
     flexDirection: "row",
@@ -325,72 +317,17 @@ export default function MergedPDF({
         </View>
 
         {/* Emergency Callout */}
-        <GSection n={1} title="Emergency">
-          {shared && vetA && (
-            <View style={{ marginBottom: 12 }}>
-              <Text style={styles.sharedVetLabel}>
-                Shared vet for both cats
-              </Text>
-              <Text style={styles.inlineText}>{vetA.name}</Text>
-              <Text style={styles.inlineText}>{vetA.clinicName}</Text>
-              <Text style={styles.inlineText}>{vetA.phone}</Text>
-              {vetA.address && (
-                <Link src={buildMapsUrl(vetA.address)}>Get directions</Link>
-              )}
-            </View>
-          )}
-          <CmpRow
-            left={
-              <View>
-                {!shared && vetA && (
-                  <View style={{ marginBottom: 8 }}>
-                    <Text style={styles.inlineText}>{vetA.name}</Text>
-                    <Text style={styles.inlineText}>{vetA.clinicName}</Text>
-                    <Text style={styles.inlineText}>{vetA.phone}</Text>
-                    {vetA.address && (
-                      <Link src={buildMapsUrl(vetA.address)}>
-                        Get directions
-                      </Link>
-                    )}
-                  </View>
-                )}
-                {profileA.medical?.emergencyContacts.map((c, i) => (
-                  <View key={i} style={{ marginTop: 8 }}>
-                    <Text style={styles.inlineText}>{c.name}</Text>
-                    <Text style={styles.inlineText}>{c.phone}</Text>
-                    <Text style={styles.inlineText}>{c.relationship}</Text>
-                  </View>
-                ))}
-              </View>
-            }
-            right={
-              <View>
-                {!shared && vetB && (
-                  <View style={{ marginBottom: 8 }}>
-                    <Text style={styles.inlineText}>{vetB.name}</Text>
-                    <Text style={styles.inlineText}>{vetB.clinicName}</Text>
-                    <Text style={styles.inlineText}>{vetB.phone}</Text>
-                    {vetB.address && (
-                      <Link src={buildMapsUrl(vetB.address)}>
-                        Get directions
-                      </Link>
-                    )}
-                  </View>
-                )}
-                {profileB.medical?.emergencyContacts.map((c, i) => (
-                  <View key={i} style={{ marginTop: 8 }}>
-                    <Text style={styles.inlineText}>{c.name}</Text>
-                    <Text style={styles.inlineText}>{c.phone}</Text>
-                    <Text style={styles.inlineText}>{c.relationship}</Text>
-                  </View>
-                ))}
-              </View>
-            }
-          />
-        </GSection>
+        <EmergencyCallout
+          mode="merged"
+          vetA={vetA}
+          vetB={vetB}
+          emergencyContactsA={profileA.medical?.emergencyContacts ?? []}
+          emergencyContactsB={profileB.medical?.emergencyContacts ?? []}
+          sharedVet={shared}
+        />
 
         {/* Feeding */}
-        <GSection n={2} title="Feeding">
+        <GSection n={1} title="Feeding">
           <CmpRow
             left={
               <FeedingCol profile={profileA} photoBlobUrls={photoBlobUrls} />
@@ -402,7 +339,7 @@ export default function MergedPDF({
         </GSection>
 
         {/* Routine */}
-        <GSection n={3} title="Routine">
+        <GSection n={2} title="Routine">
           <CmpRow
             left={
               profileA.routine ? (
@@ -428,7 +365,7 @@ export default function MergedPDF({
         </GSection>
 
         {/* Favourites */}
-        <GSection n={4} title="Favourites">
+        <GSection n={3} title="Favourites">
           <CmpRow
             left={<FavouritesCol profile={profileA} />}
             right={<FavouritesCol profile={profileB} />}
@@ -437,7 +374,7 @@ export default function MergedPDF({
 
         {/* Health */}
         {(hasHealthData(profileA) || hasHealthData(profileB)) && (
-          <GSection n={5} title="Health">
+          <GSection n={4} title="Health">
             <CmpRow
               left={<HealthCol profile={profileA} />}
               right={<HealthCol profile={profileB} />}
@@ -447,7 +384,7 @@ export default function MergedPDF({
 
         {/* Good to Know */}
         {(hasNotes(profileA) || hasNotes(profileB)) && (
-          <GSection n={6} title="Good to Know">
+          <GSection n={5} title="Good to Know">
             <CmpRow
               left={<NotesCol profile={profileA} />}
               right={<NotesCol profile={profileB} />}

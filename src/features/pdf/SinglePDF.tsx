@@ -5,13 +5,12 @@ import {
   View,
   Text,
   Image,
-  Link,
   StyleSheet,
 } from "@react-pdf/renderer";
 import type { CatProfile } from "../../types/profile";
-import { buildMapsUrl } from "../../utils/buildMapsUrl";
 import { formatAge } from "../../utils/formatAge";
 import { GSection } from "./GSection";
+import { EmergencyCallout } from "./EmergencyCallout";
 import { MiniCard } from "./MiniCard";
 import { Tag } from "./Tag";
 import { RoutineClock } from "./RoutineClock";
@@ -123,28 +122,16 @@ export default function SinglePDF({
 
         {/* Emergency Callout */}
         {medical && (
-          <GSection n={1} title="Emergency">
-            <Text style={styles.inlineText}>{medical.vet.name}</Text>
-            <Text style={styles.inlineText}>{medical.vet.clinicName}</Text>
-            <Text style={styles.inlineText}>{medical.vet.phone}</Text>
-            {medical.vet.address && (
-              <Link src={buildMapsUrl(medical.vet.address)}>
-                Get directions
-              </Link>
-            )}
-            {medical.emergencyContacts.map((c, i) => (
-              <View key={i} style={{ marginTop: 8 }}>
-                <Text style={styles.inlineText}>{c.name}</Text>
-                <Text style={styles.inlineText}>{c.phone}</Text>
-                <Text style={styles.inlineText}>{c.relationship}</Text>
-              </View>
-            ))}
-          </GSection>
+          <EmergencyCallout
+            mode="single"
+            vet={medical.vet}
+            emergencyContacts={medical.emergencyContacts}
+          />
         )}
 
         {/* Feeding */}
         {feeding && (
-          <GSection n={2} title="Feeding">
+          <GSection n={1} title="Feeding">
             <View style={styles.row}>
               {feeding.servings.map((s, i) => (
                 <Tag key={i} label={`${s.time} · ${s.grams}g`} />
@@ -181,14 +168,14 @@ export default function SinglePDF({
 
         {/* Routine */}
         {routine && (
-          <GSection n={3} title="Routine">
+          <GSection n={2} title="Routine">
             <RoutineClock slots={routine.slots} />
           </GSection>
         )}
 
         {/* Favourites */}
         {favorites && (
-          <GSection n={4} title="Favourites">
+          <GSection n={3} title="Favourites">
             {favorites.toyEntries.map((t, i) => (
               <MiniCard key={i} title={t.name} subtitle={t.description} />
             ))}
@@ -212,7 +199,7 @@ export default function SinglePDF({
 
         {/* Health */}
         {medical && (
-          <GSection n={5} title="Health">
+          <GSection n={4} title="Health">
             {medical.medications.map((m, i) => (
               <MiniCard key={i} title={m.name} subtitle={m.dosage} />
             ))}
@@ -227,7 +214,7 @@ export default function SinglePDF({
 
         {/* Good to Know */}
         {notes && notes.specialNotes.length > 0 && (
-          <GSection n={6} title="Good to Know">
+          <GSection n={5} title="Good to Know">
             {notes.specialNotes.map((note, i) => (
               <View key={i} style={styles.noteItem}>
                 <Text style={styles.inlineText}>{note.title}</Text>
