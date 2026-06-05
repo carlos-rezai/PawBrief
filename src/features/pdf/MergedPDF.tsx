@@ -254,12 +254,12 @@ function FavouritesCol({ profile }: { profile: CatProfile }) {
 
 function HealthCol({ profile }: { profile: CatProfile }) {
   const { medical } = profile;
-  if (!medical) return null;
+  if (!medical) return <NotAdded />;
   const hasHealth =
     medical.medications.length > 0 ||
     !!medical.allergies ||
     !!medical.medicalConditions;
-  if (!hasHealth) return null;
+  if (!hasHealth) return <NotAdded />;
   return (
     <>
       {medical.medications.map((m, i) => (
@@ -277,7 +277,7 @@ function HealthCol({ profile }: { profile: CatProfile }) {
 
 function NotesCol({ profile }: { profile: CatProfile }) {
   const { notes } = profile;
-  if (!notes || notes.specialNotes.length === 0) return null;
+  if (!notes || notes.specialNotes.length === 0) return <NotAdded />;
   return (
     <>
       {notes.specialNotes.map((note, i) => (

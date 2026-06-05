@@ -249,7 +249,7 @@ describe("MergedPDF", () => {
         feeding: undefined,
       };
       render(<MergedPDF profileA={profileA} profileB={noFeedingProfileB} />);
-      expect(screen.getByText("Not added")).toBeInTheDocument();
+      expect(screen.getAllByText("Not added").length).toBeGreaterThanOrEqual(1);
       expect(screen.getByText("Royal Canin · Chicken")).toBeInTheDocument();
     });
   });
@@ -284,6 +284,21 @@ describe("MergedPDF", () => {
       expect(screen.getByText("Apoquel")).toBeInTheDocument();
     });
 
+    it("shows 'Not added' in Health column when one cat has no health data", () => {
+      const noHealthB: CatProfile = {
+        ...sharedVetProfileB,
+        medical: {
+          ...sharedVetProfileB.medical!,
+          medications: [],
+          allergies: "",
+          medicalConditions: "",
+        },
+      };
+      render(<MergedPDF profileA={profileA} profileB={noHealthB} />);
+      expect(screen.getByText("Not added")).toBeInTheDocument();
+      expect(screen.getByText("Apoquel")).toBeInTheDocument();
+    });
+
     it("omits health section when neither cat has health data", () => {
       const noHealthA: CatProfile = {
         ...profileA,
@@ -314,6 +329,16 @@ describe("MergedPDF", () => {
       expect(screen.getByText("Good to Know")).toBeInTheDocument();
       expect(screen.getByText("Hiding spots")).toBeInTheDocument();
       expect(screen.getByText("Favourite toys")).toBeInTheDocument();
+    });
+
+    it("shows 'Not added' in Notes column when one cat has no notes", () => {
+      const noNotesB: CatProfile = {
+        ...sharedVetProfileB,
+        notes: { specialNotes: [] },
+      };
+      render(<MergedPDF profileA={profileA} profileB={noNotesB} />);
+      expect(screen.getAllByText("Not added").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText("Hiding spots")).toBeInTheDocument();
     });
 
     it("omits notes section when neither cat has notes", () => {
