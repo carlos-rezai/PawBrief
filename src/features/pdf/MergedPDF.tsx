@@ -380,14 +380,53 @@ function HealthCol({ profile }: { profile: CatProfile }) {
   if (!hasHealth) return <NotAdded />;
   return (
     <>
-      {medical.medications.map((m, i) => (
-        <MiniCard key={i} title={m.name} subtitle={m.dosage} />
-      ))}
+      <Text style={styles.eyebrow}>MEDICATIONS</Text>
+      {medical.medications.length > 0 ? (
+        medical.medications.map((m, i) => (
+          <MiniCard
+            key={i}
+            title={[m.name, m.dosage, m.frequency].filter(Boolean).join(" · ")}
+            subtitle={m.instructions || undefined}
+          />
+        ))
+      ) : (
+        <Text
+          style={{
+            ...styles.inlineText,
+            fontStyle: "italic",
+            color: colors.muted,
+          }}
+        >
+          None
+        </Text>
+      )}
       {medical.allergies && (
-        <Text style={styles.inlineText}>{medical.allergies}</Text>
+        <>
+          <Text style={styles.eyebrow}>ALLERGIES</Text>
+          <Text
+            style={{
+              ...styles.inlineText,
+              color: colors.accent,
+              fontWeight: 700,
+            }}
+          >
+            {medical.allergies}
+          </Text>
+        </>
       )}
       {medical.medicalConditions && (
-        <Text style={styles.inlineText}>{medical.medicalConditions}</Text>
+        <>
+          <Text style={styles.eyebrow}>CONDITIONS</Text>
+          <Text
+            style={{
+              ...styles.inlineText,
+              color: colors.inkSoft,
+              fontWeight: 600,
+            }}
+          >
+            {medical.medicalConditions}
+          </Text>
+        </>
       )}
     </>
   );

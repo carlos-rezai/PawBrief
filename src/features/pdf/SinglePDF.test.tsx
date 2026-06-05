@@ -233,14 +233,24 @@ describe("SinglePDF", () => {
   });
 
   describe("Health section", () => {
-    it("renders medication name and dosage as standalone text", () => {
+    it("renders MEDICATIONS eyebrow label", () => {
       render(<SinglePDF profile={seedProfile} />);
-      expect(screen.getByText("Apoquel")).toBeInTheDocument();
-      expect(screen.getByText("5mg")).toBeInTheDocument();
+      expect(screen.getByText("MEDICATIONS")).toBeInTheDocument();
     });
 
-    it("renders allergies", () => {
+    it("renders medication card with name, dosage, and frequency joined", () => {
       render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("Apoquel · 5mg · Daily")).toBeInTheDocument();
+    });
+
+    it("renders medication instructions as card subtitle", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("With food")).toBeInTheDocument();
+    });
+
+    it("renders ALLERGIES eyebrow and allergies text", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("ALLERGIES")).toBeInTheDocument();
       expect(screen.getByText("Fish")).toBeInTheDocument();
     });
   });

@@ -307,10 +307,15 @@ describe("MergedPDF", () => {
 
   describe("Health section", () => {
     it("renders health section when at least one cat has health data", () => {
-      // profileA has medications and allergies; sharedVetProfileB has none
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
       expect(screen.getByText("Health")).toBeInTheDocument();
-      expect(screen.getByText("Apoquel")).toBeInTheDocument();
+      expect(screen.getByText("Apoquel · 5mg · Daily")).toBeInTheDocument();
+    });
+
+    it("renders ALLERGIES eyebrow and allergies text", () => {
+      render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
+      expect(screen.getByText("ALLERGIES")).toBeInTheDocument();
+      expect(screen.getByText("Fish")).toBeInTheDocument();
     });
 
     it("shows 'Not added' in Health column when one cat has no health data", () => {
@@ -324,8 +329,8 @@ describe("MergedPDF", () => {
         },
       };
       render(<MergedPDF profileA={profileA} profileB={noHealthB} />);
-      expect(screen.getByText("Not added")).toBeInTheDocument();
-      expect(screen.getByText("Apoquel")).toBeInTheDocument();
+      expect(screen.getAllByText("Not added").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getByText("Apoquel · 5mg · Daily")).toBeInTheDocument();
     });
 
     it("omits health section when neither cat has health data", () => {

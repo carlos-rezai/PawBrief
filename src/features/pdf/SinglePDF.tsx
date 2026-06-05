@@ -424,15 +424,64 @@ export default function SinglePDF({
         {/* Health */}
         {medical && (
           <GSection n={4} title="Health">
-            {medical.medications.map((m, i) => (
-              <MiniCard key={i} title={m.name} subtitle={m.dosage} />
-            ))}
-            {medical.allergies && (
-              <Text style={styles.inlineText}>{medical.allergies}</Text>
-            )}
-            {medical.medicalConditions && (
-              <Text style={styles.inlineText}>{medical.medicalConditions}</Text>
-            )}
+            <View style={{ flexDirection: "row", gap: 16 }}>
+              {/* LEFT: medications */}
+              <View style={{ flex: 1 }}>
+                <Text style={styles.eyebrow}>MEDICATIONS</Text>
+                {medical.medications.length > 0 ? (
+                  medical.medications.map((m, i) => (
+                    <MiniCard
+                      key={i}
+                      title={[m.name, m.dosage, m.frequency]
+                        .filter(Boolean)
+                        .join(" · ")}
+                      subtitle={m.instructions || undefined}
+                    />
+                  ))
+                ) : (
+                  <Text
+                    style={{
+                      ...styles.inlineText,
+                      fontStyle: "italic",
+                      color: colors.muted,
+                    }}
+                  >
+                    None
+                  </Text>
+                )}
+              </View>
+              {/* RIGHT: allergies + conditions */}
+              <View style={{ flex: 1 }}>
+                {medical.allergies && (
+                  <>
+                    <Text style={styles.eyebrow}>ALLERGIES</Text>
+                    <Text
+                      style={{
+                        ...styles.inlineText,
+                        color: colors.accent,
+                        fontWeight: 700,
+                      }}
+                    >
+                      {medical.allergies}
+                    </Text>
+                  </>
+                )}
+                {medical.medicalConditions && (
+                  <>
+                    <Text style={styles.eyebrow}>CONDITIONS</Text>
+                    <Text
+                      style={{
+                        ...styles.inlineText,
+                        color: colors.inkSoft,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {medical.medicalConditions}
+                    </Text>
+                  </>
+                )}
+              </View>
+            </View>
           </GSection>
         )}
 
