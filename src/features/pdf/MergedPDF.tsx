@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
   notAdded: {
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
-    fontStyle: "italic",
     color: colors.muted,
   },
   row: {
@@ -395,7 +394,6 @@ function HealthCol({ profile }: { profile: CatProfile }) {
         <Text
           style={{
             ...styles.inlineText,
-            fontStyle: "italic",
             color: colors.muted,
           }}
         >

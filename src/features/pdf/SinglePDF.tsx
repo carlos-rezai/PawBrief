@@ -442,7 +442,6 @@ export default function SinglePDF({
                   <Text
                     style={{
                       ...styles.inlineText,
-                      fontStyle: "italic",
                       color: colors.muted,
                     }}
                   >
