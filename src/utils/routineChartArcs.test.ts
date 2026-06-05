@@ -6,26 +6,29 @@ describe("arcPath", () => {
     expect(arcPath("06:00", 2, 200)).toMatch(/^M\s/);
   });
 
-  it("includes the SVG arc command", () => {
-    expect(arcPath("06:00", 2, 200)).toContain(" A ");
+  it("uses cubic Bézier commands (C), not arc commands (A)", () => {
+    const path = arcPath("06:00", 2, 200);
+    expect(path).toContain(" C ");
+    expect(path).not.toContain(" A ");
   });
 
-  it("sets large-arc flag to 0 for duration 12 hours or shorter", () => {
+  it("uses a single Bézier segment for a ≤90° arc (6 hours)", () => {
     const path = arcPath("00:00", 6, 200);
-    const match = path.match(/A\s+[\d.]+\s+[\d.]+\s+0\s+([01])\s+1/);
-    expect(match?.[1]).toBe("0");
+    const segments = path.match(/\bC\b/g);
+    expect(segments).toHaveLength(1);
   });
 
-  it("sets large-arc flag to 1 for duration longer than 12 hours", () => {
+  it("uses multiple Bézier segments for a >90° arc (14 hours)", () => {
     const path = arcPath("00:00", 14, 200);
-    const match = path.match(/A\s+[\d.]+\s+[\d.]+\s+0\s+([01])\s+1/);
-    expect(match?.[1]).toBe("1");
+    const segments = path.match(/\bC\b/g);
+    expect(segments!.length).toBeGreaterThan(1);
   });
 
   it("produces different start and end coordinates for a non-zero duration", () => {
     const path = arcPath("06:00", 6, 200);
     const startMatch = path.match(/^M\s+([\d.-]+)\s+([\d.-]+)/);
-    const endMatch = path.match(/\s+1\s+([\d.-]+)\s+([\d.-]+)\s*$/);
+    // Last two numbers in the path string are the Bézier end point
+    const endMatch = path.match(/([\d.-]+)\s+([\d.-]+)\s*$/);
     expect(startMatch).not.toBeNull();
     expect(endMatch).not.toBeNull();
     const start = `${startMatch![1]},${startMatch![2]}`;

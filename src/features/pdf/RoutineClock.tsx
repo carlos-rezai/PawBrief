@@ -36,11 +36,10 @@ export function RoutineClock({ slots, size = 188 }: RoutineClockProps) {
         {slots
           .filter((s) => s.hours > 0)
           .map((slot, i) => (
-            // fill must be omitted (not "none") — react-pdf ignores stroke-only
-            // paths when fill="none" is passed explicitly
             <Path
               key={i}
               d={arcPath(slot.start, slot.hours, size)}
+              fill="none"
               stroke={palette[slot.colorIndex % palette.length]}
               strokeWidth={strokeWidth}
             />

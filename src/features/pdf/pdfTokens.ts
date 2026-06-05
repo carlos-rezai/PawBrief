@@ -17,38 +17,20 @@ export const colors: Record<string, string> = {
   ring: siennaColors.ring,
 };
 
+// PDF-specific scale — matches the prototype's inline font sizes exactly.
+// The web design tokens (src/tokens/typography.ts) are sized for screen UI;
+// the PDF renderer needs smaller values to match the A4 prototype output.
 export const typeScale: Record<
   string,
   { fontSize: number; fontWeight: number }
 > = {
-  display: {
-    fontSize: typography.scale.display.size,
-    fontWeight: typography.scale.display.weight,
-  },
-  title: {
-    fontSize: typography.scale.title.size,
-    fontWeight: typography.scale.title.weight,
-  },
-  uiHeading: {
-    fontSize: typography.scale.uiHeading.size,
-    fontWeight: typography.scale.uiHeading.weight,
-  },
-  sectionHd: {
-    fontSize: typography.scale.sectionHd.size,
-    fontWeight: typography.scale.sectionHd.weight,
-  },
-  body: {
-    fontSize: typography.scale.body.size,
-    fontWeight: typography.scale.body.weight,
-  },
-  small: {
-    fontSize: typography.scale.small.size,
-    fontWeight: typography.scale.small.weight,
-  },
-  caption: {
-    fontSize: typography.scale.caption.size,
-    fontWeight: typography.scale.caption.weight,
-  },
+  display: { fontSize: 38, fontWeight: 800 }, // single-guide cat name
+  title: { fontSize: 27, fontWeight: 800 }, // merged-guide cat name
+  uiHeading: { fontSize: 19, fontWeight: 700 },
+  sectionHd: { fontSize: 17, fontWeight: 700 },
+  body: { fontSize: 12.5, fontWeight: 400 },
+  small: { fontSize: 13, fontWeight: 400 }, // MiniCard titles, contact names
+  caption: { fontSize: 11, fontWeight: 700 }, // eyebrows, footer
 };
 
 export const palette: string[] = [

@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
     width: 92,
     height: 92,
     borderRadius: 46,
+    objectFit: "cover",
   },
   coverText: {
     marginLeft: 16,
@@ -84,8 +85,8 @@ const styles = StyleSheet.create({
   },
   catMeta: {
     fontFamily: "Plus Jakarta Sans",
-    fontSize: typeScale.body.fontSize,
-    fontWeight: typeScale.body.fontWeight as 400,
+    fontSize: 14,
+    fontWeight: 400,
     color: colors.primaryInk,
   },
   eyebrow: {

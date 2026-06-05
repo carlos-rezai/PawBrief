@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     width: COVER_PHOTO_SIZE,
     height: COVER_PHOTO_SIZE,
     borderRadius: COVER_PHOTO_SIZE / 2,
+    objectFit: "cover",
   },
   wordmark: {
     flexDirection: "row",
@@ -83,14 +84,14 @@ const styles = StyleSheet.create({
   },
   catName: {
     fontFamily: "Plus Jakarta Sans",
-    fontSize: typeScale.display.fontSize,
-    fontWeight: typeScale.display.fontWeight as 800,
+    fontSize: typeScale.title.fontSize,
+    fontWeight: 800,
     color: colors.surface,
   },
   catMeta: {
     fontFamily: "Plus Jakarta Sans",
-    fontSize: typeScale.body.fontSize,
-    fontWeight: typeScale.body.fontWeight as 400,
+    fontSize: 12.5,
+    fontWeight: 400,
     color: colors.primaryInk,
   },
   cmpRow: {
