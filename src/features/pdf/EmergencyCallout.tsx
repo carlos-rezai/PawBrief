@@ -155,12 +155,16 @@ export function EmergencyCallout(props: EmergencyCalloutProps) {
         marginTop: 18,
       }}
     >
-      {/* Header strip */}
+      {/* Header strip — round the top corners so the fill follows the
+          1.5px rounded border (react-pdf's overflow:hidden does not clip
+          a child's square corners to the parent radius). */}
       <View
         style={{
           backgroundColor: colors.primarySoft,
           paddingVertical: 5,
           paddingHorizontal: 12,
+          borderTopLeftRadius: 7.5,
+          borderTopRightRadius: 7.5,
         }}
       >
         <Text

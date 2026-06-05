@@ -53,8 +53,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   photo: {
-    width: 70,
-    height: 70,
+    // Fill the circle's content box so the white border is even all around.
+    width: "100%",
+    height: "100%",
     borderRadius: 35,
     objectFit: "cover",
   },

@@ -83,8 +83,10 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   coverPhoto: {
-    width: COVER_PHOTO_SIZE,
-    height: COVER_PHOTO_SIZE,
+    // Fill the circle's content box exactly so the white border is even all
+    // around (a fixed size equal to the bordered box overflows asymmetrically).
+    width: "100%",
+    height: "100%",
     borderRadius: COVER_PHOTO_SIZE / 2,
     objectFit: "cover",
   },
