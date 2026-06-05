@@ -1,5 +1,4 @@
 import { colors as siennaColors, routinePalette } from "../../tokens/colors";
-import { typography } from "../../tokens/typography";
 
 export const colors: Record<string, string> = {
   bg: siennaColors.bg,
@@ -17,20 +16,19 @@ export const colors: Record<string, string> = {
   ring: siennaColors.ring,
 };
 
-// PDF-specific scale — matches the prototype's inline font sizes exactly.
-// The web design tokens (src/tokens/typography.ts) are sized for screen UI;
-// the PDF renderer needs smaller values to match the A4 prototype output.
+// react-pdf uses PDF points (72 DPI); the prototype uses CSS pixels (96 DPI).
+// Conversion: pt = px × (72/96) = px × 0.75.
 export const typeScale: Record<
   string,
   { fontSize: number; fontWeight: number }
 > = {
-  display: { fontSize: 38, fontWeight: 800 }, // single-guide cat name
-  title: { fontSize: 27, fontWeight: 800 }, // merged-guide cat name
-  uiHeading: { fontSize: 19, fontWeight: 700 },
-  sectionHd: { fontSize: 17, fontWeight: 700 },
-  body: { fontSize: 12.5, fontWeight: 400 },
-  small: { fontSize: 13, fontWeight: 400 }, // MiniCard titles, contact names
-  caption: { fontSize: 11, fontWeight: 700 }, // eyebrows, footer
+  display: { fontSize: 29, fontWeight: 800 }, // 38px × 0.75
+  title: { fontSize: 20, fontWeight: 800 }, // 27px × 0.75
+  uiHeading: { fontSize: 14, fontWeight: 700 }, // 19px × 0.75
+  sectionHd: { fontSize: 13, fontWeight: 700 }, // 17px × 0.75
+  body: { fontSize: 9.5, fontWeight: 400 }, // 12.5px × 0.75
+  small: { fontSize: 10, fontWeight: 400 }, // 13px × 0.75
+  caption: { fontSize: 8, fontWeight: 700 }, // 11px × 0.75
 };
 
 export const palette: string[] = [

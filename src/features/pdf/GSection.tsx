@@ -10,29 +10,29 @@ interface GSectionProps {
 
 export function GSection({ n, title, children }: GSectionProps) {
   return (
-    <View style={{ marginTop: 24 }}>
+    <View style={{ marginTop: 18 }}>
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
-          marginBottom: 13,
+          marginBottom: 10,
         }}
       >
         <View
           style={{
-            width: 22,
-            height: 22,
-            borderRadius: 6,
+            width: 16,
+            height: 16,
+            borderRadius: 4,
             backgroundColor: colors.primarySoft,
             alignItems: "center",
             justifyContent: "center",
-            marginRight: 10,
+            marginRight: 8,
           }}
         >
           <Text
             style={{
               fontFamily: "Plus Jakarta Sans",
-              fontSize: 13,
+              fontSize: 10,
               fontWeight: 800,
               color: colors.primary,
             }}
@@ -47,7 +47,7 @@ export function GSection({ n, title, children }: GSectionProps) {
             fontWeight: typeScale.sectionHd.fontWeight,
             letterSpacing: -0.3,
             color: colors.ink,
-            marginRight: 10,
+            marginRight: 8,
           }}
         >
           {title}

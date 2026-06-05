@@ -19,24 +19,24 @@ import { PawBriefMark } from "./PawBriefMark";
 import { colors, typeScale, palette as routinePalette } from "./pdfTokens";
 import { formatRange } from "../../utils/formatRange";
 
-const CLOCK_SIZE = 156;
-const THUMB_SIZE = 60;
-const COVER_PHOTO_SIZE = 58;
+const CLOCK_SIZE = 116;
+const THUMB_SIZE = 45;
+const COVER_PHOTO_SIZE = 44;
 
 const styles = StyleSheet.create({
   page: {
     paddingTop: 0,
-    paddingHorizontal: 32,
-    paddingBottom: 32,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
     backgroundColor: colors.bg,
   },
   coverBand: {
     backgroundColor: colors.primary,
-    marginHorizontal: -32,
-    paddingVertical: 20,
-    paddingHorizontal: 32,
+    marginHorizontal: -24,
+    paddingVertical: 15,
+    paddingHorizontal: 24,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   wordmarkText: {
     fontFamily: "Plus Jakarta Sans",
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: 800,
     color: colors.surface,
   },
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   catMeta: {
     fontFamily: "Plus Jakarta Sans",
-    fontSize: 12.5,
+    fontSize: 9.5,
     fontWeight: 400,
     color: colors.primaryInk,
   },
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   col: {
     flex: 1,
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
   },
   colDivider: {
     width: 1,
@@ -145,9 +145,9 @@ const styles = StyleSheet.create({
   },
   footer: {
     position: "absolute",
-    bottom: 16,
-    left: 40,
-    right: 40,
+    bottom: 12,
+    left: 24,
+    right: 24,
     flexDirection: "row",
     justifyContent: "space-between",
     fontSize: typeScale.caption.fontSize,

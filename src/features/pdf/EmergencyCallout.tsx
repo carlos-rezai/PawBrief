@@ -127,7 +127,7 @@ function ContactsBlock({ contacts }: { contacts: EmergencyContact[] }) {
 const colDivider = {
   width: 1,
   backgroundColor: colors.border,
-  marginHorizontal: 12,
+  marginHorizontal: 9,
 };
 
 export function EmergencyCallout(props: EmergencyCalloutProps) {
@@ -136,17 +136,17 @@ export function EmergencyCallout(props: EmergencyCalloutProps) {
       style={{
         borderWidth: 1.5,
         borderColor: colors.primary,
-        borderRadius: 12,
+        borderRadius: 9,
         overflow: "hidden",
-        marginTop: 24,
+        marginTop: 18,
       }}
     >
       {/* Header strip */}
       <View
         style={{
           backgroundColor: colors.primarySoft,
-          paddingVertical: 6,
-          paddingHorizontal: 14,
+          paddingVertical: 5,
+          paddingHorizontal: 11,
         }}
       >
         <Text
@@ -163,7 +163,7 @@ export function EmergencyCallout(props: EmergencyCalloutProps) {
       </View>
 
       {/* Body */}
-      <View style={{ padding: 14 }}>
+      <View style={{ padding: 11 }}>
         {props.mode === "single" ? (
           <View style={{ flexDirection: "row" }}>
             <View style={{ flex: 1 }}>

@@ -13,9 +13,9 @@ export function MiniCard({ title, subtitle }: MiniCardProps) {
         borderWidth: 1,
         borderColor: colors.border,
         borderStyle: "solid",
-        borderRadius: 9,
-        paddingVertical: 9,
-        paddingHorizontal: 12,
+        borderRadius: 7,
+        paddingVertical: 7,
+        paddingHorizontal: 9,
         backgroundColor: colors.surface,
       }}
     >
@@ -33,10 +33,10 @@ export function MiniCard({ title, subtitle }: MiniCardProps) {
         <Text
           style={{
             fontFamily: "Plus Jakarta Sans",
-            fontSize: 12,
+            fontSize: 9,
             fontWeight: 400,
             color: colors.inkSoft,
-            marginTop: 2,
+            marginTop: 1.5,
           }}
         >
           {subtitle}

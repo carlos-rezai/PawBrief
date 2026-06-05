@@ -14,17 +14,17 @@ export function Tag({ label, variant = "primary" }: TagProps) {
     <View
       style={{
         backgroundColor: bg,
-        borderRadius: 6,
-        paddingHorizontal: 10,
-        paddingVertical: 4,
-        marginRight: 6,
-        marginBottom: 6,
+        borderRadius: 5,
+        paddingHorizontal: 8,
+        paddingVertical: 3,
+        marginRight: 5,
+        marginBottom: 5,
       }}
     >
       <Text
         style={{
           fontFamily: "Plus Jakarta Sans",
-          fontSize: 12,
+          fontSize: 9,
           fontWeight: 700,
           color: fg,
         }}

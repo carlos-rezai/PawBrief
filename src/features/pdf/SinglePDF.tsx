@@ -21,18 +21,18 @@ import { formatRange } from "../../utils/formatRange";
 const styles = StyleSheet.create({
   page: {
     paddingTop: 0,
-    paddingHorizontal: 40,
-    paddingBottom: 40,
+    paddingHorizontal: 30,
+    paddingBottom: 30,
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
     backgroundColor: colors.bg,
   },
   coverBand: {
     backgroundColor: colors.primary,
-    marginHorizontal: -40,
-    paddingTop: 26,
-    paddingBottom: 24,
-    paddingHorizontal: 40,
+    marginHorizontal: -30,
+    paddingTop: 20,
+    paddingBottom: 18,
+    paddingHorizontal: 30,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -42,24 +42,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   avatarCircle: {
-    width: 92,
-    height: 92,
-    borderRadius: 46,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     backgroundColor: colors.primarySoft,
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
   },
   photo: {
-    width: 92,
-    height: 92,
-    borderRadius: 46,
+    width: 70,
+    height: 70,
+    borderRadius: 35,
     objectFit: "cover",
   },
   coverText: {
-    marginLeft: 16,
+    marginLeft: 12,
   },
   coverEyebrow: {
     fontFamily: "Plus Jakarta Sans",
@@ -67,16 +67,16 @@ const styles = StyleSheet.create({
     fontWeight: typeScale.caption.fontWeight as 400,
     color: colors.primaryInk,
     letterSpacing: 1.2,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   wordmark: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    gap: 5,
   },
   wordmarkText: {
     fontFamily: "Plus Jakarta Sans",
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: 800,
     color: colors.surface,
   },
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   catMeta: {
     fontFamily: "Plus Jakarta Sans",
-    fontSize: 14,
+    fontSize: 10.5,
     fontWeight: 400,
     color: colors.primaryInk,
   },
@@ -98,36 +98,36 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     color: colors.muted,
     letterSpacing: 0.8,
-    marginBottom: 4,
+    marginBottom: 3,
   },
   inlineText: {
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
     fontWeight: typeScale.body.fontWeight as 400,
     color: colors.ink,
-    marginBottom: 3,
+    marginBottom: 2,
   },
   row: {
     flexDirection: "row",
     flexWrap: "wrap",
-    marginBottom: 8,
+    marginBottom: 6,
   },
   noteItem: {
-    borderLeftWidth: 3,
+    borderLeftWidth: 2,
     borderLeftColor: colors.accent,
-    paddingLeft: 10,
-    marginBottom: 10,
+    paddingLeft: 8,
+    marginBottom: 8,
   },
   thumbnail: {
-    width: 80,
-    height: 80,
-    marginTop: 4,
+    width: 60,
+    height: 60,
+    marginTop: 3,
   },
   footer: {
     position: "absolute",
-    bottom: 16,
-    left: 40,
-    right: 40,
+    bottom: 12,
+    left: 30,
+    right: 30,
     flexDirection: "row",
     justifyContent: "space-between",
     fontSize: typeScale.caption.fontSize,
@@ -192,9 +192,9 @@ export default function SinglePDF({
         {/* Feeding */}
         {feeding && (
           <GSection n={1} title="Feeding">
-            <View style={{ flexDirection: "row", gap: 16 }}>
+            <View style={{ flexDirection: "row", gap: 12 }}>
               {/* LEFT: food cards + plating */}
-              <View style={{ flex: 1, gap: 7 }}>
+              <View style={{ flex: 1, gap: 5 }}>
                 {feeding.foodEntries.map((entry, i) => (
                   <MiniCard
                     key={i}
@@ -255,10 +255,10 @@ export default function SinglePDF({
         {routine && (
           <GSection n={2} title="Routine">
             <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-              <View style={{ width: 188 }}>
-                <RoutineClock slots={routine.slots} size={188} />
+              <View style={{ width: 140 }}>
+                <RoutineClock slots={routine.slots} size={140} />
               </View>
-              <View style={{ flex: 1, marginLeft: 16 }}>
+              <View style={{ flex: 1, marginLeft: 12 }}>
                 {(() => {
                   const sorted = [...routine.slots]
                     .filter((s) => s.start != null)
@@ -267,7 +267,7 @@ export default function SinglePDF({
                   const left = sorted.slice(0, mid);
                   const right = sorted.slice(mid);
                   return (
-                    <View style={{ flexDirection: "row", gap: 8 }}>
+                    <View style={{ flexDirection: "row", gap: 6 }}>
                       <View style={{ flex: 1 }}>
                         {left.map((slot, i) => (
                           <View
@@ -371,7 +371,7 @@ export default function SinglePDF({
         {/* Favourites */}
         {favorites && (
           <GSection n={3} title="Favourites">
-            <View style={{ flexDirection: "row", gap: 16 }}>
+            <View style={{ flexDirection: "row", gap: 12 }}>
               {/* LEFT: toys */}
               <View style={{ flex: 1 }}>
                 {favorites.toyEntries.length > 0 && (
@@ -427,7 +427,7 @@ export default function SinglePDF({
         {/* Health */}
         {medical && (
           <GSection n={4} title="Health">
-            <View style={{ flexDirection: "row", gap: 16 }}>
+            <View style={{ flexDirection: "row", gap: 12 }}>
               {/* LEFT: medications */}
               <View style={{ flex: 1 }}>
                 <Text style={styles.eyebrow}>MEDICATIONS</Text>
