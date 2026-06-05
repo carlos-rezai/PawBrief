@@ -36,13 +36,13 @@ export function RoutineClock({ slots, size = 188 }: RoutineClockProps) {
         {slots
           .filter((s) => s.hours > 0)
           .map((slot, i) => (
+            // fill must be omitted (not "none") — react-pdf ignores stroke-only
+            // paths when fill="none" is passed explicitly
             <Path
               key={i}
               d={arcPath(slot.start, slot.hours, size)}
-              fill="none"
               stroke={palette[slot.colorIndex % palette.length]}
               strokeWidth={strokeWidth}
-              strokeLinecap="butt"
             />
           ))}
       </Svg>
@@ -64,6 +64,18 @@ export function RoutineClock({ slots, size = 188 }: RoutineClockProps) {
       </Text>
       <Text style={{ ...labelBase, top: cy - fontSize, right: 2 }}>06:00</Text>
       <Text style={{ ...labelBase, top: cy - fontSize, left: 2 }}>18:00</Text>
+      <Text
+        style={{
+          ...labelBase,
+          top: cy - fontSize / 2,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          fontWeight: 700,
+        }}
+      >
+        A DAY
+      </Text>
     </View>
   );
 }
