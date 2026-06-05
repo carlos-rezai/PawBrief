@@ -213,7 +213,7 @@ describe("MergedPDF", () => {
     it("renders the shared vet block with 'Shared vet for both cats' label", () => {
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
       expect(screen.getByText("Shared vet for both cats")).toBeInTheDocument();
-      expect(screen.getByText("Dr Smith")).toBeInTheDocument();
+      expect(screen.getByText("Dr Smith · Paws Clinic")).toBeInTheDocument();
       expect(screen.getByText("555-1234")).toBeInTheDocument();
     });
 
@@ -227,8 +227,10 @@ describe("MergedPDF", () => {
   describe("Emergency Callout — different vets", () => {
     it("renders each vet in its own column", () => {
       render(<MergedPDF profileA={profileA} profileB={differentVetProfileB} />);
-      expect(screen.getByText("Dr Smith")).toBeInTheDocument();
-      expect(screen.getByText("Dr Jones")).toBeInTheDocument();
+      expect(screen.getByText("Dr Smith · Paws Clinic")).toBeInTheDocument();
+      expect(
+        screen.getByText("Dr Jones · Cat Care Clinic")
+      ).toBeInTheDocument();
     });
 
     it("does not render 'Shared vet for both cats' label", () => {
@@ -358,7 +360,7 @@ describe("MergedPDF", () => {
   describe("Good to Know section", () => {
     it("renders notes section when at least one cat has notes", () => {
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
-      expect(screen.getByText("Good to Know")).toBeInTheDocument();
+      expect(screen.getByText("Good to know")).toBeInTheDocument();
       expect(screen.getByText("Hiding spots")).toBeInTheDocument();
       expect(screen.getByText("Favourite toys")).toBeInTheDocument();
     });
@@ -380,7 +382,7 @@ describe("MergedPDF", () => {
         notes: { specialNotes: [] },
       };
       render(<MergedPDF profileA={noNotesA} profileB={noNotesB} />);
-      expect(screen.queryByText("Good to Know")).not.toBeInTheDocument();
+      expect(screen.queryByText("Good to know")).not.toBeInTheDocument();
     });
   });
 

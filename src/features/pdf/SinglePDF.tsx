@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.surface,
   },
   coverBand: {
     backgroundColor: colors.primary,
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     objectFit: "cover",
   },
   coverText: {
-    marginLeft: 12,
+    marginLeft: 16,
   },
   coverEyebrow: {
     fontFamily: "Plus Jakarta Sans",
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
   wordmarkText: {
     fontFamily: "Plus Jakarta Sans",
     fontSize: 12,
-    fontWeight: 800,
+    fontWeight: 700,
     color: colors.surface,
   },
   catName: {
@@ -159,7 +159,7 @@ export default function SinglePDF({
                   src={photoBlobUrls[basics.photoId]}
                 />
               ) : (
-                <PawBriefMark size={46} />
+                <PawBriefMark size={36} />
               )}
             </View>
             <View style={styles.coverText}>
@@ -174,9 +174,11 @@ export default function SinglePDF({
               )}
             </View>
           </View>
-          <View style={styles.wordmark}>
-            <PawBriefMark size={22} reverse />
-            <Text style={styles.wordmarkText}>PawBrief</Text>
+          <View style={[styles.wordmark, { alignSelf: "flex-start" }]}>
+            <PawBriefMark size={17} reverse />
+            <Text style={styles.wordmarkText}>
+              Paw<Text style={{ color: colors.primarySoft }}>Brief</Text>
+            </Text>
           </View>
         </View>
 
@@ -253,12 +255,10 @@ export default function SinglePDF({
 
         {/* Routine */}
         {routine && (
-          <GSection n={2} title="Routine">
-            <View style={{ flexDirection: "row", alignItems: "flex-start" }}>
-              <View style={{ width: 140 }}>
-                <RoutineClock slots={routine.slots} size={140} />
-              </View>
-              <View style={{ flex: 1, marginLeft: 12 }}>
+          <GSection n={2} title="A typical day">
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <RoutineClock slots={routine.slots} size={140} />
+              <View style={{ flex: 1, marginLeft: 14 }}>
                 {(() => {
                   const sorted = [...routine.slots]
                     .filter((s) => s.start != null)
@@ -489,7 +489,7 @@ export default function SinglePDF({
 
         {/* Good to Know */}
         {notes && notes.specialNotes.length > 0 && (
-          <GSection n={5} title="Good to Know">
+          <GSection n={5} title="Good to know">
             {notes.specialNotes.map((note, i) => (
               <View key={i} style={styles.noteItem}>
                 <Text style={styles.inlineText}>{note.title}</Text>

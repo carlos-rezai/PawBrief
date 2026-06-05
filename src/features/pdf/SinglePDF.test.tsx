@@ -129,10 +129,9 @@ describe("SinglePDF", () => {
       expect(screen.getByText("IN AN EMERGENCY")).toBeInTheDocument();
     });
 
-    it("renders vet name, clinic, and phone", () => {
+    it("renders vet name · clinic inline and phone", () => {
       render(<SinglePDF profile={seedProfile} />);
-      expect(screen.getByText("Dr Smith")).toBeInTheDocument();
-      expect(screen.getByText("Paws Clinic")).toBeInTheDocument();
+      expect(screen.getByText("Dr Smith · Paws Clinic")).toBeInTheDocument();
       expect(screen.getByText("555-1234")).toBeInTheDocument();
     });
 
@@ -146,7 +145,7 @@ describe("SinglePDF", () => {
       render(<SinglePDF profile={seedProfile} />);
       expect(screen.getByText("Jane Doe")).toBeInTheDocument();
       expect(screen.getByText("555-5678")).toBeInTheDocument();
-      expect(screen.getByText("Friend")).toBeInTheDocument();
+      expect(screen.getByText(/Friend/)).toBeInTheDocument();
     });
   });
 
@@ -257,9 +256,9 @@ describe("SinglePDF", () => {
   });
 
   describe("Good to Know section", () => {
-    it("renders under a 'Good to Know' heading with note title and body", () => {
+    it("renders under a 'Good to know' heading with note title and body", () => {
       render(<SinglePDF profile={seedProfile} />);
-      expect(screen.getByText("Good to Know")).toBeInTheDocument();
+      expect(screen.getByText("Good to know")).toBeInTheDocument();
       expect(screen.getByText("Hiding spots")).toBeInTheDocument();
       expect(screen.getByText("Check under the bed")).toBeInTheDocument();
     });

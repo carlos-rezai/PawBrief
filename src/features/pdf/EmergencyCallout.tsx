@@ -51,33 +51,42 @@ function VetBlock({ vet }: { vet: VetInfo }) {
           marginBottom: 2,
         }}
       >
-        {vet.name}
+        {vet.clinicName ? `${vet.name} · ${vet.clinicName}` : vet.name}
       </Text>
-      {vet.clinicName ? (
+      {vet.phone ? (
         <Text
           style={{
             fontFamily: "Plus Jakarta Sans",
             fontSize: typeScale.body.fontSize,
-            color: colors.inkSoft,
+            fontWeight: 700,
+            color: colors.primary,
             marginBottom: 2,
           }}
         >
-          {vet.clinicName}
+          {vet.phone}
         </Text>
       ) : null}
-      <Text
-        style={{
-          fontFamily: "Plus Jakarta Sans",
-          fontSize: typeScale.body.fontSize,
-          fontWeight: 700,
-          color: colors.primary,
-          marginBottom: 2,
-        }}
-      >
-        {vet.phone}
-      </Text>
       {vet.address ? (
-        <Link src={buildMapsUrl(vet.address)}>Get directions</Link>
+        <Text
+          style={{
+            fontFamily: "Plus Jakarta Sans",
+            fontSize: 8.5,
+            color: colors.inkSoft,
+            lineHeight: 1.4,
+          }}
+        >
+          {vet.address} ·{" "}
+          <Link
+            src={buildMapsUrl(vet.address)}
+            style={{
+              color: colors.accent,
+              fontWeight: 700,
+              textDecoration: "none",
+            }}
+          >
+            Get directions ›
+          </Link>
+        </Text>
       ) : null}
     </View>
   );
@@ -87,26 +96,20 @@ function ContactsBlock({ contacts }: { contacts: EmergencyContact[] }) {
   return (
     <View>
       {contacts.map((c, i) => (
-        <View key={i} style={{ marginBottom: 6 }}>
+        <View key={i} style={{ marginBottom: 5 }}>
           <Text
             style={{
               fontFamily: "Plus Jakarta Sans",
               fontSize: typeScale.body.fontSize,
-              fontWeight: 700,
-              color: colors.ink,
               marginBottom: 1,
             }}
           >
-            {c.name}
-          </Text>
-          <Text
-            style={{
-              fontFamily: "Plus Jakarta Sans",
-              fontSize: typeScale.small.fontSize,
-              color: colors.inkSoft,
-            }}
-          >
-            {c.relationship}
+            <Text style={{ fontWeight: 700, color: colors.ink }}>{c.name}</Text>
+            {c.relationship ? (
+              <Text
+                style={{ fontWeight: 400, color: colors.muted }}
+              >{`  ·  ${c.relationship}`}</Text>
+            ) : null}
           </Text>
           <Text
             style={{

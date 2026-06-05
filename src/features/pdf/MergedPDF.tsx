@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
-    backgroundColor: colors.bg,
+    backgroundColor: colors.surface,
   },
   coverBand: {
     backgroundColor: colors.primary,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   wordmarkText: {
     fontFamily: "Plus Jakarta Sans",
     fontSize: 12,
-    fontWeight: 800,
+    fontWeight: 700,
     color: colors.surface,
   },
   catName: {
@@ -484,8 +484,10 @@ export default function MergedPDF({
             </View>
           </View>
           <View style={styles.wordmark}>
-            <PawBriefMark size={22} reverse />
-            <Text style={styles.wordmarkText}>PawBrief</Text>
+            <PawBriefMark size={17} reverse />
+            <Text style={styles.wordmarkText}>
+              Paw<Text style={{ color: colors.primarySoft }}>Brief</Text>
+            </Text>
           </View>
         </View>
 
@@ -512,7 +514,7 @@ export default function MergedPDF({
         </GSection>
 
         {/* Routine */}
-        <GSection n={2} title="Routine">
+        <GSection n={2} title="A typical day">
           <CmpRow
             left={
               profileA.routine ? (
@@ -551,7 +553,7 @@ export default function MergedPDF({
 
         {/* Good to Know */}
         {(hasNotes(profileA) || hasNotes(profileB)) && (
-          <GSection n={5} title="Good to Know">
+          <GSection n={5} title="Good to know">
             <CmpRow
               left={<NotesCol profile={profileA} />}
               right={<NotesCol profile={profileB} />}
