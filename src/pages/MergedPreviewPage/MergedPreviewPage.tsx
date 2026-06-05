@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
 import { useProfile } from "../../features/profile";
+import { usePhotoBlobUrls } from "../../features/preview/usePhotoBlobUrls";
 import MergedPDF from "../../features/pdf/MergedPDF";
 import { Button } from "../../primitives";
 import PreviewLayout from "../../layouts/PreviewLayout/PreviewLayout";
@@ -12,6 +13,9 @@ export default function MergedPreviewPage() {
   const navigate = useNavigate();
   const { profile: profileA, loading: loadingA } = useProfile(id1 ?? "");
   const { profile: profileB, loading: loadingB } = useProfile(id2 ?? "");
+  const photoBlobUrlsA = usePhotoBlobUrls(profileA);
+  const photoBlobUrlsB = usePhotoBlobUrls(profileB);
+  const photoBlobUrls = { ...photoBlobUrlsA, ...photoBlobUrlsB };
 
   useEffect(() => {
     if (!loadingA && !loadingB && (profileA === null || profileB === null)) {
@@ -49,7 +53,13 @@ export default function MergedPreviewPage() {
             Edit {nameB}
           </Button>
           <PDFDownloadLink
-            document={<MergedPDF profileA={profileA} profileB={profileB} />}
+            document={
+              <MergedPDF
+                profileA={profileA}
+                profileB={profileB}
+                photoBlobUrls={photoBlobUrls}
+              />
+            }
             fileName={fileName}
           >
             {({ loading: pdfLoading }) => (
@@ -63,7 +73,11 @@ export default function MergedPreviewPage() {
     >
       <PdfViewerContainer>
         <PDFViewer width="100%" height="100%">
-          <MergedPDF profileA={profileA} profileB={profileB} />
+          <MergedPDF
+            profileA={profileA}
+            profileB={profileB}
+            photoBlobUrls={photoBlobUrls}
+          />
         </PDFViewer>
       </PdfViewerContainer>
     </PreviewLayout>

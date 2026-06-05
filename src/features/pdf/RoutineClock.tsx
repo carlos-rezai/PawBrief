@@ -1,17 +1,11 @@
 import { View, Text, Svg, Circle, Path } from "@react-pdf/renderer";
 import type { ActivitySlot } from "../../types/profile";
 import { colors, palette } from "./pdfTokens";
+import { arcPath } from "../../utils/routineChartArcs";
 
 interface RoutineClockProps {
   slots: ActivitySlot[];
   size?: number;
-}
-
-// "HH:MM" → fractional hours (e.g. "07:30" → 7.5).
-function parseTime(str: string): number {
-  if (!str) return 0;
-  const [h, m] = str.split(":").map(Number);
-  return (h || 0) + (m || 0) / 60;
 }
 
 /**
@@ -20,37 +14,24 @@ function parseTime(str: string): number {
  * its start time across its duration, so a midnight-spanning slot
  * (e.g. sleep 22:30→07:00) renders as one continuous arc over the top.
  *
- * Built with real SVG <Path> arcs — the handoff approach (react-pdf-mapping.md).
- * The earlier strokeDasharray-on-<Circle> trick did not paint in @react-pdf
- * and left the clock blank.
+ * Arcs are drawn via the shared `arcPath()` util, which approximates the arc
+ * with cubic Béziers — react-pdf v4 does NOT reliably render the SVG `A` arc
+ * command, so we must avoid it (the same reason the wizard chart uses arcPath).
+ * Geometry (r = size*0.38, strokeWidth = size*0.13) matches arcPath and the
+ * on-screen RoutineChart so the arcs sit exactly on the track ring.
  */
 export function RoutineClock({ slots, size = 140 }: RoutineClockProps) {
   const cx = size / 2;
   const cy = size / 2;
-  const thickness = Math.round(size * 0.12);
-  const margin = Math.round(size * 0.1); // ring inset from the svg box
-  const r = size / 2 - margin - thickness / 2;
+  const r = size * 0.38;
+  const strokeWidth = size * 0.13;
   const pad = Math.round(size * 0.12); // outer room so side labels clear the ring
   const fontSize = Math.max(6, Math.round(size * 0.05));
-
-  // point on the ring for a given time (hours 0–24), midnight at top, clockwise
-  const pt = (t: number): [number, number] => {
-    const th = (t / 24) * 2 * Math.PI;
-    return [cx + r * Math.sin(th), cy - r * Math.cos(th)];
-  };
-  // arc path from t1 to t2 (clockwise, sweep-flag = 1)
-  const arc = (t1: number, t2: number): string => {
-    const [x1, y1] = pt(t1);
-    const [x2, y2] = pt(t2);
-    const span = (((t2 - t1) % 24) + 24) % 24;
-    const large = span > 12 ? 1 : 0;
-    return `M ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2}`;
-  };
 
   const segments = slots
     .filter((s) => Number(s.hours) > 0 && s.start != null)
     .map((s) => ({
-      d: arc(parseTime(s.start), parseTime(s.start) + Number(s.hours)),
+      d: arcPath(s.start, Number(s.hours), size),
       color: palette[s.colorIndex % palette.length],
     }));
 
@@ -81,7 +62,7 @@ export function RoutineClock({ slots, size = 140 }: RoutineClockProps) {
             r={r}
             fill="none"
             stroke={colors.surfaceAlt}
-            strokeWidth={thickness}
+            strokeWidth={strokeWidth}
           />
           {/* Activity arcs, painted on top of the track */}
           {segments.map((s, i) => (
@@ -90,7 +71,7 @@ export function RoutineClock({ slots, size = 140 }: RoutineClockProps) {
               d={s.d}
               fill="none"
               stroke={s.color}
-              strokeWidth={thickness}
+              strokeWidth={strokeWidth}
               strokeLinecap="butt"
             />
           ))}

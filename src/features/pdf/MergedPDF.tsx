@@ -68,7 +68,8 @@ const styles = StyleSheet.create({
   catHeadRight: {
     paddingLeft: 15,
     borderLeftWidth: 1,
-    borderLeftColor: "rgba(255,255,255,0.3)",
+    // 30% white over the primary band (rgba() renders incorrectly in react-pdf)
+    borderLeftColor: "#BC846B",
   },
   avatarCircle: {
     width: COVER_PHOTO_SIZE,
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
   wordmarkText: {
     fontFamily: "Plus Jakarta Sans",
     fontSize: 12,
-    fontWeight: 700,
+    fontWeight: 800,
     color: colors.surface,
   },
   catName: {
@@ -146,6 +147,13 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     marginBottom: 8,
   },
+  favGroup: {
+    marginBottom: 11,
+  },
+  tagRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
   thumbnail: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
@@ -162,6 +170,9 @@ const styles = StyleSheet.create({
     bottom: 12,
     left: 24,
     right: 24,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
     flexDirection: "row",
     justifyContent: "space-between",
     fontSize: typeScale.caption.fontSize,
@@ -304,42 +315,44 @@ function FavouritesCol({ profile }: { profile: CatProfile }) {
   return (
     <>
       {favorites.toyEntries.length > 0 && (
-        <>
+        <View style={styles.favGroup}>
           <Text style={styles.eyebrow}>TOYS</Text>
-          {favorites.toyEntries.map((t, i) => (
-            <MiniCard key={i} title={t.name} subtitle={t.description} />
-          ))}
-        </>
+          <View style={{ gap: 5 }}>
+            {favorites.toyEntries.map((t, i) => (
+              <MiniCard key={i} title={t.name} subtitle={t.description} />
+            ))}
+          </View>
+        </View>
       )}
       {favorites.treatEntries.length > 0 && (
-        <>
+        <View style={styles.favGroup}>
           <Text style={styles.eyebrow}>TREATS</Text>
-          <View style={styles.row}>
+          <View style={styles.tagRow}>
             {favorites.treatEntries.map((t, i) => (
               <Tag key={i} label={`${t.brand} · ${t.flavor}`} />
             ))}
           </View>
-        </>
+        </View>
       )}
       {favorites.comfortItems.length > 0 && (
-        <>
+        <View style={styles.favGroup}>
           <Text style={styles.eyebrow}>COMFORT ITEMS</Text>
-          <View style={styles.row}>
+          <View style={styles.tagRow}>
             {favorites.comfortItems.map((item, i) => (
               <Tag key={i} label={item} variant="accent" />
             ))}
           </View>
-        </>
+        </View>
       )}
       {favorites.favouriteSpots.length > 0 && (
-        <>
+        <View style={styles.favGroup}>
           <Text style={styles.eyebrow}>FAVOURITE SPOTS</Text>
-          <View style={styles.row}>
+          <View style={styles.tagRow}>
             {favorites.favouriteSpots.map((spot, i) => (
               <Tag key={i} label={spot} variant="accent" />
             ))}
           </View>
-        </>
+        </View>
       )}
     </>
   );
@@ -506,7 +519,10 @@ export default function MergedPDF({
             <View style={styles.wordmark}>
               <PawBriefMark size={17} reverse />
               <Text style={styles.wordmarkText}>
-                Paw<Text style={{ color: colors.primarySoft }}>Brief</Text>
+                Paw
+                <Text style={{ color: colors.primarySoft, fontWeight: 800 }}>
+                  Brief
+                </Text>
               </Text>
             </View>
           </View>
