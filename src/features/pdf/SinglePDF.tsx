@@ -257,9 +257,9 @@ export default function SinglePDF({
               </View>
               <View style={{ flex: 1, marginLeft: 16 }}>
                 {(() => {
-                  const sorted = [...routine.slots].sort((a, b) =>
-                    a.start.localeCompare(b.start)
-                  );
+                  const sorted = [...routine.slots]
+                    .filter((s) => s.start != null)
+                    .sort((a, b) => a.start.localeCompare(b.start));
                   const mid = Math.ceil(sorted.length / 2);
                   const left = sorted.slice(0, mid);
                   const right = sorted.slice(mid);

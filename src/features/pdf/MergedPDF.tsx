@@ -318,7 +318,9 @@ function FavouritesCol({ profile }: { profile: CatProfile }) {
 }
 
 function RoutineCol({ slots }: { slots: ActivitySlot[] }) {
-  const sorted = [...slots].sort((a, b) => a.start.localeCompare(b.start));
+  const sorted = [...slots]
+    .filter((s) => s.start != null)
+    .sort((a, b) => a.start.localeCompare(b.start));
   return (
     <>
       <RoutineClock slots={slots} size={CLOCK_SIZE} />
