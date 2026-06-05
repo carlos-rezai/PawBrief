@@ -1,7 +1,15 @@
-import { View, Text, Svg, Circle, Path } from "@react-pdf/renderer";
+import { View, Text, Svg, Circle } from "@react-pdf/renderer";
+import type React from "react";
 import type { ActivitySlot } from "../../types/profile";
-import { arcPath } from "../../utils/routineChartArcs";
 import { colors, palette } from "./pdfTokens";
+
+// react-pdf v4 types omit strokeDasharray/strokeDashoffset — extend locally
+const DashedCircle = Circle as React.ComponentType<
+  React.ComponentProps<typeof Circle> & {
+    strokeDasharray?: string;
+    strokeDashoffset?: string | number;
+  }
+>;
 
 interface RoutineClockProps {
   slots: ActivitySlot[];
@@ -13,6 +21,7 @@ export function RoutineClock({ slots, size = 188 }: RoutineClockProps) {
   const cy = size / 2;
   const r = size * 0.38;
   const strokeWidth = size * 0.12;
+  const circumference = 2 * Math.PI * r;
   const fontSize = Math.max(7, Math.round(size * 0.05));
 
   const labelBase = {
@@ -25,6 +34,7 @@ export function RoutineClock({ slots, size = 188 }: RoutineClockProps) {
   return (
     <View style={{ position: "relative", width: size, height: size }}>
       <Svg width={size} height={size}>
+        {/* Track ring */}
         <Circle
           cx={cx}
           cy={cy}
@@ -33,17 +43,36 @@ export function RoutineClock({ slots, size = 188 }: RoutineClockProps) {
           stroke={colors.surfaceAlt}
           strokeWidth={strokeWidth}
         />
+        {/*
+         * Activity arcs rendered via strokeDasharray/strokeDashoffset on Circle
+         * elements. react-pdf v4 silently drops SVG Path commands, but Circle
+         * with dash patterns renders correctly.
+         *
+         * The SVG circle path starts at 3 o'clock = 06:00 on our 24-hour clock
+         * and goes clockwise. offset = clockwise distance from 06:00 to the slot
+         * start time, as a fraction of the circumference.
+         */}
         {slots
-          .filter((s) => s.hours > 0)
-          .map((slot, i) => (
-            <Path
-              key={i}
-              d={arcPath(slot.start, slot.hours, size)}
-              fill="none"
-              stroke={palette[slot.colorIndex % palette.length]}
-              strokeWidth={strokeWidth}
-            />
-          ))}
+          .filter((s) => s.hours > 0 && s.start != null)
+          .map((slot, i) => {
+            const [h, m] = slot.start.split(":").map(Number);
+            const minutesFrom6am = (h * 60 + m - 6 * 60 + 24 * 60) % (24 * 60);
+            const offset = (minutesFrom6am / (24 * 60)) * circumference;
+            const arcLen = (slot.hours / 24) * circumference;
+            return (
+              <DashedCircle
+                key={i}
+                cx={cx}
+                cy={cy}
+                r={r}
+                fill="none"
+                stroke={palette[slot.colorIndex % palette.length]}
+                strokeWidth={strokeWidth}
+                strokeDasharray={`${arcLen} ${circumference - arcLen}`}
+                strokeDashoffset={offset}
+              />
+            );
+          })}
       </Svg>
       <Text
         style={{ ...labelBase, top: 2, left: 0, right: 0, textAlign: "center" }}

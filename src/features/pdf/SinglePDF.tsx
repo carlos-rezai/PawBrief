@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   page: {
     paddingTop: 0,
     paddingHorizontal: 40,
-    paddingBottom: 48,
+    paddingBottom: 40,
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
     backgroundColor: colors.bg,
@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
   coverBand: {
     backgroundColor: colors.primary,
     marginHorizontal: -40,
-    paddingVertical: 28,
+    paddingTop: 26,
+    paddingBottom: 24,
     paddingHorizontal: 40,
     flexDirection: "row",
     alignItems: "center",
@@ -45,6 +46,8 @@ const styles = StyleSheet.create({
     height: 92,
     borderRadius: 46,
     backgroundColor: colors.primarySoft,
+    borderWidth: 3,
+    borderColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
@@ -162,12 +165,11 @@ export default function SinglePDF({
             <View style={styles.coverText}>
               <Text style={styles.coverEyebrow}>CARE GUIDE</Text>
               <Text style={styles.catName}>{basics?.name ?? ""}</Text>
-              {basics?.breed && (
-                <Text style={styles.catMeta}>{basics.breed}</Text>
-              )}
               {basics && (
                 <Text style={styles.catMeta}>
-                  {formatAge(basics.ageValue, basics.ageUnit)}
+                  {[basics.breed, formatAge(basics.ageValue, basics.ageUnit)]
+                    .filter(Boolean)
+                    .join("  ·  ")}
                 </Text>
               )}
             </View>

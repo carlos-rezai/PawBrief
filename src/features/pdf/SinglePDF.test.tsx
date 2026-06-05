@@ -91,11 +91,12 @@ describe("SinglePDF", () => {
       expect(screen.getByText("CARE GUIDE")).toBeInTheDocument();
     });
 
-    it("renders the cat name, breed, and formatted age", () => {
+    it("renders the cat name and breed · age on one line", () => {
       render(<SinglePDF profile={seedProfile} />);
       expect(screen.getByText("Mochi")).toBeInTheDocument();
-      expect(screen.getByText("Scottish Fold")).toBeInTheDocument();
-      expect(screen.getByText("3 years")).toBeInTheDocument();
+      expect(
+        screen.getByText(/Scottish Fold\s+·\s+3 years/)
+      ).toBeInTheDocument();
     });
 
     it("renders PawBriefMark SVG fallback when no photo is provided", () => {

@@ -161,14 +161,12 @@ describe("MergedPDF", () => {
       expect(screen.getByText("Household Care Guide")).toBeInTheDocument();
     });
 
-    it("renders both cats' names, breeds, and formatted ages", () => {
+    it("renders both cats' names and breed · age on one line each", () => {
       render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
       expect(screen.getByText("Mochi")).toBeInTheDocument();
-      expect(screen.getByText("Scottish Fold")).toBeInTheDocument();
-      expect(screen.getByText("3 years")).toBeInTheDocument();
+      expect(screen.getByText("Scottish Fold · 3 years")).toBeInTheDocument();
       expect(screen.getByText("Luna")).toBeInTheDocument();
-      expect(screen.getByText("Ragdoll")).toBeInTheDocument();
-      expect(screen.getByText("2 years")).toBeInTheDocument();
+      expect(screen.getByText("Ragdoll · 2 years")).toBeInTheDocument();
     });
 
     it("renders both cat photos when photoIds and blob URLs are provided", () => {

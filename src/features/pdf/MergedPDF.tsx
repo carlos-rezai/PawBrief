@@ -26,17 +26,17 @@ const COVER_PHOTO_SIZE = 58;
 const styles = StyleSheet.create({
   page: {
     paddingTop: 0,
-    paddingHorizontal: 40,
-    paddingBottom: 48,
+    paddingHorizontal: 32,
+    paddingBottom: 32,
     fontFamily: "Plus Jakarta Sans",
     fontSize: typeScale.body.fontSize,
     backgroundColor: colors.bg,
   },
   coverBand: {
     backgroundColor: colors.primary,
-    marginHorizontal: -40,
-    paddingVertical: 28,
-    paddingHorizontal: 40,
+    marginHorizontal: -32,
+    paddingVertical: 20,
+    paddingHorizontal: 32,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -61,6 +61,8 @@ const styles = StyleSheet.create({
     height: COVER_PHOTO_SIZE,
     borderRadius: COVER_PHOTO_SIZE / 2,
     backgroundColor: colors.primarySoft,
+    borderWidth: 2.5,
+    borderColor: colors.surface,
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
@@ -179,10 +181,11 @@ function CatCoverCard({
       </View>
       <View>
         <Text style={styles.catName}>{basics?.name ?? ""}</Text>
-        {basics?.breed && <Text style={styles.catMeta}>{basics.breed}</Text>}
         {basics && (
           <Text style={styles.catMeta}>
-            {formatAge(basics.ageValue, basics.ageUnit)}
+            {[basics.breed, formatAge(basics.ageValue, basics.ageUnit)]
+              .filter(Boolean)
+              .join(" · ")}
           </Text>
         )}
       </View>
