@@ -28,6 +28,7 @@ vi.mock("@react-pdf/renderer", () => ({
   Font: { register: vi.fn() },
   Svg: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   Circle: () => null,
+  Ellipse: () => null,
   G: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   Path: () => null,
 }));

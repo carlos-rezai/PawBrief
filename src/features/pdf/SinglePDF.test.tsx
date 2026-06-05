@@ -17,6 +17,7 @@ vi.mock("@react-pdf/renderer", () => ({
   ),
   Svg: ({ children }: { children?: React.ReactNode }) => <svg>{children}</svg>,
   Circle: () => null,
+  Ellipse: () => null,
   G: ({ children }: { children?: React.ReactNode }) => <g>{children}</g>,
   Path: () => null,
   StyleSheet: { create: (s: unknown) => s },
@@ -85,6 +86,11 @@ const seedProfile: CatProfile = {
 
 describe("SinglePDF", () => {
   describe("Cover Band", () => {
+    it("renders the CARE GUIDE eyebrow label", () => {
+      render(<SinglePDF profile={seedProfile} />);
+      expect(screen.getByText("CARE GUIDE")).toBeInTheDocument();
+    });
+
     it("renders the cat name, breed, and formatted age", () => {
       render(<SinglePDF profile={seedProfile} />);
       expect(screen.getByText("Mochi")).toBeInTheDocument();
@@ -92,9 +98,10 @@ describe("SinglePDF", () => {
       expect(screen.getByText("3 years")).toBeInTheDocument();
     });
 
-    it("renders no photo when photoId is absent", () => {
-      render(<SinglePDF profile={seedProfile} />);
+    it("renders PawBriefMark SVG fallback when no photo is provided", () => {
+      const { container } = render(<SinglePDF profile={seedProfile} />);
       expect(screen.queryByRole("img")).not.toBeInTheDocument();
+      expect(container.querySelector("svg")).toBeInTheDocument();
     });
 
     it("renders the cat photo when photoId and blob URL are provided", () => {

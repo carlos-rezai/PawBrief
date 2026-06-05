@@ -14,6 +14,7 @@ import { EmergencyCallout } from "./EmergencyCallout";
 import { MiniCard } from "./MiniCard";
 import { Tag } from "./Tag";
 import { RoutineClock } from "./RoutineClock";
+import { PawBriefMark } from "./PawBriefMark";
 import { colors, typeScale } from "./pdfTokens";
 
 const styles = StyleSheet.create({
@@ -32,14 +33,47 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
+  },
+  coverLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  avatarCircle: {
+    width: 92,
+    height: 92,
+    borderRadius: 46,
+    backgroundColor: colors.primarySoft,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
   },
   photo: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
+    width: 92,
+    height: 92,
+    borderRadius: 46,
   },
   coverText: {
     marginLeft: 16,
+  },
+  coverEyebrow: {
+    fontFamily: "Plus Jakarta Sans",
+    fontSize: typeScale.caption.fontSize,
+    fontWeight: typeScale.caption.fontWeight as 400,
+    color: colors.primaryInk,
+    letterSpacing: 1.2,
+    marginBottom: 4,
+  },
+  wordmark: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  wordmarkText: {
+    fontFamily: "Plus Jakarta Sans",
+    fontSize: 16,
+    fontWeight: 800,
+    color: colors.surface,
   },
   catName: {
     fontFamily: "Plus Jakarta Sans",
@@ -104,19 +138,33 @@ export default function SinglePDF({
       <Page size="A4" style={styles.page}>
         {/* Cover Band */}
         <View style={styles.coverBand}>
-          {basics?.photoId && photoBlobUrls[basics.photoId] ? (
-            <Image style={styles.photo} src={photoBlobUrls[basics.photoId]} />
-          ) : null}
-          <View style={styles.coverText}>
-            <Text style={styles.catName}>{basics?.name ?? ""}</Text>
-            {basics?.breed && (
-              <Text style={styles.catMeta}>{basics.breed}</Text>
-            )}
-            {basics && (
-              <Text style={styles.catMeta}>
-                {formatAge(basics.ageValue, basics.ageUnit)}
-              </Text>
-            )}
+          <View style={styles.coverLeft}>
+            <View style={styles.avatarCircle}>
+              {basics?.photoId && photoBlobUrls[basics.photoId] ? (
+                <Image
+                  style={styles.photo}
+                  src={photoBlobUrls[basics.photoId]}
+                />
+              ) : (
+                <PawBriefMark size={46} />
+              )}
+            </View>
+            <View style={styles.coverText}>
+              <Text style={styles.coverEyebrow}>CARE GUIDE</Text>
+              <Text style={styles.catName}>{basics?.name ?? ""}</Text>
+              {basics?.breed && (
+                <Text style={styles.catMeta}>{basics.breed}</Text>
+              )}
+              {basics && (
+                <Text style={styles.catMeta}>
+                  {formatAge(basics.ageValue, basics.ageUnit)}
+                </Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.wordmark}>
+            <PawBriefMark size={22} reverse />
+            <Text style={styles.wordmarkText}>PawBrief</Text>
           </View>
         </View>
 

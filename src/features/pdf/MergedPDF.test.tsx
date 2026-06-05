@@ -16,6 +16,7 @@ vi.mock("@react-pdf/renderer", () => ({
   ),
   Svg: ({ children }: { children?: React.ReactNode }) => <svg>{children}</svg>,
   Circle: () => null,
+  Ellipse: () => null,
   G: ({ children }: { children?: React.ReactNode }) => <g>{children}</g>,
   Path: () => null,
   StyleSheet: { create: (s: unknown) => s },
@@ -194,9 +195,14 @@ describe("MergedPDF", () => {
       expect(imgs[1]).toHaveAttribute("src", "blob:http://localhost/b");
     });
 
-    it("renders no photos when photoIds are absent", () => {
-      render(<MergedPDF profileA={profileA} profileB={sharedVetProfileB} />);
+    it("renders PawBriefMark SVG fallbacks when photoIds are absent", () => {
+      const { container } = render(
+        <MergedPDF profileA={profileA} profileB={sharedVetProfileB} />
+      );
       expect(screen.queryByRole("img")).not.toBeInTheDocument();
+      expect(container.querySelectorAll("svg").length).toBeGreaterThanOrEqual(
+        2
+      );
     });
   });
 

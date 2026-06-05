@@ -15,11 +15,12 @@ import { EmergencyCallout } from "./EmergencyCallout";
 import { MiniCard } from "./MiniCard";
 import { Tag } from "./Tag";
 import { RoutineClock } from "./RoutineClock";
+import { PawBriefMark } from "./PawBriefMark";
 import { colors, typeScale } from "./pdfTokens";
 
 const CLOCK_SIZE = 156;
 const THUMB_SIZE = 60;
-const COVER_PHOTO_SIZE = 72;
+const COVER_PHOTO_SIZE = 58;
 
 const styles = StyleSheet.create({
   page: {
@@ -54,10 +55,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
+  avatarCircle: {
+    width: COVER_PHOTO_SIZE,
+    height: COVER_PHOTO_SIZE,
+    borderRadius: COVER_PHOTO_SIZE / 2,
+    backgroundColor: colors.primarySoft,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
   coverPhoto: {
     width: COVER_PHOTO_SIZE,
     height: COVER_PHOTO_SIZE,
     borderRadius: COVER_PHOTO_SIZE / 2,
+  },
+  wordmark: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  wordmarkText: {
+    fontFamily: "Plus Jakarta Sans",
+    fontSize: 16,
+    fontWeight: 800,
+    color: colors.surface,
   },
   catName: {
     fontFamily: "Plus Jakarta Sans",
@@ -140,7 +161,13 @@ function CatCoverCard({
   const photoUrl = basics?.photoId ? photoBlobUrls[basics.photoId] : undefined;
   return (
     <View style={styles.catCard}>
-      {photoUrl && <Image style={styles.coverPhoto} src={photoUrl} />}
+      <View style={styles.avatarCircle}>
+        {photoUrl ? (
+          <Image style={styles.coverPhoto} src={photoUrl} />
+        ) : (
+          <PawBriefMark size={30} />
+        )}
+      </View>
       <View>
         <Text style={styles.catName}>{basics?.name ?? ""}</Text>
         {basics?.breed && <Text style={styles.catMeta}>{basics.breed}</Text>}
@@ -309,10 +336,14 @@ export default function MergedPDF({
         <View style={styles.coverBand}>
           <View>
             <Text style={styles.coverEyebrow}>Household Care Guide</Text>
+            <View style={styles.coverCats}>
+              <CatCoverCard profile={profileA} photoBlobUrls={photoBlobUrls} />
+              <CatCoverCard profile={profileB} photoBlobUrls={photoBlobUrls} />
+            </View>
           </View>
-          <View style={styles.coverCats}>
-            <CatCoverCard profile={profileA} photoBlobUrls={photoBlobUrls} />
-            <CatCoverCard profile={profileB} photoBlobUrls={photoBlobUrls} />
+          <View style={styles.wordmark}>
+            <PawBriefMark size={22} reverse />
+            <Text style={styles.wordmarkText}>PawBrief</Text>
           </View>
         </View>
 
