@@ -685,7 +685,7 @@ function HealthCol({ profile }: { profile: CatProfile }) {
         </Text>
       )}
       {medical.allergies && (
-        <>
+        <View style={{ marginTop: 8 }}>
           <Text style={styles.eyebrow}>ALLERGIES</Text>
           <Text
             style={{
@@ -696,10 +696,10 @@ function HealthCol({ profile }: { profile: CatProfile }) {
           >
             {medical.allergies}
           </Text>
-        </>
+        </View>
       )}
       {medical.medicalConditions && (
-        <>
+        <View style={{ marginTop: 8 }}>
           <Text style={styles.eyebrow}>CONDITIONS</Text>
           <Text
             style={{
@@ -710,7 +710,7 @@ function HealthCol({ profile }: { profile: CatProfile }) {
           >
             {medical.medicalConditions}
           </Text>
-        </>
+        </View>
       )}
     </>
   );
