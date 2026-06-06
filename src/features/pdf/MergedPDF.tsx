@@ -26,7 +26,7 @@ import { colors, typeScale, palette as routinePalette } from "./pdfTokens";
 import { formatRange } from "../../utils/formatRange";
 
 const CLOCK_SIZE = 116;
-const THUMB_SIZE = 45;
+const THUMB_SIZE = 100;
 const COVER_PHOTO_SIZE = 44;
 
 const styles = StyleSheet.create({
@@ -163,8 +163,9 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   thumbnail: {
+    // Width only — height is derived from the image's aspect ratio so the
+    // plating photo is never squashed into a square.
     width: THUMB_SIZE,
-    height: THUMB_SIZE,
     marginTop: 4,
   },
   noteItem: {
@@ -327,19 +328,20 @@ function FeedingCol({
           ))}
         </View>
       )}
-      {feeding.platingInstructions && (
-        <Text style={{ ...styles.inlineText, marginTop: 8 }}>
-          <Text style={{ fontWeight: 700, color: colors.ink }}>
-            How to serve:{" "}
-          </Text>
-          {feeding.platingInstructions}
-        </Text>
-      )}
-      {feeding.platingPhotoId && photoBlobUrls[feeding.platingPhotoId] && (
-        <Image
-          style={styles.thumbnail}
-          src={photoBlobUrls[feeding.platingPhotoId]}
-        />
+      {(feeding.platingInstructions ||
+        (feeding.platingPhotoId && photoBlobUrls[feeding.platingPhotoId])) && (
+        <View style={{ marginTop: 8 }}>
+          <Text style={styles.eyebrow}>HOW TO SERVE</Text>
+          {feeding.platingInstructions && (
+            <Text style={styles.inlineText}>{feeding.platingInstructions}</Text>
+          )}
+          {feeding.platingPhotoId && photoBlobUrls[feeding.platingPhotoId] && (
+            <Image
+              style={styles.thumbnail}
+              src={photoBlobUrls[feeding.platingPhotoId]}
+            />
+          )}
+        </View>
       )}
       {feeding.dietaryNotes && (
         <View style={{ marginTop: 8 }}>
@@ -404,13 +406,9 @@ function feedingHowToServe(
   if (!feeding.platingInstructions && !platingUrl) return null;
   return (
     <View>
+      <Text style={styles.eyebrow}>HOW TO SERVE</Text>
       {!!feeding.platingInstructions && (
-        <Text style={styles.inlineText}>
-          <Text style={{ fontWeight: 700, color: colors.ink }}>
-            How to serve:{" "}
-          </Text>
-          {feeding.platingInstructions}
-        </Text>
+        <Text style={styles.inlineText}>{feeding.platingInstructions}</Text>
       )}
       {platingUrl && <Image style={styles.thumbnail} src={platingUrl} />}
     </View>
@@ -864,17 +862,8 @@ export default function MergedPDF({
           sharedVet={shared}
         />
 
-        {/* Feeding */}
-        <GSection n={1} title="Feeding">
-          <FeedingSection
-            profileA={profileA}
-            profileB={profileB}
-            photoBlobUrls={photoBlobUrls}
-          />
-        </GSection>
-
         {/* Routine */}
-        <GSection n={2} title="A typical day">
+        <GSection n={1} title="A typical day">
           <CmpRow
             left={
               profileA.routine ? (
@@ -890,6 +879,15 @@ export default function MergedPDF({
                 <NotAdded />
               )
             }
+          />
+        </GSection>
+
+        {/* Feeding */}
+        <GSection n={2} title="Feeding">
+          <FeedingSection
+            profileA={profileA}
+            profileB={profileB}
+            photoBlobUrls={photoBlobUrls}
           />
         </GSection>
 

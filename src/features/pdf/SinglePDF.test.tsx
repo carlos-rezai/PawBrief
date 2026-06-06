@@ -172,20 +172,21 @@ describe("SinglePDF", () => {
       expect(screen.getByText("Zesty Paws · Salmon Oil")).toBeInTheDocument();
     });
 
-    it("renders plating instructions with How to serve prefix", () => {
+    it("renders plating instructions under a HOW TO SERVE heading", () => {
       render(<SinglePDF profile={seedProfile} />);
-      expect(screen.getByText("How to serve:")).toBeInTheDocument();
+      expect(screen.getByText("HOW TO SERVE")).toBeInTheDocument();
       expect(
         screen.getByText("Mix wet and dry food together")
       ).toBeInTheDocument();
     });
 
-    it("renders dietary notes with warning prefix when present", () => {
+    it("renders dietary notes under a DIETARY NOTES heading when present", () => {
       const withDietaryNotes: CatProfile = {
         ...seedProfile,
         feeding: { ...seedProfile.feeding!, dietaryNotes: "No fish" },
       };
       render(<SinglePDF profile={withDietaryNotes} />);
+      expect(screen.getByText("DIETARY NOTES")).toBeInTheDocument();
       expect(screen.getByText("No fish")).toBeInTheDocument();
     });
   });

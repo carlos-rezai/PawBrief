@@ -127,8 +127,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   thumbnail: {
-    width: 60,
-    height: 60,
+    // Width only — height follows the image's aspect ratio (no square squash).
+    width: 120,
     marginTop: 3,
   },
   footer: {
@@ -205,71 +205,9 @@ export default function SinglePDF({
           />
         )}
 
-        {/* Feeding */}
-        {feeding && (
-          <GSection n={1} title="Feeding">
-            <View style={{ flexDirection: "row", gap: 12 }}>
-              {/* LEFT: food cards + plating */}
-              <View style={{ flex: 1, gap: 5 }}>
-                {feeding.foodEntries.map((entry, i) => (
-                  <MiniCard
-                    key={i}
-                    title={[entry.brand, entry.flavor]
-                      .filter(Boolean)
-                      .join(" · ")}
-                    subtitle={entry.texture}
-                  />
-                ))}
-                {feeding.platingInstructions && (
-                  <Text style={styles.inlineText}>
-                    <Text style={{ fontWeight: 700, color: colors.ink }}>
-                      How to serve:{" "}
-                    </Text>
-                    {feeding.platingInstructions}
-                  </Text>
-                )}
-                {feeding.platingPhotoId &&
-                  photoBlobUrls[feeding.platingPhotoId] && (
-                    <Image
-                      style={styles.thumbnail}
-                      src={photoBlobUrls[feeding.platingPhotoId]}
-                    />
-                  )}
-              </View>
-              {/* RIGHT: servings + supplements + dietary notes */}
-              <View style={{ flex: 1 }}>
-                <Text style={styles.eyebrow}>SERVINGS</Text>
-                <View style={styles.row}>
-                  {feeding.servings.map((s, i) => (
-                    <Tag key={i} label={`${s.time} · ${s.grams}g`} />
-                  ))}
-                </View>
-                {feeding.supplementEntries.length > 0 && (
-                  <View style={{ marginTop: 8 }}>
-                    <Text style={styles.eyebrow}>SUPPLEMENTS</Text>
-                    {feeding.supplementEntries.map((s, i) => (
-                      <Text key={i} style={styles.inlineText}>
-                        {[s.brand, s.flavor].filter(Boolean).join(" · ")}
-                      </Text>
-                    ))}
-                  </View>
-                )}
-                {feeding.dietaryNotes && (
-                  <View style={{ marginTop: 8 }}>
-                    <Text style={styles.eyebrow}>DIETARY NOTES</Text>
-                    <Text style={styles.inlineText}>
-                      {feeding.dietaryNotes}
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </View>
-          </GSection>
-        )}
-
         {/* Routine */}
         {routine && (
-          <GSection n={2} title="A typical day">
+          <GSection n={1} title="A typical day">
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <RoutineClock slots={routine.slots} size={140} />
@@ -391,6 +329,72 @@ export default function SinglePDF({
                     </View>
                   );
                 })()}
+              </View>
+            </View>
+          </GSection>
+        )}
+
+        {/* Feeding */}
+        {feeding && (
+          <GSection n={2} title="Feeding">
+            <View style={{ flexDirection: "row", gap: 12 }}>
+              {/* LEFT: food cards + plating */}
+              <View style={{ flex: 1, gap: 5 }}>
+                {feeding.foodEntries.map((entry, i) => (
+                  <MiniCard
+                    key={i}
+                    title={[entry.brand, entry.flavor]
+                      .filter(Boolean)
+                      .join(" · ")}
+                    subtitle={entry.texture}
+                  />
+                ))}
+                {(feeding.platingInstructions ||
+                  (feeding.platingPhotoId &&
+                    photoBlobUrls[feeding.platingPhotoId])) && (
+                  <View>
+                    <Text style={styles.eyebrow}>HOW TO SERVE</Text>
+                    {feeding.platingInstructions && (
+                      <Text style={styles.inlineText}>
+                        {feeding.platingInstructions}
+                      </Text>
+                    )}
+                    {feeding.platingPhotoId &&
+                      photoBlobUrls[feeding.platingPhotoId] && (
+                        <Image
+                          style={styles.thumbnail}
+                          src={photoBlobUrls[feeding.platingPhotoId]}
+                        />
+                      )}
+                  </View>
+                )}
+              </View>
+              {/* RIGHT: servings + supplements + dietary notes */}
+              <View style={{ flex: 1 }}>
+                <Text style={styles.eyebrow}>SERVINGS</Text>
+                <View style={styles.row}>
+                  {feeding.servings.map((s, i) => (
+                    <Tag key={i} label={`${s.time} · ${s.grams}g`} />
+                  ))}
+                </View>
+                {feeding.supplementEntries.length > 0 && (
+                  <View style={{ marginTop: 8 }}>
+                    <Text style={styles.eyebrow}>SUPPLEMENTS</Text>
+                    {feeding.supplementEntries.map((s, i) => (
+                      <Text key={i} style={styles.inlineText}>
+                        {[s.brand, s.flavor].filter(Boolean).join(" · ")}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+                {feeding.dietaryNotes && (
+                  <View style={{ marginTop: 8 }}>
+                    <Text style={styles.eyebrow}>DIETARY NOTES</Text>
+                    <Text style={styles.inlineText}>
+                      {feeding.dietaryNotes}
+                    </Text>
+                  </View>
+                )}
               </View>
             </View>
           </GSection>
