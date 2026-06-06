@@ -389,7 +389,15 @@ function RoutineCol({ slots }: { slots: ActivitySlot[] }) {
                   routinePalette[slot.colorIndex % routinePalette.length],
               }}
             />
-            <View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "baseline",
+                justifyContent: "space-between",
+                gap: 6,
+              }}
+            >
               <Text
                 style={{
                   fontFamily: "Plus Jakarta Sans",

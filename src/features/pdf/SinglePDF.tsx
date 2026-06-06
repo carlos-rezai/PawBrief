@@ -306,7 +306,13 @@ export default function SinglePDF({
                                   ],
                               }}
                             />
-                            <View>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "baseline",
+                                gap: 5,
+                              }}
+                            >
                               <Text
                                 style={{
                                   fontFamily: "Plus Jakarta Sans",
@@ -352,7 +358,13 @@ export default function SinglePDF({
                                   ],
                               }}
                             />
-                            <View>
+                            <View
+                              style={{
+                                flexDirection: "row",
+                                alignItems: "baseline",
+                                gap: 5,
+                              }}
+                            >
                               <Text
                                 style={{
                                   fontFamily: "Plus Jakarta Sans",
