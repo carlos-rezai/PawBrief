@@ -10,8 +10,13 @@ interface GSectionProps {
 
 export function GSection({ n, title, children }: GSectionProps) {
   return (
-    <View wrap={false} style={{ marginTop: 18 }}>
+    // Sections may wrap across pages; subsections inside opt out individually so
+    // a page break only happens between subsections, never mid-subsection.
+    <View style={{ marginTop: 18 }}>
       <View
+        // Keep the heading from being stranded alone at the foot of a page —
+        // it pulls to the next page unless a subsection can follow it.
+        minPresenceAhead={60}
         style={{
           flexDirection: "row",
           alignItems: "center",

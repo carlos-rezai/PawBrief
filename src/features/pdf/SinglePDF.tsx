@@ -208,7 +208,10 @@ export default function SinglePDF({
         {/* Routine */}
         {routine && (
           <GSection n={1} title="A typical day">
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View
+              wrap={false}
+              style={{ flexDirection: "row", alignItems: "center" }}
+            >
               <View style={{ flex: 1, alignItems: "center" }}>
                 <RoutineClock slots={routine.slots} size={140} />
               </View>
@@ -337,7 +340,7 @@ export default function SinglePDF({
         {/* Feeding */}
         {feeding && (
           <GSection n={2} title="Feeding">
-            <View style={{ flexDirection: "row", gap: 12 }}>
+            <View wrap={false} style={{ flexDirection: "row", gap: 12 }}>
               {/* LEFT: food cards + plating */}
               <View style={{ flex: 1, gap: 5 }}>
                 {feeding.foodEntries.map((entry, i) => (
@@ -403,7 +406,7 @@ export default function SinglePDF({
         {/* Favourites */}
         {favorites && (
           <GSection n={3} title="Favourites">
-            <View style={{ flexDirection: "row", gap: 12 }}>
+            <View wrap={false} style={{ flexDirection: "row", gap: 12 }}>
               {/* LEFT: toys */}
               <View style={{ flex: 1 }}>
                 {favorites.toyEntries.length > 0 && (
@@ -461,7 +464,7 @@ export default function SinglePDF({
         {/* Health */}
         {medical && (
           <GSection n={4} title="Health">
-            <View style={{ flexDirection: "row", gap: 12 }}>
+            <View wrap={false} style={{ flexDirection: "row", gap: 12 }}>
               {/* LEFT: medications */}
               <View style={{ flex: 1 }}>
                 <Text style={styles.eyebrow}>MEDICATIONS</Text>
@@ -525,7 +528,7 @@ export default function SinglePDF({
         {notes && notes.specialNotes.length > 0 && (
           <GSection n={5} title="Good to know">
             {notes.specialNotes.map((note, i) => (
-              <View key={i} style={styles.noteItem}>
+              <View key={i} wrap={false} style={styles.noteItem}>
                 <Text style={styles.inlineText}>{note.title}</Text>
                 <Text style={styles.inlineText}>{note.body}</Text>
                 {note.photoId && photoBlobUrls[note.photoId] && (

@@ -242,7 +242,7 @@ function CmpRow({
   right: React.ReactNode;
 }) {
   return (
-    <View style={styles.cmpRow}>
+    <View wrap={false} style={styles.cmpRow}>
       <View style={styles.col}>{left}</View>
       <View style={styles.colDivider} />
       <View style={styles.col}>{right}</View>
@@ -273,7 +273,7 @@ function AlignedSection({
         const cellStyle =
           i > 0 ? [styles.col, { paddingTop: gap }] : styles.col;
         return (
-          <View key={i} style={styles.cmpRow}>
+          <View key={i} wrap={false} style={styles.cmpRow}>
             <View style={cellStyle}>{r.left}</View>
             <View style={styles.colDivider} />
             <View style={cellStyle}>{r.right}</View>
