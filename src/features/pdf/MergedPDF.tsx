@@ -7,7 +7,13 @@ import {
   Image,
   StyleSheet,
 } from "@react-pdf/renderer";
-import type { CatProfile, ActivitySlot } from "../../types/profile";
+import type {
+  CatProfile,
+  ActivitySlot,
+  FeedingData,
+  FavoritesData,
+  MedicalData,
+} from "../../types/profile";
 import { formatAge } from "../../utils/formatAge";
 import { isSharedVet } from "../../utils/isSharedVet";
 import { GSection } from "./GSection";
@@ -243,6 +249,40 @@ function CmpRow({
   );
 }
 
+type AlignedRow = { left: React.ReactNode; right: React.ReactNode };
+
+/**
+ * Renders a comparison section as a stack of subsection rows so the same
+ * subsection (e.g. SERVINGS) lines up horizontally on both sides even when the
+ * two cats have different amounts of content above it. Rows touch with no gap
+ * so the centre divider stays continuous; inter-subsection spacing lives inside
+ * the cells via paddingTop.
+ */
+function AlignedSection({
+  rows,
+  gap = 8,
+}: {
+  rows: AlignedRow[];
+  gap?: number;
+}) {
+  const visible = rows.filter((r) => r.left || r.right);
+  return (
+    <View>
+      {visible.map((r, i) => {
+        const cellStyle =
+          i > 0 ? [styles.col, { paddingTop: gap }] : styles.col;
+        return (
+          <View key={i} style={styles.cmpRow}>
+            <View style={cellStyle}>{r.left}</View>
+            <View style={styles.colDivider} />
+            <View style={cellStyle}>{r.right}</View>
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 function NotAdded() {
   return <Text style={styles.notAdded}>Not added</Text>;
 }
@@ -311,6 +351,114 @@ function FeedingCol({
   );
 }
 
+function feedingFood(feeding: FeedingData) {
+  if (feeding.foodEntries.length === 0) return null;
+  return (
+    <View style={{ gap: 5 }}>
+      {feeding.foodEntries.map((entry, i) => (
+        <MiniCard
+          key={i}
+          title={[entry.brand, entry.flavor].filter(Boolean).join(" · ")}
+          subtitle={entry.texture}
+        />
+      ))}
+    </View>
+  );
+}
+
+function feedingServings(feeding: FeedingData) {
+  if (feeding.servings.length === 0) return null;
+  return (
+    <View>
+      <Text style={styles.eyebrow}>SERVINGS</Text>
+      <View style={styles.row}>
+        {feeding.servings.map((s, i) => (
+          <Tag key={i} label={`${s.time} · ${s.grams}g`} />
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function feedingSupplements(feeding: FeedingData) {
+  if (feeding.supplementEntries.length === 0) return null;
+  return (
+    <View>
+      <Text style={styles.eyebrow}>SUPPLEMENTS</Text>
+      {feeding.supplementEntries.map((s, i) => (
+        <Text key={i} style={styles.inlineText}>
+          {[s.brand, s.flavor].filter(Boolean).join(" · ")}
+        </Text>
+      ))}
+    </View>
+  );
+}
+
+function feedingHowToServe(
+  feeding: FeedingData,
+  photoBlobUrls: Record<string, string>
+) {
+  const platingUrl = feeding.platingPhotoId
+    ? photoBlobUrls[feeding.platingPhotoId]
+    : undefined;
+  if (!feeding.platingInstructions && !platingUrl) return null;
+  return (
+    <View>
+      {!!feeding.platingInstructions && (
+        <Text style={styles.inlineText}>
+          <Text style={{ fontWeight: 700, color: colors.ink }}>
+            How to serve:{" "}
+          </Text>
+          {feeding.platingInstructions}
+        </Text>
+      )}
+      {platingUrl && <Image style={styles.thumbnail} src={platingUrl} />}
+    </View>
+  );
+}
+
+function feedingDietary(feeding: FeedingData) {
+  if (!feeding.dietaryNotes) return null;
+  return (
+    <Text style={styles.inlineText}>
+      <Text style={{ color: colors.accent, fontWeight: 700 }}>⚠ </Text>
+      {feeding.dietaryNotes}
+    </Text>
+  );
+}
+
+function FeedingSection({
+  profileA,
+  profileB,
+  photoBlobUrls,
+}: {
+  profileA: CatProfile;
+  profileB: CatProfile;
+  photoBlobUrls: Record<string, string>;
+}) {
+  const a = profileA.feeding;
+  const b = profileB.feeding;
+  if (!a || !b) {
+    return (
+      <CmpRow
+        left={<FeedingCol profile={profileA} photoBlobUrls={photoBlobUrls} />}
+        right={<FeedingCol profile={profileB} photoBlobUrls={photoBlobUrls} />}
+      />
+    );
+  }
+  const rows: AlignedRow[] = [
+    { left: feedingFood(a), right: feedingFood(b) },
+    { left: feedingServings(a), right: feedingServings(b) },
+    { left: feedingSupplements(a), right: feedingSupplements(b) },
+    {
+      left: feedingHowToServe(a, photoBlobUrls),
+      right: feedingHowToServe(b, photoBlobUrls),
+    },
+    { left: feedingDietary(a), right: feedingDietary(b) },
+  ];
+  return <AlignedSection rows={rows} />;
+}
+
 function FavouritesCol({ profile }: { profile: CatProfile }) {
   const { favorites } = profile;
   if (!favorites) return <NotAdded />;
@@ -358,6 +506,88 @@ function FavouritesCol({ profile }: { profile: CatProfile }) {
       )}
     </>
   );
+}
+
+function favToys(fav: FavoritesData) {
+  if (fav.toyEntries.length === 0) return null;
+  return (
+    <View>
+      <Text style={styles.eyebrow}>TOYS</Text>
+      <View style={{ gap: 5 }}>
+        {fav.toyEntries.map((t, i) => (
+          <MiniCard key={i} title={t.name} subtitle={t.description} />
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function favTreats(fav: FavoritesData) {
+  if (fav.treatEntries.length === 0) return null;
+  return (
+    <View>
+      <Text style={styles.eyebrow}>TREATS</Text>
+      <View style={styles.tagRow}>
+        {fav.treatEntries.map((t, i) => (
+          <Tag key={i} label={`${t.brand} · ${t.flavor}`} />
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function favComfort(fav: FavoritesData) {
+  if (fav.comfortItems.length === 0) return null;
+  return (
+    <View>
+      <Text style={styles.eyebrow}>COMFORT ITEMS</Text>
+      <View style={styles.tagRow}>
+        {fav.comfortItems.map((item, i) => (
+          <Tag key={i} label={item} variant="accent" />
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function favSpots(fav: FavoritesData) {
+  if (fav.favouriteSpots.length === 0) return null;
+  return (
+    <View>
+      <Text style={styles.eyebrow}>FAVOURITE SPOTS</Text>
+      <View style={styles.tagRow}>
+        {fav.favouriteSpots.map((spot, i) => (
+          <Tag key={i} label={spot} variant="accent" />
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function FavouritesSection({
+  profileA,
+  profileB,
+}: {
+  profileA: CatProfile;
+  profileB: CatProfile;
+}) {
+  const a = profileA.favorites;
+  const b = profileB.favorites;
+  if (!a || !b) {
+    return (
+      <CmpRow
+        left={<FavouritesCol profile={profileA} />}
+        right={<FavouritesCol profile={profileB} />}
+      />
+    );
+  }
+  const rows: AlignedRow[] = [
+    { left: favToys(a), right: favToys(b) },
+    { left: favTreats(a), right: favTreats(b) },
+    { left: favComfort(a), right: favComfort(b) },
+    { left: favSpots(a), right: favSpots(b) },
+  ];
+  return <AlignedSection rows={rows} gap={11} />;
 }
 
 function RoutineCol({ slots }: { slots: ActivitySlot[] }) {
@@ -486,6 +716,78 @@ function HealthCol({ profile }: { profile: CatProfile }) {
   );
 }
 
+function healthMeds(medical: MedicalData) {
+  return (
+    <View>
+      <Text style={styles.eyebrow}>MEDICATIONS</Text>
+      {medical.medications.length > 0 ? (
+        medical.medications.map((m, i) => (
+          <MiniCard
+            key={i}
+            title={[m.name, m.dosage, m.frequency].filter(Boolean).join(" · ")}
+            subtitle={m.instructions || undefined}
+          />
+        ))
+      ) : (
+        <Text style={{ ...styles.inlineText, color: colors.muted }}>None</Text>
+      )}
+    </View>
+  );
+}
+
+function healthAllergies(medical: MedicalData) {
+  if (!medical.allergies) return null;
+  return (
+    <View>
+      <Text style={styles.eyebrow}>ALLERGIES</Text>
+      <Text
+        style={{ ...styles.inlineText, color: colors.accent, fontWeight: 700 }}
+      >
+        {medical.allergies}
+      </Text>
+    </View>
+  );
+}
+
+function healthConditions(medical: MedicalData) {
+  if (!medical.medicalConditions) return null;
+  return (
+    <View>
+      <Text style={styles.eyebrow}>CONDITIONS</Text>
+      <Text
+        style={{ ...styles.inlineText, color: colors.inkSoft, fontWeight: 600 }}
+      >
+        {medical.medicalConditions}
+      </Text>
+    </View>
+  );
+}
+
+function HealthSection({
+  profileA,
+  profileB,
+}: {
+  profileA: CatProfile;
+  profileB: CatProfile;
+}) {
+  const a = profileA.medical;
+  const b = profileB.medical;
+  if (!a || !b || !hasHealthData(profileA) || !hasHealthData(profileB)) {
+    return (
+      <CmpRow
+        left={<HealthCol profile={profileA} />}
+        right={<HealthCol profile={profileB} />}
+      />
+    );
+  }
+  const rows: AlignedRow[] = [
+    { left: healthMeds(a), right: healthMeds(b) },
+    { left: healthAllergies(a), right: healthAllergies(b) },
+    { left: healthConditions(a), right: healthConditions(b) },
+  ];
+  return <AlignedSection rows={rows} />;
+}
+
 function NotesCol({ profile }: { profile: CatProfile }) {
   const { notes } = profile;
   if (!notes || notes.specialNotes.length === 0) return <NotAdded />;
@@ -564,13 +866,10 @@ export default function MergedPDF({
 
         {/* Feeding */}
         <GSection n={1} title="Feeding">
-          <CmpRow
-            left={
-              <FeedingCol profile={profileA} photoBlobUrls={photoBlobUrls} />
-            }
-            right={
-              <FeedingCol profile={profileB} photoBlobUrls={photoBlobUrls} />
-            }
+          <FeedingSection
+            profileA={profileA}
+            profileB={profileB}
+            photoBlobUrls={photoBlobUrls}
           />
         </GSection>
 
@@ -596,19 +895,13 @@ export default function MergedPDF({
 
         {/* Favourites */}
         <GSection n={3} title="Favourites">
-          <CmpRow
-            left={<FavouritesCol profile={profileA} />}
-            right={<FavouritesCol profile={profileB} />}
-          />
+          <FavouritesSection profileA={profileA} profileB={profileB} />
         </GSection>
 
         {/* Health */}
         {(hasHealthData(profileA) || hasHealthData(profileB)) && (
           <GSection n={4} title="Health">
-            <CmpRow
-              left={<HealthCol profile={profileA} />}
-              right={<HealthCol profile={profileB} />}
-            />
+            <HealthSection profileA={profileA} profileB={profileB} />
           </GSection>
         )}
 
