@@ -342,10 +342,10 @@ function FeedingCol({
         />
       )}
       {feeding.dietaryNotes && (
-        <Text style={{ ...styles.inlineText, marginTop: 8 }}>
-          <Text style={{ color: colors.accent, fontWeight: 700 }}>⚠ </Text>
-          {feeding.dietaryNotes}
-        </Text>
+        <View style={{ marginTop: 8 }}>
+          <Text style={styles.eyebrow}>DIETARY NOTES</Text>
+          <Text style={styles.inlineText}>{feeding.dietaryNotes}</Text>
+        </View>
       )}
     </>
   );
@@ -420,10 +420,10 @@ function feedingHowToServe(
 function feedingDietary(feeding: FeedingData) {
   if (!feeding.dietaryNotes) return null;
   return (
-    <Text style={styles.inlineText}>
-      <Text style={{ color: colors.accent, fontWeight: 700 }}>⚠ </Text>
-      {feeding.dietaryNotes}
-    </Text>
+    <View>
+      <Text style={styles.eyebrow}>DIETARY NOTES</Text>
+      <Text style={styles.inlineText}>{feeding.dietaryNotes}</Text>
+    </View>
   );
 }
 

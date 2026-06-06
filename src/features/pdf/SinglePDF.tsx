@@ -255,12 +255,12 @@ export default function SinglePDF({
                   </View>
                 )}
                 {feeding.dietaryNotes && (
-                  <Text style={{ ...styles.inlineText, marginTop: 8 }}>
-                    <Text style={{ color: colors.accent, fontWeight: 700 }}>
-                      ⚠{" "}
+                  <View style={{ marginTop: 8 }}>
+                    <Text style={styles.eyebrow}>DIETARY NOTES</Text>
+                    <Text style={styles.inlineText}>
+                      {feeding.dietaryNotes}
                     </Text>
-                    {feeding.dietaryNotes}
-                  </Text>
+                  </View>
                 )}
               </View>
             </View>
