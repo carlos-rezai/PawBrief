@@ -3,7 +3,7 @@ import type { BasicsData } from "../../../types/profile";
 import { validatePhoto } from "../../../utils/validatePhoto";
 import { getPhoto, savePhoto } from "../../profile";
 import { Button, Field, Input, PhotoUpload, Select } from "../../../primitives";
-import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
+import { StepFooter, StepFooterSpacer } from "../shared/footer.styles";
 import { AgeGrid, BasicsBody, FieldsCol, PhotoCol } from "./BasicsStep.styles";
 
 interface BasicsStepProps {

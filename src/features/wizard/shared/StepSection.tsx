@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { theme as defaultTheme } from "../../tokens";
+import { theme as defaultTheme } from "../../../tokens";
 
 const SectionWrapper = styled.div<{ $first?: boolean }>`
   margin-top: ${({ $first }) => ($first ? 0 : 26)}px;

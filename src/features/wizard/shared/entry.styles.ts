@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { theme as defaultTheme } from "../../tokens";
+import { theme as defaultTheme } from "../../../tokens";
 
 export const EntryList = styled.div`
   display: flex;

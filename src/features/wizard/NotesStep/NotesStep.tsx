@@ -9,9 +9,9 @@ import {
   PhotoUpload,
   Textarea,
 } from "../../../primitives";
-import { EntryList } from "../StepEntry.styles";
-import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
-import StepSection from "../StepSection";
+import { EntryList } from "../shared/entry.styles";
+import { StepFooter, StepFooterSpacer } from "../shared/footer.styles";
+import StepSection from "../shared/StepSection";
 import { NoteCard } from "./NotesStep.styles";
 
 interface NotesStepProps {

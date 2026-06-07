@@ -6,8 +6,8 @@ import type {
 } from "../../../types/profile";
 import { Button, Field, Input, Tooltip } from "../../../primitives";
 import { IconPlus, IconX } from "../../../primitives/icons";
-import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
-import StepSection from "../StepSection";
+import { StepFooter, StepFooterSpacer } from "../shared/footer.styles";
+import StepSection from "../shared/StepSection";
 import {
   AddEntryButton,
   EntryCard,
@@ -15,7 +15,7 @@ import {
   EntryLabel,
   EntryList,
   RemoveButton,
-} from "../StepEntry.styles";
+} from "../shared/entry.styles";
 import { ToyGrid, TreatGrid } from "./FavoritesStep.styles";
 
 interface FavoritesStepProps {

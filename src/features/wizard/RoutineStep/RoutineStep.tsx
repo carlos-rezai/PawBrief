@@ -4,8 +4,8 @@ import { Button, Tooltip } from "../../../primitives";
 import { IconCopy, IconGrip, IconPlus, IconX } from "../../../primitives/icons";
 import { ColorPicker, RoutineChart } from "../../../components";
 import { routinePalette } from "../../../tokens";
-import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
-import { RemoveButton } from "../StepEntry.styles";
+import { StepFooter, StepFooterSpacer } from "../shared/footer.styles";
+import { RemoveButton } from "../shared/entry.styles";
 import {
   AddSlotButton,
   ChartBlock,

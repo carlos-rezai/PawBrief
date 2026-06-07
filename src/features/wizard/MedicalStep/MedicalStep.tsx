@@ -8,8 +8,8 @@ import type {
 import { buildMapsUrl } from "../../../utils/buildMapsUrl";
 import { Button, Field, Input, Textarea } from "../../../primitives";
 import { IconPlus, IconX } from "../../../primitives/icons";
-import { StepFooter, StepFooterSpacer } from "../StepFooter.styles";
-import StepSection from "../StepSection";
+import { StepFooter, StepFooterSpacer } from "../shared/footer.styles";
+import StepSection from "../shared/StepSection";
 import {
   AddEntryButton,
   EntryCard,
@@ -17,7 +17,7 @@ import {
   EntryLabel,
   EntryList,
   RemoveButton,
-} from "../StepEntry.styles";
+} from "../shared/entry.styles";
 import {
   ContactGrid,
   HealthGrid,
