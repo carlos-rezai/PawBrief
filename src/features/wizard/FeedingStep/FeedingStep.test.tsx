@@ -119,7 +119,9 @@ describe("FeedingStep plating photo upload", () => {
     render(<FeedingStep onSave={onSave} />);
     await user.upload(
       screen.getByLabelText(/plating photo/i),
-      new File(["fake-image"], "plating.jpg", { type: "image/jpeg" })
+      new File([new Uint8Array([0xff, 0xd8, 0xff, 0xe0])], "plating.jpg", {
+        type: "image/jpeg",
+      })
     );
     await user.click(screen.getByRole("button", { name: /next/i }));
     await waitFor(() => {

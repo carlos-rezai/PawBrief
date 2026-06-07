@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import type { BasicsData } from "../../../types/profile";
-import { validatePhoto } from "../../../utils/validatePhoto";
+import {
+  validateMagicBytes,
+  validatePhoto,
+} from "../../../utils/validatePhoto";
 import { getPhoto, savePhoto } from "../../profile";
 import { Button, Field, Input, PhotoUpload, Select } from "../../../primitives";
 import { StepFooter, StepFooterSpacer } from "../shared/footer.styles";
@@ -66,10 +69,14 @@ export default function BasicsStep({
     };
   }, [initialData?.photoId]);
 
-  function handlePhotoChange(file: File) {
+  async function handlePhotoChange(file: File) {
     const error = validatePhoto(file);
     if (error) {
       setPhotoError(error);
+      return;
+    }
+    if (!(await validateMagicBytes(file))) {
+      setPhotoError("That file doesn't appear to be a valid image.");
       return;
     }
     setPhotoError(null);

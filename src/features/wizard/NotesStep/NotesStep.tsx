@@ -1,6 +1,9 @@
 import { useState } from "react";
 import type { NotesData, SpecialNote } from "../../../types/profile";
-import { validatePhoto } from "../../../utils/validatePhoto";
+import {
+  validateMagicBytes,
+  validatePhoto,
+} from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import {
   Button,
@@ -35,18 +38,25 @@ export default function NotesStep({
   const [pendingPhotos, setPendingPhotos] = useState<Record<number, File>>({});
   const [photoErrors, setPhotoErrors] = useState<Record<number, string>>({});
 
-  function handlePhotoChange(index: number, file: File) {
+  async function handlePhotoChange(index: number, file: File) {
     const error = validatePhoto(file);
     if (error) {
       setPhotoErrors((prev) => ({ ...prev, [index]: error }));
-    } else {
-      setPhotoErrors((prev) => {
-        const next = { ...prev };
-        delete next[index];
-        return next;
-      });
-      setPendingPhotos((prev) => ({ ...prev, [index]: file }));
+      return;
     }
+    if (!(await validateMagicBytes(file))) {
+      setPhotoErrors((prev) => ({
+        ...prev,
+        [index]: "That file doesn't appear to be a valid image.",
+      }));
+      return;
+    }
+    setPhotoErrors((prev) => {
+      const next = { ...prev };
+      delete next[index];
+      return next;
+    });
+    setPendingPhotos((prev) => ({ ...prev, [index]: file }));
   }
 
   async function handleSubmit(e: React.FormEvent) {

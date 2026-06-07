@@ -5,7 +5,10 @@ import type {
   ServingEntry,
   SupplementEntry,
 } from "../../../types/profile";
-import { validatePhoto } from "../../../utils/validatePhoto";
+import {
+  validateMagicBytes,
+  validatePhoto,
+} from "../../../utils/validatePhoto";
 import { savePhoto } from "../../profile";
 import {
   Button,
@@ -146,10 +149,14 @@ export default function FeedingStep({
     setSupplementEntries((prev) => prev.filter((_, i) => i !== index));
   }
 
-  function handlePhotoChange(file: File) {
+  async function handlePhotoChange(file: File) {
     const error = validatePhoto(file);
     if (error) {
       setPhotoError(error);
+      return;
+    }
+    if (!(await validateMagicBytes(file))) {
+      setPhotoError("That file doesn't appear to be a valid image.");
       return;
     }
     setPhotoError(null);

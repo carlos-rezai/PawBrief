@@ -87,7 +87,9 @@ describe("NotesStep photo upload", () => {
     const entry = screen.getByTestId("special-note");
     await user.upload(
       within(entry).getByLabelText(/photo/i),
-      new File(["fake-image"], "note.jpg", { type: "image/jpeg" })
+      new File([new Uint8Array([0xff, 0xd8, 0xff, 0xe0])], "note.jpg", {
+        type: "image/jpeg",
+      })
     );
     await user.click(screen.getByRole("button", { name: /next/i }));
     await waitFor(() => {

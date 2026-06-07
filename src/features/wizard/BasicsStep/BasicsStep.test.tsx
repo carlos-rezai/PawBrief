@@ -75,7 +75,9 @@ describe("BasicsStep photo upload", () => {
     const input = screen.getByLabelText(/photo/i);
     await user.upload(
       input,
-      new File(["fake-image"], "cat.jpg", { type: "image/jpeg" })
+      new File([new Uint8Array([0xff, 0xd8, 0xff, 0xe0])], "cat.jpg", {
+        type: "image/jpeg",
+      })
     );
     const preview = await screen.findByAltText(/cat photo preview/i);
     expect(preview).toBeInTheDocument();
@@ -89,7 +91,9 @@ describe("BasicsStep photo upload", () => {
     await user.type(screen.getByLabelText(/name/i), "Luna");
     await user.upload(
       screen.getByLabelText(/photo/i),
-      new File(["fake-image"], "cat.jpg", { type: "image/jpeg" })
+      new File([new Uint8Array([0xff, 0xd8, 0xff, 0xe0])], "cat.jpg", {
+        type: "image/jpeg",
+      })
     );
     await user.click(screen.getByRole("button", { name: /next/i }));
     await waitFor(() => {
