@@ -31,7 +31,9 @@ const COVER_PHOTO_SIZE = 44;
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 0,
+    // Top padding gives continuation pages a margin matching the sides; the
+    // cover band cancels it on page 1 with a negative marginTop (below).
+    paddingTop: 24,
     paddingHorizontal: 24,
     paddingBottom: 24,
     fontFamily: "Plus Jakarta Sans",
@@ -40,6 +42,7 @@ const styles = StyleSheet.create({
   },
   coverBand: {
     backgroundColor: colors.primary,
+    marginTop: -24,
     marginHorizontal: -24,
     paddingTop: 15,
     paddingBottom: 16,

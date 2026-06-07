@@ -25,7 +25,8 @@ export function RoutineClock({ slots, size = 140 }: RoutineClockProps) {
   const cy = size / 2;
   const r = size * 0.38;
   const strokeWidth = size * 0.13;
-  const pad = Math.round(size * 0.12); // outer room so side labels clear the ring
+  const pad = Math.round(size * 0.14); // side room so the L/R labels clear the ring
+  const vpad = Math.round(size * 0.09); // top/bottom room so those labels clear too
   const fontSize = Math.max(6, Math.round(size * 0.05));
 
   const segments = slots
@@ -44,12 +45,18 @@ export function RoutineClock({ slots, size = 140 }: RoutineClockProps) {
   };
 
   return (
-    <View style={{ position: "relative", width: size + pad * 2, height: size }}>
+    <View
+      style={{
+        position: "relative",
+        width: size + pad * 2,
+        height: size + vpad * 2,
+      }}
+    >
       <View
         style={{
           position: "absolute",
           left: pad,
-          top: 0,
+          top: vpad,
           width: size,
           height: size,
         }}
@@ -101,37 +108,29 @@ export function RoutineClock({ slots, size = 140 }: RoutineClockProps) {
             A DAY
           </Text>
         </View>
-
-        {/* Top / bottom hour labels */}
-        <Text
-          style={{
-            ...labelBase,
-            top: 0,
-            left: 0,
-            right: 0,
-            textAlign: "center",
-          }}
-        >
-          00:00
-        </Text>
-        <Text
-          style={{
-            ...labelBase,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            textAlign: "center",
-          }}
-        >
-          12:00
-        </Text>
       </View>
 
-      {/* Side hour labels live in the outer padding so they clear the ring */}
-      <Text style={{ ...labelBase, right: 0, top: cy - fontSize / 2 }}>
+      {/* Hour labels live in the outer padding so they clear the ring */}
+      <Text
+        style={{ ...labelBase, top: 0, left: 0, right: 0, textAlign: "center" }}
+      >
+        00:00
+      </Text>
+      <Text
+        style={{
+          ...labelBase,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+        }}
+      >
+        12:00
+      </Text>
+      <Text style={{ ...labelBase, right: 0, top: vpad + cy - fontSize / 2 }}>
         06:00
       </Text>
-      <Text style={{ ...labelBase, left: 0, top: cy - fontSize / 2 }}>
+      <Text style={{ ...labelBase, left: 0, top: vpad + cy - fontSize / 2 }}>
         18:00
       </Text>
     </View>

@@ -20,7 +20,9 @@ import { formatRange } from "../../utils/formatRange";
 
 const styles = StyleSheet.create({
   page: {
-    paddingTop: 0,
+    // Top padding gives continuation pages a margin matching the sides; the
+    // cover band cancels it on page 1 with a negative marginTop (below).
+    paddingTop: 30,
     paddingHorizontal: 30,
     paddingBottom: 30,
     fontFamily: "Plus Jakarta Sans",
@@ -29,6 +31,7 @@ const styles = StyleSheet.create({
   },
   coverBand: {
     backgroundColor: colors.primary,
+    marginTop: -30,
     marginHorizontal: -30,
     paddingTop: 20,
     paddingBottom: 18,
