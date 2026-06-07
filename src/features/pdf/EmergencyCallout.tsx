@@ -234,8 +234,12 @@ export function EmergencyCallout(props: EmergencyCalloutProps) {
                   <VetBlock vet={props.vetA} />
                 </View>
               ) : null}
-              <Eyebrow label="Contacts" />
-              <ContactsBlock contacts={props.emergencyContactsA} />
+              {props.emergencyContactsA.length > 0 ? (
+                <View>
+                  <Eyebrow label="Contacts" />
+                  <ContactsBlock contacts={props.emergencyContactsA} />
+                </View>
+              ) : null}
             </View>
             <View style={{ flex: 1, paddingLeft: 12 }}>
               {!props.sharedVet && props.vetB ? (
@@ -244,8 +248,12 @@ export function EmergencyCallout(props: EmergencyCalloutProps) {
                   <VetBlock vet={props.vetB} />
                 </View>
               ) : null}
-              <Eyebrow label="Contacts" />
-              <ContactsBlock contacts={props.emergencyContactsB} />
+              {props.emergencyContactsB.length > 0 ? (
+                <View>
+                  <Eyebrow label="Contacts" />
+                  <ContactsBlock contacts={props.emergencyContactsB} />
+                </View>
+              ) : null}
             </View>
           </View>
         </View>

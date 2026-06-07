@@ -222,6 +222,18 @@ describe("MergedPDF", () => {
       expect(screen.getByText("Jane Doe")).toBeInTheDocument();
       expect(screen.getByText("Bob Smith")).toBeInTheDocument();
     });
+
+    it("omits the Contacts label for a cat with no emergency contacts", () => {
+      const noContactsProfileB: CatProfile = {
+        ...sharedVetProfileB,
+        medical: { ...sharedVetProfileB.medical!, emergencyContacts: [] },
+      };
+      render(<MergedPDF profileA={profileA} profileB={noContactsProfileB} />);
+      // profileA still has a contact, profileB does not → one CONTACTS label
+      expect(screen.getAllByText("CONTACTS")).toHaveLength(1);
+      expect(screen.getByText("Jane Doe")).toBeInTheDocument();
+      expect(screen.queryByText("Bob Smith")).not.toBeInTheDocument();
+    });
   });
 
   describe("Emergency Callout — different vets", () => {
