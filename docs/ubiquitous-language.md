@@ -88,10 +88,20 @@
 
 ## Storage & Security
 
-| Term           | Definition                                                                                                          | Aliases to avoid             |
-| -------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| **Photo ID**   | A UUID string used as the IndexedDB key for a stored photo Blob                                                     | Image key, file ID           |
-| **EXIF Strip** | The process of removing all metadata from an uploaded photo by re-drawing it through an HTML5 Canvas before storage | Metadata removal, EXIF scrub |
+| Term                      | Definition                                                                                                             | Aliases to avoid                 |
+| ------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| **Photo ID**              | A UUID string used as the IndexedDB key for a stored photo Blob                                                        | Image key, file ID               |
+| **EXIF Strip**            | The process of removing all metadata from an uploaded photo by re-drawing it through an HTML5 Canvas before storage    | Metadata removal, EXIF scrub     |
+| **Magic Byte Validation** | Verification of a file's actual type by reading its first 4 bytes, independent of the browser-reported MIME type (new) | File type check, MIME validation |
+
+## Security Review
+
+| Term                | Definition                                                                                                | Aliases to avoid         |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------ |
+| **Security Review** | The structured pre-deployment audit of the client-side surface, producing a written findings report (new) | Security audit, pen test |
+| **Blocking**        | A finding severity that must be resolved before the Vercel deploy proceeds (new)                          | Critical, must-fix       |
+| **Non-blocking**    | A finding severity that should be fixed but does not gate the Vercel deploy (new)                         | Minor, low severity      |
+| **Informational**   | A finding severity for accepted design decisions noted for awareness; no action required (new)            | FYI, advisory, low risk  |
 
 ## Dashboard
 
