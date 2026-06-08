@@ -168,7 +168,7 @@ Types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`
 | IndexedDB persistence     | ✅ Complete |
 | Care guide preview        | ✅ Complete |
 | PDF guide design          | ✅ Complete |
-| Security review           | 🔜 Planned  |
+| Security review           | ✅ Complete |
 | Vercel deployment         | 🔜 Planned  |
 
 ---
