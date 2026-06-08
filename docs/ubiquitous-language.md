@@ -103,6 +103,16 @@
 | **Non-blocking**    | A finding severity that should be fixed but does not gate the Vercel deploy (new)                         | Minor, low severity      |
 | **Informational**   | A finding severity for accepted design decisions noted for awareness; no action required (new)            | FYI, advisory, low risk  |
 
+## Deployment
+
+| Term                   | Definition                                                                                                                                            | Aliases to avoid                  |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| **Production Deploy**  | A live release of PawBrief served from the `main` branch on Vercel (new)                                                                              | Release, ship, prod push          |
+| **Preview Deployment** | A per-PR Vercel deploy with its own URL, created automatically for every pull request (new)                                                           | Staging, test deploy, branch demo |
+| **CI Gate**            | The GitHub Actions check (typecheck + test + lint) that must pass before a PR merges to `main` (new)                                                  | CI, pipeline, build check         |
+| **Hardening Headers**  | The non-CSP security response headers set in `vercel.json` (HSTS, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, X-Frame-Options) (new) | Security headers, extra headers   |
+| **Self-hosted Font**   | Plus Jakarta Sans bundled and served same-origin via `@font-face`, replacing the Google Fonts `<link>` to satisfy the strict CSP (new)                | Local font, web font              |
+
 ## Dashboard
 
 | Term                  | Definition                                                                                            | Aliases to avoid                  |
@@ -150,6 +160,9 @@
 - A **Care Guide** opens with a **Cover Band** followed immediately by an **Emergency Callout**, then numbered sections.
 - A **Serving Entry** combines a time and a gram amount — it is not the same as a **Feeding Time** (time only) from the prototype model.
 - A **Merged Care Guide** detects a **Shared Vet** by matching both `vet.name` and `vet.phone` across the two profiles.
+- A **Production Deploy** comes only from `main`; every PR produces a **Preview Deployment** instead.
+- A PR cannot merge to `main` until its **CI Gate** passes — the same **Blocking** / **Non-blocking** severities from the **Security Review** govern what must be fixed first.
+- The **Self-hosted Font** is a prerequisite for the first **Production Deploy** so the brand typeface renders under the strict CSP.
 
 ## Example dialogue (updated)
 
@@ -167,6 +180,10 @@
 > **Domain expert:** "No — that's a **Shared Vet** condition. We detect it by matching name and phone, then render the vet block once full-width. Each column still shows its own emergency contacts."
 > **Dev:** "The prototype had `amountGrams` and separate feeding times. Our model has `ServingEntry` with both. How do we show that?"
 > **Domain expert:** "A **Serving Entry** renders as a Tag: `'07:30 · 70g'`. We don't split time and grams — the **Serving Entry** is the atomic unit, and it may differ across servings."
+> **Dev:** "When I open a PR, does it go straight to the live site?"
+> **Domain expert:** "No — a PR gets a **Preview Deployment** at its own URL. Only a merge to `main` triggers a **Production Deploy**, and the **CI Gate** has to be green before you can merge."
+> **Dev:** "The font looks wrong on the preview — system font, not the brand one."
+> **Domain expert:** "That's the strict CSP doing its job. We ship the **Self-hosted Font** before the first **Production Deploy** so Plus Jakarta Sans loads same-origin. Same reason the **Hardening Headers** live in `vercel.json` — the live response surface is part of the security story."
 
 ## Flagged ambiguities
 
