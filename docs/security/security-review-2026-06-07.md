@@ -138,6 +138,40 @@ Non-blocking. Recommended fix (#27): self-host Plus Jakarta Sans — the static
 instances are already bundled for the PDF layer — and remove the Google Fonts
 `<link>` tags, keeping the `'self'`-only CSP and removing a third-party request.
 
+### [CSP Headers] Scoped wasm exceptions required by the PDF layer
+
+Severity: Non-blocking
+Status: Fixed (#33)
+
+Follow-up to the `script-src 'self'` tightening above. The care guide is rendered by
+`@react-pdf/renderer` → `@react-pdf/layout` → `yoga-layout` v3, which is a WebAssembly
+module loaded from an inlined `data:` URI. This was not exercised under the production
+CSP during the review (the Vite dev server and the Puppeteer harness do not apply
+`vercel.json` headers), so it surfaced only on the first deploy: the live preview
+rendered blank because the strict CSP blocked both the `fetch()` of the `data:` wasm
+binary (`connect-src 'self'`) and `WebAssembly.instantiate()` (`script-src 'self'`).
+
+Two minimal, scoped exceptions were added in `vercel.json`:
+
+- `script-src 'self' 'wasm-unsafe-eval'` — `'wasm-unsafe-eval'` permits **only**
+  WebAssembly compilation. It does **not** enable `eval()` or `new Function()`, so the
+  XSS-via-eval protection from the original tightening is retained. It is strictly
+  narrower than `'unsafe-eval'`, which is **not** present.
+- `connect-src 'self' data:` — `data:` is not a network origin; it is self-contained
+  inline bytes that cannot reach any server. The "no external network transmission"
+  promise still holds and no external host is permitted.
+- `frame-src 'self' blob:` — `PDFViewer` displays the generated care guide in an
+  `<iframe src="blob:...">`. `blob:` is a same-origin, client-generated object URL (the
+  same kind already permitted in `img-src`), so this lets the app frame its own PDF
+  output without permitting any external framed origin. `frame-ancestors 'none'` is
+  unchanged, so the app itself still cannot be embedded by anyone.
+
+The stricter alternative (emitting Yoga's wasm as a same-origin `.wasm` asset so
+`connect-src 'self'` covers the fetch) was rejected: it would still require
+`'wasm-unsafe-eval'` to instantiate, and patching the library loader is fragile and
+version-dependent. The CSP is locked against silent regression by
+`src/styles/cspGuard.test.ts`.
+
 ---
 
 ## Dependencies
@@ -181,9 +215,12 @@ no profile and is handled by the not-found path.
 | CSP Headers      | Non-blocking  | Fixed inline (#25) |
 | CSP Headers      | Informational | Accepted by design |
 | CSP Headers      | Non-blocking  | GitHub issue #27   |
+| CSP Headers      | Non-blocking  | Fixed (#33)        |
 | Dependencies     | Informational | Pass (0 vulns)     |
 | Route Parameters | Informational | Accepted by design |
 
 **No Blocking findings.** Two Non-blocking findings were fixed inline (#24, #25);
 one Non-blocking finding (#27, web fonts) is tracked and does not gate the deploy.
-PawBrief is cleared for the Vercel deploy.
+A further Non-blocking CSP finding surfaced on the first deploy and was fixed with
+two scoped wasm exceptions required by the PDF layer (#33). PawBrief is cleared for
+the Vercel deploy.
