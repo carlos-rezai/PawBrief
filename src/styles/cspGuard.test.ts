@@ -43,6 +43,13 @@ describe("production CSP guard", () => {
     expect(csp).toMatch(/connect-src 'self' data:;/);
   });
 
+  it("allows the generated PDF blob to be framed by the preview without opening external origins", () => {
+    // PDFViewer renders the care guide in an <iframe src="blob:...">.
+    expect(csp).toMatch(/frame-src[^;]*\bblob:/);
+    // frame-src stays same-origin + blob: only — no arbitrary framed hosts.
+    expect(csp).toMatch(/frame-src 'self' blob:;/);
+  });
+
   it("keeps the rest of the strict posture intact", () => {
     expect(csp).toContain("default-src 'self'");
     expect(csp).toContain("object-src 'none'");

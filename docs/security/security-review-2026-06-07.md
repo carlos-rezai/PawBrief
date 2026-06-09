@@ -160,6 +160,11 @@ Two minimal, scoped exceptions were added in `vercel.json`:
 - `connect-src 'self' data:` — `data:` is not a network origin; it is self-contained
   inline bytes that cannot reach any server. The "no external network transmission"
   promise still holds and no external host is permitted.
+- `frame-src 'self' blob:` — `PDFViewer` displays the generated care guide in an
+  `<iframe src="blob:...">`. `blob:` is a same-origin, client-generated object URL (the
+  same kind already permitted in `img-src`), so this lets the app frame its own PDF
+  output without permitting any external framed origin. `frame-ancestors 'none'` is
+  unchanged, so the app itself still cannot be embedded by anyone.
 
 The stricter alternative (emitting Yoga's wasm as a same-origin `.wasm` asset so
 `connect-src 'self'` covers the fetch) was rejected: it would still require
