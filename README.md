@@ -4,6 +4,8 @@
 
 PawBrief generates clean, shareable PDF care guides for pet owners to hand to their caretakers. Answer a short wizard about your cat's routine, get a polished PDF. No backend. No account. No friction.
 
+**🐾 [PawBrief live demo](https://paw-brief.vercel.app)**
+
 ---
 
 ## Why This Project Exists
@@ -169,7 +171,7 @@ Types: `feat`, `fix`, `chore`, `refactor`, `test`, `docs`
 | Care guide preview        | ✅ Complete |
 | PDF guide design          | ✅ Complete |
 | Security review           | ✅ Complete |
-| Vercel deployment         | 🔜 Planned  |
+| Vercel deployment         | ✅ Complete |
 
 ---
 
