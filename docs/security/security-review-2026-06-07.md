@@ -157,9 +157,11 @@ Two minimal, scoped exceptions were added in `vercel.json`:
   WebAssembly compilation. It does **not** enable `eval()` or `new Function()`, so the
   XSS-via-eval protection from the original tightening is retained. It is strictly
   narrower than `'unsafe-eval'`, which is **not** present.
-- `connect-src 'self' data:` — `data:` is not a network origin; it is self-contained
-  inline bytes that cannot reach any server. The "no external network transmission"
-  promise still holds and no external host is permitted.
+- `connect-src 'self' data: blob:` — `data:` is the inlined wasm binary; `blob:` is
+  react-pdf `fetch()`-ing back its own generated PDF object URL (and profile-photo
+  blobs). Neither is a network origin — both are self-contained, same-origin bytes that
+  cannot reach any server, so the "no external network transmission" promise still
+  holds and no external host is permitted.
 - `frame-src 'self' blob:` — `PDFViewer` displays the generated care guide in an
   `<iframe src="blob:...">`. `blob:` is a same-origin, client-generated object URL (the
   same kind already permitted in `img-src`), so this lets the app frame its own PDF

@@ -37,10 +37,13 @@ describe("production CSP guard", () => {
     expect(csp).not.toContain("'unsafe-eval'");
   });
 
-  it("allows the inlined data: wasm to be fetched without opening external origins", () => {
+  it("allows the inlined data: wasm and same-origin blob: to be fetched without opening external origins", () => {
+    // data: -> the inlined wasm binary; blob: -> react-pdf fetching its own
+    // generated PDF/photo object URLs. Neither is a network origin.
     expect(csp).toMatch(/connect-src[^;]*\bdata:/);
+    expect(csp).toMatch(/connect-src[^;]*\bblob:/);
     // connect-src must not be widened to arbitrary hosts.
-    expect(csp).toMatch(/connect-src 'self' data:;/);
+    expect(csp).toMatch(/connect-src 'self' data: blob:;/);
   });
 
   it("allows the generated PDF blob to be framed by the preview without opening external origins", () => {
